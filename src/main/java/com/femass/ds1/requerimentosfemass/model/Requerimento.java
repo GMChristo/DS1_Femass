@@ -32,6 +32,46 @@ public class Requerimento implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Calendar dataEncerramento;
 
+    public Calendar getDataAbertura() {
+        return dataAbertura;
+    }
+
+    public void setDataAbertura(Calendar dataAbertura) {
+        this.dataAbertura = dataAbertura;
+    }
+
+    public String getNumeroProtocolo() {
+        return numeroProtocolo;
+    }
+
+    public void setNumeroProtocolo(String numeroProtocolo) {
+        this.numeroProtocolo = numeroProtocolo;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getRevisao() {
+        return revisao;
+    }
+
+    public void setRevisao(String revisao) {
+        this.revisao = revisao;
+    }
+
+    public Calendar getDataEncerramento() {
+        return dataEncerramento;
+    }
+
+    public void setDataEncerramento(Calendar dataEncerramento) {
+        this.dataEncerramento = dataEncerramento;
+    }
+    
     public Long getId() {
         return id;
     }

@@ -22,12 +22,28 @@ public class Movimentacao implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Calendar dataMovimentacao;
     private String descricao;
 
+    public Calendar getDataMovimentacao() {
+        return dataMovimentacao;
+    }
+
+    public void setDataMovimentacao(Calendar dataMovimentacao) {
+        this.dataMovimentacao = dataMovimentacao;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+    
     public Long getId() {
         return id;
     }
