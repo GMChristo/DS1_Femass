@@ -6,7 +6,10 @@
 package com.femass.ds1.requerimentosfemass.model;
 
 import java.io.Serializable;
+import java.util.Enumeration;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,6 +34,12 @@ public class Aluno implements Serializable {
     private String email;
     private String telefone;
     private String senha;
+    private Curso curso;
+    private Endereco endereco;
+    @Enumerated(EnumType.STRING)
+    private StatusMatricula statusMatricula;
+    
+    
 
     public String getMatricula() {
         return matricula;

@@ -8,9 +8,12 @@ package com.femass.ds1.requerimentosfemass.model;
 import java.io.Serializable;
 import java.util.Calendar;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
 /**
@@ -27,7 +30,15 @@ public class Movimentacao implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Calendar dataMovimentacao;
     private String descricao;
-
+    @ManyToOne
+    private Requerimento requerimento;
+    @ManyToOne
+    private Responsavel responsavelAtual; // Responsável "de" "para"
+    @ManyToOne
+    private Responsavel responsavelSeguinte; // Responsável "de" "para"    
+    @Enumerated(EnumType.STRING)
+    private StatusMovimentacao statusMovimentacao;
+    
     public Calendar getDataMovimentacao() {
         return dataMovimentacao;
     }
