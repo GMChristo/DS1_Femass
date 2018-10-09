@@ -24,6 +24,7 @@ public class TipoRequerimento implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; //sera usado como codigo do tipo de requerimento
+   
     private String nome;
     private String descricao;
     private List<String> documentos = new ArrayList();

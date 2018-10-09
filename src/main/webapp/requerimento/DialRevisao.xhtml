@@ -26,12 +26,12 @@
 
 					<p:outputLabel for="prot" value="Protocolo.:" />
 					<p:inputText id="prot" maxlength="200" disabled="true"
-						value="#{requerimentoBean.cadastro.protocolo}" required="true"
+                                                     value="#{requerimentoBean.cadastro.numeroProtocolo}" required="true"
 						requiredMessage="O Campo 'PROTOCOLO' é obrigatório." />
 						
 					<p:outputLabel for="tpreq" value="Tipo de Requerimento.: " />
 					<p:selectOneMenu id="tpreq" filter="true" disabled="true"
-						value="#{requerimentoBean.cadastro.tipoReq.nome}" style="width:100%;"
+                                                         value="#{requerimentoBean.cadastro.tipoRequerimento.nome}" style="width:100%;"
 						converter="omnifaces.SelectItemsConverter" required="true"
 						requiredMessage="O Campo 'TIPO DE REQUERIMENTO' é obrigatório.">
 						<f:selectItem noSelectionOption="true"

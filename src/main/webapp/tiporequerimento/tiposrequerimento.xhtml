@@ -66,7 +66,7 @@
 			<p:dataTable emptyMessage="sem registros" id="tabela"
 				var="r" widgetVar="rTable" value="#{tiporequerimentoBean.lista}"
 				selectionMode="single" selection="#{tiporequerimentoBean.cadastro}"
-				rowKey="#{r.codigo}">
+				rowKey="#{r.id}">
 
 				<p:ajax event="rowSelect" listener="#{tiporequerimentoBean.onRowSelect}"
 					update="frmList:toolbar" />
@@ -74,7 +74,7 @@
 
 				<p:column headerText="#"
 					style="width:10% ;text-align: center">
-					<h:outputText value="#{r.codigo}" />
+					<h:outputText value="#{r.id}" />
 					<f:facet name="footer">
 						<h:outputText value="Qtd #{tiporequerimentoBean.size}" />
 					</f:facet>
@@ -91,8 +91,8 @@
 				
 				
 				<p:column headerText="Setor"
-					style="width:10% ;text-align: center" sortBy="#{r.setor.nome}">
-					<h:outputText value="#{r.setor.nome}" />
+					style="width:10% ;text-align: center" sortBy="#{r.setor}">
+					<h:outputText value="#{r.setor}" />
 				</p:column>
 			</p:dataTable>
 		</h:form>

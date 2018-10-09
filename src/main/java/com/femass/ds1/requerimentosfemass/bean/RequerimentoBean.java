@@ -116,7 +116,7 @@ public class RequerimentoBean {
 			req.setStatusRequerimento(StatusRequerimento.Aberto);
 			req.setTipoRequerimento(treq);
 			req.setAluno(aluno);
-			req.setDataAbertura(new GregorianCalendar());
+			req.setDataAbertura(new Date());
 			lista.add(req);
 
 			Requerimento req2 = new Requerimento();
@@ -127,7 +127,7 @@ public class RequerimentoBean {
 			req2.setStatusRequerimento(StatusRequerimento.Aberto);
 			req2.setTipoRequerimento(treq2);
 			req2.setAluno(aluno2);
-			req2.setDataAbertura(new GregorianCalendar());
+			req2.setDataAbertura(new Date());
 			lista.add(req2);
 
 			size = lista.size();
@@ -186,7 +186,7 @@ public class RequerimentoBean {
 	public void novo() {
 		cadastro = new Requerimento();
 		acao = "Salvar";
-		cadastro.setDataAbertura(new GregorianCalendar());
+		cadastro.setDataAbertura(new Date());
 		cadastro.setStatusRequerimento(StatusRequerimento.Aberto);
 	}
 

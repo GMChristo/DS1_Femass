@@ -19,6 +19,7 @@ import com.femass.ds1.requerimentosfemass.model.StatusRequerimento;
 import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
 import com.femass.ds1.requerimentosfemass.filter.RequerimentoFilter;
 import com.femass.ds1.requerimentosfemass.model.Cargo;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import sun.util.calendar.Gregorian;
 
@@ -117,7 +118,8 @@ public class MovimentacaoBean {
 			req.setStatusRequerimento(StatusRequerimento.Aberto);
 			req.setTipoRequerimento(treq);
 			req.setAluno(aluno);
-			req.setDataAbertura(new GregorianCalendar());
+                        
+			req.setDataAbertura(new Date());
 			
 			Requerimento req2 = new Requerimento();
 			req2.setId(2L);
@@ -127,7 +129,7 @@ public class MovimentacaoBean {
 			req2.setStatusRequerimento(StatusRequerimento.Aberto);
 			req2.setTipoRequerimento(treq2);
 			req2.setAluno(aluno2);
-			req2.setDataAbertura(new GregorianCalendar());
+			req2.setDataAbertura(new Date());
 			
 			Responsavel resp = new Responsavel();
 			resp.setId(1L);
@@ -138,7 +140,7 @@ public class MovimentacaoBean {
 			lista = new ArrayList<>();
 			Movimentacao mov = new Movimentacao();
 			mov.setId(1L);
-			mov.setDataMovimentacao(new GregorianCalendar());
+			mov.setDataMovimentacao(new Date());
 			mov.setDescricao("Descrever alguma coisa");
 			mov.setRequerimento(req);
 			mov.setResponsavelAtual(resp);
@@ -147,7 +149,7 @@ public class MovimentacaoBean {
 			
 			Movimentacao mov2 = new Movimentacao();
 			mov2.setId(1L);
-			mov2.setDataMovimentacao(new GregorianCalendar());
+			mov2.setDataMovimentacao(new Date());
 			mov2.setDescricao("Descrever alguma coisa");
 			mov2.setRequerimento(req2);
 			mov2.setResponsavelAtual(resp);

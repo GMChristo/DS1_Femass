@@ -51,7 +51,7 @@
 			<p:dataTable emptyMessage="sem registros" id="tabela" var="m"
 				widgetVar="mTable" value="#{movimentacaoBean.lista}"
 				selectionMode="single" selection="#{movimentacaoBean.cadastro}"
-				rowKey="#{m.codigo}">
+                                rowKey="#{m.id}">
 
 				<p:ajax event="rowSelect" listener="#{movimentacaoBean.onRowSelect}"
 					update=":frmList:toolbar" />
@@ -63,7 +63,7 @@
 
 				<p:column headerText="Data" priority="1"
 					style="width:10% ;text-align: center">
-					<h:outputText value="#{m.data}">
+                                    <h:outputText value="#{m.dataMovimentacao}">
 						<f:convertDateTime pattern="dd/MM/yy" timeZone="America/Sao_Paulo" />
 					</h:outputText>
 					<f:facet name="footer">
@@ -77,16 +77,16 @@
 
 				<p:column headerText="Protocolo"
 					style="width:10%;text-align: center">
-					<h:outputText value="#{m.requerimento.protocolo}" />
+                                    <h:outputText value="#{m.requerimento.numeroProtocolo}" />
 				</p:column>
 
 				<p:column headerText="Responsável"
 					style="width:15%;text-align: center">
-					<h:outputText value="#{m.responsavel.nome}" />
+                                    <h:outputText value="#{m.responsavelAtual.nome}" />
 				</p:column>
 
 				<p:column headerText="Status" style="width:10%;text-align: center">
-					<h:outputText value="#{m.statusmov}" />
+                                    <h:outputText value="#{m.statusMovimentacao}" />
 				</p:column>
 
 				<p:rowExpansion>
@@ -105,7 +105,7 @@
 						</p:column>
 						
 						<p:column headerText="Protocolo" style="width:10%;text-align: center">
-							<h:outputText value="#{m.requerimento.protocolo}"/>
+                                                    <h:outputText value="#{m.requerimento.numeroProtocolo}"/>
 						</p:column>
 						
 						<p:column headerText="Aluno" style="width:10%;text-align: center">
@@ -113,7 +113,7 @@
 						</p:column>
 						
 						<p:column headerText="Tipo Requerimento" style="width:25%;text-align: center">
-							<h:outputText value="#{m.requerimento.tipoReq.nome}"/>
+                                                    <h:outputText value="#{m.requerimento.tipoRequerimento.nome}"/>
 						</p:column>
 						
 						<p:column headerText="Descrição">

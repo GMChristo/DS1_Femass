@@ -7,6 +7,7 @@ package com.femass.ds1.requerimentosfemass.model;
 
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -27,17 +28,20 @@ public class Requerimento implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Calendar dataAbertura;
+    private Date dataAbertura;
+    
     private String numeroProtocolo;
     private String descricao;
     private boolean revisao;
+    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Calendar dataEncerramento;
+    
     @ManyToOne
     private Aluno aluno;
-    @Enumerated(EnumType.STRING)
-    @ManyToOne
+   
     private TipoRequerimento tipoRequerimento;    
     private StatusRequerimento statusRequerimento;
 
@@ -64,13 +68,12 @@ public class Requerimento implements Serializable {
     public void setStatusRequerimento(StatusRequerimento statusRequerimento) {
         this.statusRequerimento = statusRequerimento;
     }
-    
-    
-    public Calendar getDataAbertura() {
+
+    public Date getDataAbertura() {
         return dataAbertura;
     }
 
-    public void setDataAbertura(Calendar dataAbertura) {
+    public void setDataAbertura(Date dataAbertura) {
         this.dataAbertura = dataAbertura;
     }
 

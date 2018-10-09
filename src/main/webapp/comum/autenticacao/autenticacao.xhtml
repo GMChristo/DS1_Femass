@@ -46,7 +46,7 @@
 				<!-- <div class="ui-fluid"> -->
 				<div class="formulario">
 					<div class="topoform">
-						<h:panelGrid columns="1" layout="grid"
+						<h:panelGrid columns="1" 
 							columnClasses="ui-grid-col-12" style="width:100%;">
 							<h:graphicImage url="/resources/imagens/logo_empresa.png"
 								width="170px" styleClass="logoMob" />
@@ -54,7 +54,7 @@
 					</div>
 
 					<h:form id="frmLogin">
-						<b:container layout="fluid" style="max-width:320px;">
+						<b:container style="max-width:320px;">
 							<b:row style="margin-top:10px;">
 								<b:column medium-screen="12">
 									<b:inputText  id="cpf"
@@ -82,7 +82,7 @@
 							<b:row style="margin-bottom: 10px;">
 								<b:column span="12">
 									<b:commandButton value="Entrar" style="width:100%;padding:8px;margin-bottom:7px"
-										update=":msgGlobal" />
+                                                                                         action="#{autenticacaoBean.entrar}" update=":msgGlobal" />
 
 									<p:commandLink value="Esqueci minha senha."
 										

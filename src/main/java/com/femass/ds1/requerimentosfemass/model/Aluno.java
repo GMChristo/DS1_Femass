@@ -36,6 +36,7 @@ public class Aluno implements Serializable {
     private String senha;
     private Curso curso;
     private Endereco endereco;
+    
     @Enumerated(EnumType.STRING)
     private StatusMatricula statusMatricula;
     

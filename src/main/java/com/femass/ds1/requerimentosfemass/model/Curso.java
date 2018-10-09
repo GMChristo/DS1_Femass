@@ -22,6 +22,7 @@ public class Curso implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; //usar o id como codigo
+    
     private String nome;
     private String periodo;
 
