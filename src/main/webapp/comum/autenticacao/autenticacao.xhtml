@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<!-- vai chamar os metadatas das páginas -->
+<!-- <ui:insert name="metadata" /> -->
+
+<h:head>
+
+	<f:facet name="first">
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+	</f:facet>
+
+	<!-- <link rel="shortcut icon" type="image/x-icon"
+		href="#{resource['favicon/favicon.ico']}" /> -->
+	<!-- library pasta name arquivo -->
+	<h:outputStylesheet library="css" name="estilo.css" />
+	<h:outputStylesheet library="css" name="loginb.css" />
+	<h:outputStylesheet library="css" name="temalab.css" />
+	<h:outputScript library="js" name="particles.min.js" />
+	<!-- <h:outputStylesheet library="css" name="bootstrap.css" /> -->
+
+	<title>SisRequerimeto</title>
+</h:head>
+
+<h:body>
+	<div id="particles-js">
+		<!-- Componente de mensagem de erro ou sucesso, (sticky sempre fica aberto) -->
+		<p:growl id="msgGlobal" sticky="true" />
+		<div class="topbarcredential"></div>
+		<div class="topbarcustom"></div>
+
+		<div class="container-fluid-alex">
+			<div class="titlecontainer withborderbottom">
+				<h3 style="font-weight: bold;">ACESSO AO SISTEMA</h3>
+			</div>
+
+			<div class="cxcontainer">
+
+				<!-- <div class="ui-fluid"> -->
+				<div class="formulario">
+					<div class="topoform">
+						<h:panelGrid columns="1" layout="grid"
+							columnClasses="ui-grid-col-12" style="width:100%;">
+							<h:graphicImage url="/resources/imagens/logo_empresa.png"
+								width="170px" styleClass="logoMob" />
+						</h:panelGrid>
+					</div>
+
+					<h:form id="frmLogin">
+						<b:container layout="fluid" style="max-width:320px;">
+							<b:row style="margin-top:10px;">
+								<b:column medium-screen="12">
+									<b:inputText  id="cpf"
+										placeholder="MATRÍCULA:" autocomplete="false" mask="999.999.999-99">
+										<f:facet name="prepend">
+											<b:icon name="user" style-class="iconTxt" />
+										</f:facet>
+										
+									</b:inputText>
+								</b:column>
+							</b:row>
+
+							<b:row>
+								<b:column medium-screen="12">
+									<b:inputSecret 
+										placeholder="SENHA:" autocomplete="false">
+										<f:facet name="prepend">
+											<b:iconAwesome name="key" style-class="iconTxt" />
+										</f:facet>
+										
+									</b:inputSecret>
+								</b:column>
+							</b:row>
+
+							<b:row style="margin-bottom: 10px;">
+								<b:column span="12">
+									<b:commandButton value="Entrar" style="width:100%;padding:8px;margin-bottom:7px"
+										update=":msgGlobal" />
+
+									<p:commandLink value="Esqueci minha senha."
+										
+										process="cpf @this" update=":msgGlobal"
+										style="margin-left: 28%; color: #0000a0;" />
+								</b:column>
+							</b:row>
+						</b:container>
+
+					</h:form>
+				</div>
+			</div>
+		</div>
+		<!-- </div> -->
+		<div class="footercontainer">
+			<div class="direitos">
+				<span><h:outputText
+						value="Versão: 0.0.1" /></span> <span
+					style="float: right;">Grupo I de DSI. Todos os direitos
+					reservados.</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- inclui status de carregamento com um arquivo.gif  -->
+	<!-- <ui:include src="/comum/carregamento.xhtml" /> -->
+
+
+	<script type="text/javascript">
+		particlesJS("particles-js", {
+			"particles": {
+				"number": {
+					"value": 80,
+					"density": {
+						"enable": true,
+						/* "value_area": 800 */
+						"value_area": 400
+					}
+				},
+				"color": {
+					/* "value": "#ffffff" */
+					"value": "#1c85b7" 
+				},
+				"shape": {
+					"type": "circle",
+					"stroke": {
+						"width": 0,
+						/* "color": "#000000" */
+						"color": "#1c85b7"	
+					},
+					"polygon": {
+						"nb_sides": 5
+					},
+					"image": {
+						"src": "img/github.svg",
+						"width": 100,
+						"height": 100
+					}
+				},
+				"opacity": {
+					"value": 0.5,
+					"random": true,
+					"anim": {
+						"enable": true,
+						"speed": 1,
+						"opacity_min": 0.1,
+						"sync": false
+					}
+				},
+				"size": {
+					"value": 2,
+					"random": true,
+					"anim": {
+						"enable": false,
+						"speed": 40,
+						"size_min": 0.1,
+						"sync": false
+					}
+				},
+				"line_linked": {
+					"enable": true,
+					"distance": 150,
+					/* "color": "#ffffff", */
+					"color": "#1c85b7",
+					"opacity": 0.4,
+					"width": 1
+				},
+				"move": {
+					"enable": true,
+					"speed": 1.2,
+					"direction": "top",
+					"random": false,
+					"straight": false,
+					"out_mode": "out",
+					"bounce": false,
+					"attract": {
+						"enable": false,
+						"rotateX": 600,
+						"rotateY": 1200
+					}
+				}
+			},
+			"interactivity": {
+				"detect_on": "canvas",
+				"events": {
+					"onhover": {
+						"enable": true,
+						"mode": "grab"
+					},
+					"onclick": {
+						"enable": true,
+						"mode": "push"
+					},
+					"resize": true
+				},
+				"modes": {
+					"grab": {
+						"distance": 200,
+						"line_linked": {
+							"opacity": 1
+						}
+					},
+					"bubble": {
+						"distance": 400,
+						"size": 40,
+						"duration": 2,
+						"opacity": 8,
+						"speed": 3
+					},
+					"repulse": {
+						"distance": 200,
+						"duration": 0.4
+					},
+					"push": {
+						"particles_nb": 4
+					},
+					"remove": {
+						"particles_nb": 2
+					}
+				}
+			},
+			"retina_detect": true
+		});
+</script>
+</h:body>
+</html>
