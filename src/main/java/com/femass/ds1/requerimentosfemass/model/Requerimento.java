@@ -8,9 +8,12 @@ package com.femass.ds1.requerimentosfemass.model;
 import java.io.Serializable;
 import java.util.Calendar;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
 /**
@@ -28,10 +31,41 @@ public class Requerimento implements Serializable {
     private Calendar dataAbertura;
     private String numeroProtocolo;
     private String descricao;
-    private String revisao;
+    private boolean revisao;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Calendar dataEncerramento;
+    @ManyToOne
+    private Aluno aluno;
+    @Enumerated(EnumType.STRING)
+    @ManyToOne
+    private TipoRequerimento tipoRequerimento;    
+    private StatusRequerimento statusRequerimento;
 
+    public Aluno getAluno() {
+        return aluno;
+    }
+
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
+    }
+
+    public TipoRequerimento getTipoRequerimento() {
+        return tipoRequerimento;
+    }
+
+    public void setTipoRequerimento(TipoRequerimento tipoRequerimento) {
+        this.tipoRequerimento = tipoRequerimento;
+    }
+
+    public StatusRequerimento getStatusRequerimento() {
+        return statusRequerimento;
+    }
+
+    public void setStatusRequerimento(StatusRequerimento statusRequerimento) {
+        this.statusRequerimento = statusRequerimento;
+    }
+    
+    
     public Calendar getDataAbertura() {
         return dataAbertura;
     }
@@ -56,13 +90,15 @@ public class Requerimento implements Serializable {
         this.descricao = descricao;
     }
 
-    public String getRevisao() {
+    public boolean isRevisao() {
         return revisao;
     }
 
-    public void setRevisao(String revisao) {
+    public void setRevisao(boolean revisao) {
         this.revisao = revisao;
     }
+
+    
 
     public Calendar getDataEncerramento() {
         return dataEncerramento;
