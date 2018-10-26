@@ -31,7 +31,7 @@ public class TipoRequerimentoDao {
     public void excluir (TipoRequerimento tipoRequerimento){
         em.remove(tipoRequerimento);
     }
-    public List<TipoRequerimento> getCursos(){
+    public List<TipoRequerimento> getTipoRequerimentos(){
         Query q = em.createQuery("select t from TipoRequerimento t order by t.nome");
         return q.getResultList();
     }

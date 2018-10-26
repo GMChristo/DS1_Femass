@@ -12,7 +12,6 @@ import org.primefaces.event.SelectEvent;
 
 import com.femass.ds1.requerimentosfemass.model.Aluno;
 import com.femass.ds1.requerimentosfemass.model.Requerimento;
-import com.femass.ds1.requerimentosfemass.model.Setor;
 import com.femass.ds1.requerimentosfemass.model.StatusRequerimento;
 import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
 import com.femass.ds1.requerimentosfemass.filter.RequerimentoFilter;

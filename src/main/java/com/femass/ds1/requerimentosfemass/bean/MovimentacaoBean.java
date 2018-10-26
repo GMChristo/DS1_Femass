@@ -13,15 +13,13 @@ import com.femass.ds1.requerimentosfemass.model.Aluno;
 import com.femass.ds1.requerimentosfemass.model.Movimentacao;
 import com.femass.ds1.requerimentosfemass.model.Requerimento;
 import com.femass.ds1.requerimentosfemass.model.Responsavel;
-import com.femass.ds1.requerimentosfemass.model.Setor;
+
 import com.femass.ds1.requerimentosfemass.model.StatusMovimentacao;
 import com.femass.ds1.requerimentosfemass.model.StatusRequerimento;
 import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
 import com.femass.ds1.requerimentosfemass.filter.RequerimentoFilter;
 import com.femass.ds1.requerimentosfemass.model.Cargo;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import sun.util.calendar.Gregorian;
+
 
 @ManagedBean
 @ViewScoped
