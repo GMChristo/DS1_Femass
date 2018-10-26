@@ -18,20 +18,27 @@ import javax.persistence.Query;
  */
 @Stateless
 public class TipoRequerimentoDao {
-    
+
     @PersistenceContext
     EntityManager em;
-    
-    public void incluir (TipoRequerimento tipoRequerimento){
+
+    public void incluir(TipoRequerimento tipoRequerimento) {
         em.persist(tipoRequerimento);
     }
-    public void alterar (TipoRequerimento tipoRequerimento){
+
+    public void alterar(TipoRequerimento tipoRequerimento) {
         em.merge(tipoRequerimento);
     }
-    public void excluir (TipoRequerimento tipoRequerimento){
+
+    public void excluir(TipoRequerimento tipoRequerimento) {
+        // resolve erro de: Entity must be managed to call remove: com.femass.ds1.requerimentosfemass.model.TipoRequerimento[ id=4 ], try merging the detached and try the remove again.
+        if (!em.contains(tipoRequerimento)) {
+            tipoRequerimento = em.merge(tipoRequerimento);
+        }
         em.remove(tipoRequerimento);
     }
-    public List<TipoRequerimento> getTipoRequerimentos(){
+
+    public List<TipoRequerimento> getTipoRequerimentos() {
         Query q = em.createQuery("select t from TipoRequerimento t order by t.nome");
         return q.getResultList();
     }
