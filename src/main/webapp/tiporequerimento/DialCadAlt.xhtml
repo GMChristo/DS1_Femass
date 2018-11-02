@@ -24,15 +24,16 @@
                                  columns="2" style="width: 800px;"
                                  columnClasses="ui-grid-col-4,ui-grid-col-8">
 
-                        <p:outputLabel for="nome" value="Nome.:" />
+                        <p:outputLabel for="nome" value="Nome:" />
                         <p:inputText id="nome" maxlength="200"
                                      value="#{tiporequerimentoBean.cadastro.nome}" required="true"
                                      requiredMessage="O Campo 'NOME' é obrigatório." />
 
-                        <p:outputLabel for="descricao" value="descricao.: " />
+                        <!--<p:outputLabel for="descricao" value="descricao.: " />
                         <p:inputText id="descricao" value="#{tiporequerimentoBean.cadastro.descricao}" />
+                        -->
 
-                        <p:outputLabel for="func" value="Setor.: " />
+                        <p:outputLabel for="func" value="Setor: " />
                         <p:selectOneMenu id="func" filter="true"
                                          value="#{tiporequerimentoBean.cadastro.setor}" style="width:100%;"
                                          converter="omnifaces.SelectItemsConverter" required="true"
@@ -42,6 +43,13 @@
                             <f:selectItem itemLabel="Coordenação" itemValue="Coordenação" />
                             <f:selectItem itemLabel="Recepção" itemValue="Recepção" />
                         </p:selectOneMenu>
+
+                        <p:outputLabel for="button" value="Data Limite:" />
+                        <p:calendar id="button" value="#{calendarView.date3}" showOn="button" />
+
+                        <p:outputLabel for="@next" value="Ativo:" />
+                        <p:selectBooleanCheckbox value="#{selectBooleanView.value1}" />
+
 
                     </p:panelGrid>
                 </p:panel>
