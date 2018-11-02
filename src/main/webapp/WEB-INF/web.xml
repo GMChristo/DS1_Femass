@@ -9,7 +9,7 @@
 
 	<!-- página inicial -->
 	<welcome-file-list>
-		<welcome-file>comum/autenticacao/autenticacaoResponsavel.xhtml</welcome-file>
+		<welcome-file>comum/autenticacao/autenticacao.xhtml</welcome-file>
 	</welcome-file-list>
 
 	<context-param>
