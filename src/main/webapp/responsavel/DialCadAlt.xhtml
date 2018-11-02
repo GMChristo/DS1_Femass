@@ -28,9 +28,12 @@
 					<p:inputText id="nome" maxlength="200"
 						value="#{responsavelBean.cadastro.nome}" required="true"
 						requiredMessage="O Campo 'NOME' é obrigatório." />
-
+                         
 					<p:outputLabel for="cpf" value="CPF.: " />
-					<p:inputText id="cpf" maxlength="14" value="#{responsavelBean.cadastro.cpf}" />
+                                        <p:inputText id="cpf" maxlength="14" value="#{responsavelBean.cadastro.cpf}" />
+                                        
+                                        <p:outputLabel for="status" value="Status.: " />
+                                        <p:inputText id="status" maxlength="14" value="#{responsavelBean.cadastro.status}" />
 					
 					<p:outputLabel for="func" value="Cargo.: " />
 					<p:selectOneMenu id="func" filter="true"
@@ -41,6 +44,7 @@
 							itemLabel="Selecione um Cargo..." />
 						<f:selectItem itemLabel="Coordenador" itemValue="Coordenador" />
 						<f:selectItem itemLabel="Secretaria" itemValue="Secretaria" />
+                                                <f:selectItem itemLabel="Direcao" itemValue="Direcao" />
 					</p:selectOneMenu>
 
 				</p:panelGrid>
