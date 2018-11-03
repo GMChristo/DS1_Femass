@@ -18,38 +18,8 @@ public class ResponsavelBean {
 	private List<Responsavel> lista;
 	private int size;
 	private String acao;
-	
-	public Responsavel getCadastro() {
-		if (cadastro == null) {
-			cadastro = new Responsavel();
-		}
-		return cadastro;
-	}
-
-	public void setCadastro(Responsavel cadastro) {
-		this.cadastro = cadastro;
-	}
-
-	public List<Responsavel> getLista() {
-		return lista;
-	}
-
-	public void setLista(List<Responsavel> lista) {
-		this.lista = lista;
-	}
-
-	public int getSize() {
-		return size;
-	}
-
-	public void setSize(int size) {
-		this.size = size;
-	}
-	public String getAcao() {
-		return acao;
-	}
-	
-	/**
+        
+        /**
 	 * Metodo de abertura
 	 */
 	public void carregar() {
@@ -108,6 +78,36 @@ public class ResponsavelBean {
 		cadastro = new Responsavel();
 		acao = "Salvar";
 	}
+	
+	public Responsavel getCadastro() {
+		if (cadastro == null) {
+			cadastro = new Responsavel();
+		}
+		return cadastro;
+	}
 
+	public void setCadastro(Responsavel cadastro) {
+		this.cadastro = cadastro;
+	}
+
+	public List<Responsavel> getLista() {
+		return lista;
+	}
+
+	public void setLista(List<Responsavel> lista) {
+		this.lista = lista;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+	public String getAcao() {
+		return acao;
+	}
+	
 }
 

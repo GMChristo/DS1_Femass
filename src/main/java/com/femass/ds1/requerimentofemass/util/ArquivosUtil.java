@@ -1,4 +1,4 @@
-package br.com.comum.util;
+package com.femass.ds1.requerimentofemass.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

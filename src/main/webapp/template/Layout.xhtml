@@ -64,12 +64,12 @@
  -->
 			<p:clock pattern="HH:mm:ss - dd/MM/yyyy" />
 			<p:spacer width="5px" />
-			<h:outputText value="© 2018 - Suporte. Cel:(00)00000-0000 " />
-			<h:outputText value="Ver.: 0.0.1" />
+                        <h:outputText value="#{autenticacaoBean.constante.COPI} - Suporte. Cel:(00)00000-0000 " />
+                        <h:outputText value="#{autenticacaoBean.constante.VERSAO}" />
 		</f:facet>
 			
 		<f:facet name="right">
-			<h:outputText value="Usuário: Responsável" />
+                    <h:outputText value="Usuário: #{autenticacaoBean.respLogado.nome}" />
 			<p:spacer width="5px" />
 		</f:facet>
 	</p:toolbar>
