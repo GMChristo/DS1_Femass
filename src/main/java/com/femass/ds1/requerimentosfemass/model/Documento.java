@@ -6,9 +6,6 @@
 package com.femass.ds1.requerimentosfemass.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,38 +13,17 @@ import javax.persistence.Id;
 
 /**
  *
- * @author Gabriel
+ * @author GMC
  */
 @Entity
-public class TipoRequerimento implements Serializable {
+public class Documento implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //sera usado como codigo do tipo de requerimento
-   
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String nome;
-    private Boolean ativo;
-    private List<Documento> documentos = new ArrayList();
-    private String setor;
-    private Calendar dataLimite;
 
-    public Boolean getAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(Boolean ativo) {
-        this.ativo = ativo;
-    }
-
-    public Calendar getDataLimite() {
-        return dataLimite;
-    }
-
-    public void setDataLimite(Calendar dataLimite) {
-        this.dataLimite = dataLimite;
-    }
-    
     public String getNome() {
         return nome;
     }
@@ -55,23 +31,9 @@ public class TipoRequerimento implements Serializable {
     public void setNome(String nome) {
         this.nome = nome;
     }
-
-    public List<Documento> getDocumentos() {
-        return documentos;
-    }
-
-    public void setDocumentos(List<Documento> documentos) {
-        this.documentos = documentos;
-    }
-
-    public String getSetor() {
-        return setor;
-    }
-
-    public void setSetor(String setor) {
-        this.setor = setor;
-    }
     
+    
+
     public Long getId() {
         return id;
     }
@@ -90,10 +52,10 @@ public class TipoRequerimento implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TipoRequerimento)) {
+        if (!(object instanceof Documento)) {
             return false;
         }
-        TipoRequerimento other = (TipoRequerimento) object;
+        Documento other = (Documento) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -102,7 +64,7 @@ public class TipoRequerimento implements Serializable {
 
     @Override
     public String toString() {
-        return "com.femass.ds1.requerimentosfemass.model.TipoRequerimento[ id=" + id + " ]";
+        return "com.femass.ds1.requerimentosfemass.model.Documento[ id=" + id + " ]";
     }
     
 }
