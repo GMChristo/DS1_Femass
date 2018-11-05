@@ -96,13 +96,11 @@ public class RequerimentoBean {
 			TipoRequerimento treq = new TipoRequerimento();
 			treq.setId(1L);
 			treq.setNome("Assinatura do Contrato de estágio");
-			treq.setDescricao("Descrição do tipo deste requerimento");
 			treq.setSetor("Recepção");
 
 			TipoRequerimento treq2 = new TipoRequerimento();
 			treq2.setId(2L);
 			treq2.setNome("Dispensa de Disciplina");
-			treq2.setDescricao("Descrição do tipo deste requerimento");
 			treq2.setSetor("Coordenação");
 
 			lista = new ArrayList<>();
