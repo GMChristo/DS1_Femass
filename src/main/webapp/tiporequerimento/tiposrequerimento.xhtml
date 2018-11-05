@@ -86,8 +86,15 @@
                         <h:outputText value="#{r.nome}" />
                     </p:column>
 
-                    <p:column headerText="Descricao" style="width:50%">
-                        <h:outputText value="#{r.descricao}" />
+                    <p:column headerText="Setor" style="width:30%">
+                        <h:outputText value="#{r.setor}" />
+                    </p:column>
+                    
+                    <p:column headerText="Estado" style="width:10%">
+                        <h:outputText value="#{r.ativo ? 'Ativo': 'Inativo'}" />
+                        <!--h:outputText value="Ativo" rendered="#{r.ativo}"/>
+                        <h:outputText value="Inativo" rendered="#{!r.ativo}"/-->
+                        <p:selectBooleanCheckbox value="#{r.ativo}" />
                     </p:column>
 
 

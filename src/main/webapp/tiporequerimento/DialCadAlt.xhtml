@@ -29,10 +29,6 @@
                                      value="#{tiporequerimentoBean.cadastro.nome}" required="true"
                                      requiredMessage="O Campo 'NOME' é obrigatório." />
 
-                        <!--<p:outputLabel for="descricao" value="descricao.: " />
-                        <p:inputText id="descricao" value="#{tiporequerimentoBean.cadastro.descricao}" />
-                        -->
-
                         <p:outputLabel for="func" value="Setor: " />
                         <p:selectOneMenu id="func" filter="true"
                                          value="#{tiporequerimentoBean.cadastro.setor}" style="width:100%;"
@@ -41,14 +37,16 @@
                             <f:selectItem noSelectionOption="true"
                                           itemLabel="Selecione um Setor..." />
                             <f:selectItem itemLabel="Coordenação" itemValue="Coordenação" />
-                            <f:selectItem itemLabel="Recepção" itemValue="Recepção" />
+                            <f:selectItem itemLabel="Direção" itemValue="Direção" />
+                            <f:selectItem itemLabel="Secretaria" itemValue="Secretaria" />
                         </p:selectOneMenu>
 
+                        <!--
                         <p:outputLabel for="button" value="Data Limite:" />
                         <p:calendar id="button" value="#{calendarView.date3}" showOn="button" />
-
+                        -->
                         <p:outputLabel for="@next" value="Ativo:" />
-                        <p:selectBooleanCheckbox value="#{selectBooleanView.value1}" />
+                        <p:selectBooleanCheckbox value="#{tiporequerimentoBean.cadastro.ativo}" />
 
 
                     </p:panelGrid>
