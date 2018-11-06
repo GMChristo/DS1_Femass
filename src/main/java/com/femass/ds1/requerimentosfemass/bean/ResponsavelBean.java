@@ -23,7 +23,7 @@ public class ResponsavelBean {
     private List<Cargo> licargos;
     private int size;
     private String acao;
-    
+
     @EJB
     ResponsavelDao dao;
 
@@ -97,9 +97,8 @@ public class ResponsavelBean {
     }
 
     //gets e sets
-
     public Responsavel getCadastro() {
-        if(cadastro == null){
+        if (cadastro == null) {
             cadastro = new Responsavel();
         }
         return cadastro;
@@ -117,14 +116,6 @@ public class ResponsavelBean {
         this.lista = lista;
     }
 
-    public List<Cargo> getLicargos() {
-        return licargos;
-    }
-
-    public void setLicargos(List<Cargo> licargos) {
-        this.licargos = licargos;
-    }
-    
     public int getSize() {
         return size;
     }
@@ -137,7 +128,4 @@ public class ResponsavelBean {
         return acao;
     }
 
-    public void setAcao(String acao) {
-        this.acao = acao;
-    }  
 }

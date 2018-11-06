@@ -75,7 +75,7 @@
                     <p:ajax event="rowUnselect" update="frmList:toolbar" />
 
                     <p:column headerText="#"
-                              style="width:10% ;text-align: center">
+                              style="width:10% ;text-align: center" sortBy="#{r.id}">
                         <h:outputText value="#{r.id}" />
                         <f:facet name="footer">
                             <h:outputText value="Qtd #{tiporequerimentoBean.size}" />
@@ -83,19 +83,26 @@
                     </p:column>
 
                     <p:column headerText="Nome" style="width:30%"
-                              filterBy="#{r.nome}">
+                              filterBy="#{r.nome}" sortBy="#{r.nome}">
                         <h:outputText value="#{r.nome}" />
                     </p:column>
 
-                    <p:column headerText="Descricao" style="width:50%">
-                        <h:outputText value="#{r.descricao}" />
-                    </p:column>
-
-
-                    <p:column headerText="Setor"
-                              style="width:10% ;text-align: center" sortBy="#{r.setor}">
+                    <p:column headerText="Setor" style="width:10% ;text-align: center">
                         <h:outputText value="#{r.setor}" />
                     </p:column>
+                    
+                    <p:column headerText="Ativo" style="width:10%; text-align: center">
+                        <!--<h:outputText value="#{r.ativo ? 'Ativo': 'Inativo'}" />
+                        <!h:outputText value="Ativo" rendered="#{r.ativo}"/>
+                        <h:outputText value="Inativo" rendered="#{!r.ativo}"/-->
+                        <p:selectBooleanCheckbox value="#{r.ativo}"/>
+                    </p:column>
+                    <!-- Salvamento de data
+                    <p:column headerText="Data Limite" style="width:10% ;text-align: center">
+                        <h:outputText value="#{r.dataLimite}" />
+                    </p:column>
+                    -->
+
                 </p:dataTable>
             </h:form>
 

@@ -7,6 +7,7 @@ package com.femass.ds1.requerimentosfemass.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,10 +27,27 @@ public class TipoRequerimento implements Serializable {
     private Long id; //sera usado como codigo do tipo de requerimento
    
     private String nome;
-    private String descricao;
-    private List<String> documentos = new ArrayList();
+    private Boolean ativo;
+    private List<Documento> documentos = new ArrayList();
     private String setor;
+    private Calendar dataLimite;
 
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public Calendar getDataLimite() {
+        return dataLimite;
+    }
+
+    public void setDataLimite(Calendar dataLimite) {
+        this.dataLimite = dataLimite;
+    }
+    
     public String getNome() {
         return nome;
     }
@@ -38,19 +56,11 @@ public class TipoRequerimento implements Serializable {
         this.nome = nome;
     }
 
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public List<String> getDocumentos() {
+    public List<Documento> getDocumentos() {
         return documentos;
     }
 
-    public void setDocumentos(List<String> documentos) {
+    public void setDocumentos(List<Documento> documentos) {
         this.documentos = documentos;
     }
 

@@ -62,6 +62,19 @@
             </f:facet>
         </p:toolbar>
 
+				<p:spacer width="5px" />
+ -->
+			<p:clock pattern="HH:mm:ss - dd/MM/yyyy" />
+			<p:spacer width="5px" />
+                        <h:outputText value="#{autenticacaoBean.constante.COPI} - Suporte. Cel:(00)00000-0000 " />
+                        <h:outputText value="#{autenticacaoBean.constante.VERSAO}" />
+		</f:facet>
+			
+		<f:facet name="right">
+                    <h:outputText value="Usuário: #{autenticacaoBean.respLogado.nome}" />
+			<p:spacer width="5px" />
+		</f:facet>
+	</p:toolbar>
         <div class="header js-header">
             <div class="img" >
                 <h:graphicImage library="imagens" name="logo_empresa.png" width="110" />

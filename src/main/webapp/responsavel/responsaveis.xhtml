@@ -63,6 +63,29 @@
                 </p:toolbar>
 
                 <p:spacer width="10px" />
+				<p:column headerText="Nome" style="width:20%"
+					sortBy="#{r.nome}">
+					<h:outputText value="#{r.nome}" />
+				</p:column>
+				
+				<p:column headerText="CPF" style="width:30% ;text-align: center"
+					filterBy="#{r.cpf}">
+					<h:outputText value="#{r.cpf}" />
+				</p:column>
+                                
+      
+                                
+                                <p:column headerText="Status" style="width:30% ;text-align: center"
+                                          filterBy="#{r.status}">
+                                    <h:outputText value="#{r.status}" />
+				</p:column>
+				
+				
+				<p:column headerText="Cargo"
+					style="width:10% ;text-align: center" sortBy="#{r.cargo}">
+					<h:outputText value="#{r.cargo}" />
+				</p:column>
+			</p:dataTable>
 
                 <p:dataTable emptyMessage="sem registros" id="tabela"
                              var="r" widgetVar="rTable" value="#{responsavelBean.lista}"

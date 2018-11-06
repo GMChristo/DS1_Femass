@@ -6,12 +6,16 @@
 package com.femass.ds1.requerimentosfemass.model;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.br.CPF;
 
 /**
  *
@@ -24,10 +28,18 @@ public class Responsavel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+   
     private String nome;
+    
+    @CPF(message = "O CPF informado é inválido.")
+    @Column(length = 14, nullable = false, unique = true)
     private String cpf;
+    
+    @NotEmpty(message = "O campo senha é obrigatório.")
+    @Size(min = 6, max = 50, message = "Tamanho inválido para o campo senha (6 - 8)")
+    @Column(length = 50, nullable = false)
     private String senha;
+    
     private Boolean status;
    
     @Enumerated(EnumType.STRING)

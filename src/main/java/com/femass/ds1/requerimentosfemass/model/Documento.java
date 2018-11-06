@@ -70,7 +70,6 @@ public class Documento implements Serializable {
 
     @Override
     public String toString() {
-        return "Documento{" + "id=" + id + ", nome=" + nome + '}';
+        return "Documento{" + "id=" + id + ", nome=" + nome + '}'; 
     }
-    
 }

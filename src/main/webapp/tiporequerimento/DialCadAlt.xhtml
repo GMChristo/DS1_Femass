@@ -24,15 +24,12 @@
                                  columns="2"
                                  columnClasses="ui-grid-col-4,ui-grid-col-8">
 
-                        <p:outputLabel for="nome" value="Nome.:" />
+                        <p:outputLabel for="nome" value="Nome:" />
                         <p:inputText id="nome" maxlength="200"
                                      value="#{tiporequerimentoBean.cadastro.nome}" required="true"
                                      requiredMessage="O Campo 'NOME' é obrigatório." />
 
-                        <p:outputLabel for="descricao" value="Descricao.: " />
-                        <p:inputText id="descricao" value="#{tiporequerimentoBean.cadastro.descricao}" />
-
-                        <p:outputLabel for="func" value="Setor.: " />
+                        <p:outputLabel for="func" value="Setor: " />
                         <p:selectOneMenu id="func" filter="true"
                                          value="#{tiporequerimentoBean.cadastro.setor}" style="width:100%;"
                                          converter="omnifaces.SelectItemsConverter" required="true"
@@ -40,8 +37,17 @@
                             <f:selectItem noSelectionOption="true"
                                           itemLabel="Selecione um Setor..." />
                             <f:selectItem itemLabel="Coordenação" itemValue="Coordenação" />
-                            <f:selectItem itemLabel="Recepção" itemValue="Recepção" />
+                            <f:selectItem itemLabel="Direção" itemValue="Direção" />
+                            <f:selectItem itemLabel="Secretaria" itemValue="Secretaria" />
                         </p:selectOneMenu>
+
+                        <!-- Salvamento de data
+                        <p:outputLabel for="button" value="Data Limite:" />
+                        <p:calendar id="button" value="#{tiporequerimentoBean.cadastro.dataLimite}" showOn="button" />
+                        -->
+                        <p:outputLabel for="@next" value="Ativo:" />
+                        <p:selectBooleanCheckbox value="#{tiporequerimentoBean.cadastro.ativo}" />
+
 
                     </p:panelGrid>
                 </p:panel>

@@ -18,14 +18,15 @@ import javax.persistence.Query;
  */
 @Stateless
 public class ResponsavelDao {
-    
+
     @PersistenceContext
     EntityManager em;
-    
-    public void incluir (Responsavel responsavel){
+
+    public void incluir(Responsavel responsavel) {
         em.persist(responsavel);
     }
-    public void alterar (Responsavel responsavel){
+
+    public void alterar(Responsavel responsavel) {
         em.merge(responsavel);
     }
     public void excluir (Responsavel responsavel){
@@ -33,10 +34,22 @@ public class ResponsavelDao {
         if (!em.contains(responsavel)) {
             responsavel = em.merge(responsavel);
         }
-        em.remove(responsavel);
     }
+    
     public List<Responsavel> getResponsaveis(){
         Query q = em.createQuery("select r from Responsavel r order by r.nome");
         return q.getResultList();
+    }
+
+    public Responsavel autenticar(String cpf, String senha) {
+        String q = "select r FROM Responsavel r WHERE r.cpf=:cpf and r.senha=:senha";
+        Responsavel resp = this.em.createQuery(q , Responsavel.class)
+        .setParameter("cpf", cpf)
+        .setParameter("senha", senha)
+        .getSingleResult(); 
+        
+        System.out.println("Responsavel = "+resp.getId());
+         
+        return resp;
     }
 }

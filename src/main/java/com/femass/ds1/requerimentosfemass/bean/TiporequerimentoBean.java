@@ -73,7 +73,7 @@ public class TiporequerimentoBean {
             Messages.addGlobalInfo("Tipo de Requerimento Salvo com sucesso!");
         } catch (RuntimeException e) {
             e.printStackTrace();
-            Messages.addGlobalError(">>>> ERRO: Não foi possivel Salvar o Tipo de Requerimento: "+cadastro.getDescricao());
+            Messages.addGlobalError(">>>> ERRO: Não foi possivel Salvar o Tipo de Requerimento: "+cadastro.getNome());
         }
     }
     
