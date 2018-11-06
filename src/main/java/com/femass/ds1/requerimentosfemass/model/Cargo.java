@@ -10,6 +10,5 @@ package com.femass.ds1.requerimentosfemass.model;
  * @author Gabriel
  */
 public enum Cargo {
-    Coordenador, 
-    Secretaria;
+    Coordenador, Secretaria, Direção;
 }

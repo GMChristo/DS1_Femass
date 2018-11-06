@@ -13,6 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.br.CPF;
@@ -44,6 +45,9 @@ public class Responsavel implements Serializable {
    
     @Enumerated(EnumType.STRING)
     private Cargo cargo;
+    
+    @ManyToOne
+    private Curso curso;
 
     public String getNome() {
         return nome;
@@ -92,7 +96,14 @@ public class Responsavel implements Serializable {
     public void setCargo(Cargo cargo) {
         this.cargo = cargo;
     }
-    
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
 
     @Override
     public int hashCode() {

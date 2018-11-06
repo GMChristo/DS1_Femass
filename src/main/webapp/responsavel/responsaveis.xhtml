@@ -85,17 +85,26 @@
                               sortBy="#{r.nome}">
                         <h:outputText value="#{r.nome}" />
                     </p:column>
+                    
+                    <p:column headerText="Curso" style="text-align: center; width:20%">
+                        <h:outputText value="#{r.curso.nome}" />
+                    </p:column>
 
-                    <p:column headerText="CPF" style="width:20% ;text-align: center"
+                    <p:column headerText="CPF" style="width:10% ;text-align: center"
                               filterBy="#{r.cpf}">
                         <h:outputText value="#{r.cpf}" />
                     </p:column>
 
 
                     <p:column headerText="Cargo"
-                              style="width:20% ;text-align: center" sortBy="#{r.cargo}">
+                              style="width:10% ;text-align: center" sortBy="#{r.cargo}">
                         <h:outputText value="#{r.cargo}" />
                     </p:column>
+                    
+                     <p:column headerText="Status"
+                              style="width:10% ;text-align: center" sortBy="#{r.cargo}">
+                         <p:selectBooleanCheckbox value="#{r.status}" disabled="true"/>
+                    </p:column> 
                 </p:dataTable>
             </h:form>
 
