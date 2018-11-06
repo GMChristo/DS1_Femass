@@ -9,6 +9,7 @@
       xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <ui:composition template="/template/Layout.xhtml">	
+        
         <ui:define name="metadata">
             <f:metadata>
                 <f:viewAction action="#{tiporequerimentoBean.carregar}" />
@@ -38,7 +39,7 @@
 
                         <p:spacer width="10px" />
 
-                        <p:commandButton title="Editar" icon="edit-folha_icon"
+                        <p:commandButton value="Editar" title="Editar" icon="edit-folha_icon"
                                          disabled="#{tiporequerimentoBean.acao eq 'Editar' ?false : true}"
                                          id="edit" 
                                          oncomplete="PF('dialogo').show()" 
@@ -53,7 +54,7 @@
                                          actionListener="#{tiporequerimentoBean.excluir}"
                                          disabled="#{tiporequerimentoBean.acao eq 'Editar' ?false : true}"
                                          id="delete" 
-                                         update="msgGlobal tabela toolbar" 
+                                         update=":msgGlobal tabela toolbar" 
                                          process="@this">
 
                             <p:confirm header="Exluir"

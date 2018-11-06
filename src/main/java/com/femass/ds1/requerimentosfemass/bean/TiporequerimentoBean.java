@@ -1,6 +1,7 @@
 package com.femass.ds1.requerimentosfemass.bean;
 
 import com.femass.ds1.requerimentosfemass.dao.TipoRequerimentoDao;
+import com.femass.ds1.requerimentosfemass.model.Documento;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class TiporequerimentoBean {
 
     private TipoRequerimento cadastro;
     private List<TipoRequerimento> lista;
+    private List<Documento> lidoc;
     private int size;
     private String acao;
 
@@ -52,6 +54,7 @@ public class TiporequerimentoBean {
      */
     public void novo() {
         cadastro = new TipoRequerimento();
+        lidoc = new ArrayList<>();
         acao = "Salvar";
     }
     
@@ -84,7 +87,7 @@ public class TiporequerimentoBean {
             Messages.addGlobalInfo("Tipo de Requerimento excluído com sucesso!");
         } catch (RuntimeException e) {
             e.printStackTrace();
-            Messages.addGlobalError(">>>> ERRO: Não foi possivel excluir o Tipo de Requerimento: "+cadastro.getNome());
+            Messages.addGlobalError(">>>> ERRO: Não foi possivel excluir o Tipo de Requerimento: "+cadastro.getNome()+" - "+ e.getMessage());
         }
     }
     
