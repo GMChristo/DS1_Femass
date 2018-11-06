@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -30,7 +32,8 @@ public class TipoRequerimento implements Serializable {
     private Boolean ativo;
     private List<Documento> documentos = new ArrayList();
     private String setor;
-    private Calendar dataLimite;
+    @Temporal(TemporalType.DATE)
+    private Calendar dataLimite = Calendar.getInstance();
 
     public Boolean getAtivo() {
         return ativo;

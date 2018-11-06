@@ -41,13 +41,18 @@
                             <f:selectItem itemLabel="Secretaria" itemValue="Secretaria" />
                         </p:selectOneMenu>
 
-                        <!-- Salvamento de data
+                        <!-- Salvamento de data -->
                         <p:outputLabel for="button" value="Data Limite:" />
-                        <p:calendar id="button" value="#{tiporequerimentoBean.cadastro.dataLimite}" showOn="button" />
-                        -->
+                        <p:calendar id="button" value="#{tiporequerimentoBean.cadastro.dataLimite.time}" showOn="button" />
+                        
                         <p:outputLabel for="@next" value="Ativo:" />
-                        <p:selectBooleanCheckbox value="#{tiporequerimentoBean.cadastro.ativo}" />
-
+                        <p:selectBooleanCheckbox 
+                                                 value="#{tiporequerimentoBean.cadastro.ativo}"
+                                                 disabled="#{tiporequerimentoBean.acao eq 'Novo' ?false : true}" >
+                        </p:selectBooleanCheckbox>
+                        
+                        <!-- Exemplo de hiperlink: <a href="https://www.google.com/" target="_blank" >Google </a> -->
+                        <!-- Exemplo de hiperlink: <a href="C:\Users\Gabriel\Desktop\Diagrama de Classe v4.0 - DS1.asta" " Download </a> -->
 
                     </p:panelGrid>
                 </p:panel>

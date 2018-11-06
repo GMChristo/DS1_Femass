@@ -95,13 +95,15 @@
                         <!--<h:outputText value="#{r.ativo ? 'Ativo': 'Inativo'}" />
                         <!h:outputText value="Ativo" rendered="#{r.ativo}"/>
                         <h:outputText value="Inativo" rendered="#{!r.ativo}"/-->
-                        <p:selectBooleanCheckbox value="#{r.ativo}"/>
+                        <p:selectBooleanCheckbox value="#{r.ativo}" disabled="true"/>
                     </p:column>
-                    <!-- Salvamento de data
+                    <!-- Salvamento de data -->
                     <p:column headerText="Data Limite" style="width:10% ;text-align: center">
-                        <h:outputText value="#{r.dataLimite}" />
+                        <!-- <f:convertDateTime pattern="dd/MM/yy" /> -->
+                        <h:outputText value="#{r.dataLimite.time}" >
+                        <f:convertDateTime pattern="dd/MM/yy" /></h:outputText>
                     </p:column>
-                    -->
+                    
 
                 </p:dataTable>
             </h:form>
