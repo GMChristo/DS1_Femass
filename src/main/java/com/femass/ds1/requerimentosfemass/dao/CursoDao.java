@@ -29,6 +29,10 @@ public class CursoDao {
         em.merge(curso);
     }
     public void excluir (Curso curso){
+        // resolve erro de: Entity must be managed to call remove: try merging the detached and try the remove again.
+        if (!em.contains(curso)) {
+            curso = em.merge(curso);
+        }
         em.remove(curso);
     }
     public List<Curso> getCursos(){

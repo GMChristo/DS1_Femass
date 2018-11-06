@@ -26,6 +26,7 @@ public class Aluno implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     private String matricula;
     private String nome;
     private String cpf;
@@ -98,6 +99,31 @@ public class Aluno implements Serializable {
         this.telefone = telefone;
     }
 
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public StatusMatricula getStatusMatricula() {
+        return statusMatricula;
+    }
+
+    public void setStatusMatricula(StatusMatricula statusMatricula) {
+        this.statusMatricula = statusMatricula;
+    }
+
+    
     public String getSenha() {
         return senha;
     }
