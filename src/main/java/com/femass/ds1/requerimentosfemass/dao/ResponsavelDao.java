@@ -29,9 +29,13 @@ public class ResponsavelDao {
         em.merge(responsavel);
     }
     public void excluir (Responsavel responsavel){
+        // resolve erro de: Entity must be managed to call remove: try merging the detached and try the remove again.
+        if (!em.contains(responsavel)) {
+            responsavel = em.merge(responsavel);
+        }
         em.remove(responsavel);
     }
-    public List<Responsavel> getCursos(){
+    public List<Responsavel> getResponsaveis(){
         Query q = em.createQuery("select r from Responsavel r order by r.nome");
         return q.getResultList();
     }
