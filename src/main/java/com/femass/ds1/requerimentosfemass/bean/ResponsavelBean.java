@@ -128,4 +128,13 @@ public class ResponsavelBean {
         return acao;
     }
 
+    public List<Cargo> getLicargos() {
+        return licargos;
+    }
+
+    public void setLicargos(List<Cargo> licargos) {
+        this.licargos = licargos;
+    }
+    
+
 }
