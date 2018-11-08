@@ -1,7 +1,9 @@
 package com.femass.ds1.requerimentosfemass.bean;
 
+import com.femass.ds1.requerimentosfemass.dao.CursoDao;
 import com.femass.ds1.requerimentosfemass.dao.ResponsavelDao;
 import com.femass.ds1.requerimentosfemass.model.Cargo;
+import com.femass.ds1.requerimentosfemass.model.Curso;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -21,11 +23,15 @@ public class ResponsavelBean {
     private Responsavel cadastro;
     private List<Responsavel> lista;
     private List<Cargo> licargos;
+    private List<Curso> licursos;
     private int size;
     private String acao;
 
     @EJB
     ResponsavelDao dao;
+    
+    @EJB
+    CursoDao cursoDao;
 
     /**
      * Metodo de abertura
@@ -34,7 +40,9 @@ public class ResponsavelBean {
         try {
             lista = dao.getResponsaveis();
             size = lista.size();
+            
             licargos = Arrays.asList(Cargo.values());
+            licursos = cursoDao.getCursos();
 
         } catch (RuntimeException e) {
             Messages.addGlobalError(">>>> ERRO: Não foi possível carregar os Responsáveis.");
@@ -56,6 +64,7 @@ public class ResponsavelBean {
      */
     public void novo() {
         cadastro = new Responsavel();
+        cadastro.setStatus(true);
         acao = "Salvar";
     }
 
@@ -135,6 +144,13 @@ public class ResponsavelBean {
     public void setLicargos(List<Cargo> licargos) {
         this.licargos = licargos;
     }
-    
+
+    public List<Curso> getLicursos() {
+        return licursos;
+    }
+
+    public void setLicursos(List<Curso> licursos) {
+        this.licursos = licursos;
+    }
 
 }

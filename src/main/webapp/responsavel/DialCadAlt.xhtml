@@ -30,16 +30,40 @@
                                      requiredMessage="O Campo 'NOME' é obrigatório." />
 
                         <p:outputLabel for="cpf" value="CPF.: " />
-                        <p:inputText id="cpf" maxlength="14" value="#{responsavelBean.cadastro.cpf}" />
-
-                        <p:outputLabel for="func" value="Cargo.: " />
-                        <p:selectOneMenu id="func" filter="true"
+                        <p:inputMask id="cpf" maxlength="14" value="#{responsavelBean.cadastro.cpf}"
+                                     required="true" requiredMessage="O Campo 'CPF' é obrigatório."
+                                     mask="999.999.999-99"/>
+                        
+                        <p:outputLabel for="senha" value="Senha.:" />
+                        <p:password id="senha" maxlength="200"
+                                     value="#{responsavelBean.cadastro.senha}" required="true"
+                                     requiredMessage="O Campo 'SENHA' é obrigatório."
+                                     feedback="true" inline="true" 
+                                     weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte"
+                                     promptLabel="Digite sua Senha"/>
+                        
+                        <p:outputLabel for="carg" value="Cargo.: " />
+                        <p:selectOneMenu id="carg" filter="true"
                                          value="#{responsavelBean.cadastro.cargo}" style="width:100%;"
                                          converter="omnifaces.SelectItemsConverter" required="true"
                                          requiredMessage="O Campo 'CARGO' é obrigatório.">
                             <f:selectItem noSelectionOption="true" itemLabel="Selecione um Cargo..." />
                             <f:selectItems value="#{responsavelBean.licargos}" />
                         </p:selectOneMenu>
+                        
+                        <p:outputLabel for="cur" value="Curso.: " />
+                        <p:selectOneMenu id="cur" filter="true"
+                                         value="#{responsavelBean.cadastro.curso}" style="width:100%;"
+                                         converter="omnifaces.SelectItemsConverter" required="true"
+                                         requiredMessage="O Campo 'CURSO' é obrigatório.">
+                            <f:selectItem noSelectionOption="true" itemLabel="Selecione um Curso..." />
+                            <f:selectItems value="#{responsavelBean.licursos}" var="curso" itemLabel="#{curso.nome}"
+                                           itemValue="#{curso}"/>
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel for="st" value="Status.: " />
+                        <p:selectBooleanCheckbox id="st" value="#{responsavelBean.cadastro.status}" 
+                                                 disabled="#{responsavelBean.acao eq 'Salvar' ?true :false}"/>
 
                     </p:panelGrid>
                 </p:panel>
