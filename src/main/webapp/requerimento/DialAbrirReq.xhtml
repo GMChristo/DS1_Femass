@@ -28,11 +28,18 @@
                         <p:calendar value="#{requerimentoBean.cadastro.dataAbertura}" disabled="true"
                                     mask="true" pattern="dd/MM/yyyy" showOn="button" navigator="true" />
 
+                        
+                        <p:outputLabel for="prot" value="Protocolo.:"/>
+                        <p:inputText id="prot"
+                                     value="#{requerimentoBean.cadastro.numeroProtocolo}" required="true"
+                                     requiredMessage="O Campo 'PROTOCOLO' é obrigatório." disabled="true"/>
+                        <!-- Código no git o de cima é pra inserir o protocolo automaticamente, está faltando acrescimo da lógica.
                         <p:outputLabel for="prot" value="Protocolo.:" />
                         <p:inputText id="prot"
                                      value="#{requerimentoBean.cadastro.numeroProtocolo}" required="true"
                                      requiredMessage="O Campo 'PROTOCOLO' é obrigatório." />
-
+                        
+                        -->
 
                         <!--  -->
                         <p:outputLabel for="nome" value="Tipo de Requerimento.: " />

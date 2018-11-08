@@ -45,6 +45,11 @@ public class Requerimento implements Serializable {
     private TipoRequerimento tipoRequerimento;    
     private StatusRequerimento statusRequerimento;
 
+    public String GerarNumeroProtocolo(){
+        
+        return id.toString();        
+    }
+    
     public Aluno getAluno() {
         return aluno;
     }
