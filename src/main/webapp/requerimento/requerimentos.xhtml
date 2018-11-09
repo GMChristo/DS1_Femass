@@ -1,125 +1,126 @@
 <!-- <?xml version="1.0" encoding="UTF-8" ?> -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:jsf="http://xmlns.jcp.org/jsf">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-<ui:composition template="/template/Layout.xhtml">
-	<ui:define name="metadata">
-		<f:metadata>
-			<f:viewAction action="#{requerimentoBean.carregar}" />
-		</f:metadata>
-	</ui:define>
+    <ui:composition template="/template/Layout.xhtml">
+        <ui:define name="metadata">
+            <f:metadata>
+                <f:viewAction action="#{requerimentoBean.carregar}" />
+            </f:metadata>
+        </ui:define>
 
-	<ui:define name="conteudo">
+        <ui:define name="conteudo">
 
-		<!-- <p:separator /> -->
-		<h3>Listagem de Requerimento</h3>
-		<!-- <p:separator /> -->
+            <!-- <p:separator /> -->
+            <h3>Listagem de Requerimento</h3>
+            <!-- <p:separator /> -->
 
-		<h:form id="frmList">
-			<!-- toobar pesquisa, botões e exportação -->
-			<p:toolbar id="toolbar">
-				<f:facet name="left">
-					<p:commandButton icon="novo-icon" title="Novo"
-						actionListener="#{requerimentoBean.novo}" process="@this"
-						update=":msgGlobal :frmCad :frmList:tabela edit delete"
-						oncomplete="PF('dialogo').show();">
+            <h:form id="frmList">
+                <!-- toobar pesquisa, botões e exportação -->
+                <p:toolbar id="toolbar">
+                    <f:facet name="left">
+                        <p:commandButton icon="novo-icon" title="Novo"
+                                         actionListener="#{requerimentoBean.novo}" process="@this"
+                                         update=":msgGlobal :frmCad :frmList:tabela edit delete"
+                                         oncomplete="PF('dialogo').show();">
 
-						<p:resetInput target="dial" />
-						<f:actionListener
-							type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
-					</p:commandButton>
+                            <p:resetInput target="dial" />
+                            <f:actionListener
+                                type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+                        </p:commandButton>
 
-					<p:spacer width="10px" />
+                        <p:spacer width="10px" />
 
-					<p:commandButton title="Editar" icon="edit-folha_icon"
-						disabled="#{requerimentoBean.acao eq 'Editar' ?false : true}"
-						id="edit" oncomplete="PF('dialogo').show()" update="dial"
-						process="@this">
-						<p:resetInput target="dial" />
-					</p:commandButton>
+                        <p:commandButton title="Editar" icon="edit-folha_icon"
+                                         disabled="#{requerimentoBean.acao eq 'Editar' ?false : true}"
+                                         id="edit" oncomplete="PF('dialogo').show()" update="dial"
+                                         process="@this">
+                            <p:resetInput target="dial" />
+                        </p:commandButton>
 
-					<p:spacer width="10px" />
+                        <p:spacer width="10px" />
 
-					<p:commandButton title="Excluir" icon="excluir-x-icon"
-						disabled="#{requerimentoBean.acao eq 'Editar' ?false : true}"
-						id="delete" update="msgGlobal tabela toolbar" process="@this">
+                        <p:commandButton title="Excluir" icon="excluir-x-icon"
+                                         actionListener="#{requerimentoBean.excluir()}"
+                                         disabled="#{requerimentoBean.acao eq 'Editar' ?false : true}"
+                                         id="delete" update="msgGlobal tabela toolbar" process="@this">
 
-						<p:confirm header="Exluir"
-							message="Deseja excluir este Requerimento?" icon="perigo-icon" />
-					</p:commandButton>
-					
-					<p:spacer width="10px" />
+                            <p:confirm header="Exluir"
+                                       message="Deseja excluir este Requerimento?" icon="perigo-icon" />
+                        </p:commandButton>
 
-					<p:commandButton value="Notificar Responsável" title="Notificar Responsável" 
-						disabled="#{requerimentoBean.acao eq 'Editar' ?false : true}"
-						id="notif" oncomplete="PF('dialogo').show()" update="dial"
-						process="@this">
-						<p:resetInput target="dial" />
-					</p:commandButton>
+                        <p:spacer width="10px" />
 
-					<p:spacer width="10px" />
-				</f:facet>
-			</p:toolbar>
+                        <!--					<p:commandButton value="Notificar Responsável" title="Notificar Responsável" 
+                                                                        disabled="#{requerimentoBean.acao eq 'Editar' ?false : true}"
+                                                                        id="notif" oncomplete="PF('dialogo').show()" update="dial"
+                                                                        process="@this">
+                                                                        <p:resetInput target="dial" />
+                                                                </p:commandButton>-->
 
-			<p:spacer width="10px" />
+                        <p:spacer width="10px" />
+                    </f:facet>
+                </p:toolbar>
 
-			<p:dataTable emptyMessage="sem registros" id="tabela" var="r"
-				widgetVar="rTable" value="#{requerimentoBean.lista}"
-				selectionMode="single" selection="#{requerimentoBean.cadastro}"
-				rowKey="#{r.id}" >
+                <p:spacer width="10px" />
 
-				<p:ajax event="rowSelect" listener="#{requerimentoBean.onRowSelect}"
-					update="frmList:toolbar" />
-				<p:ajax event="rowUnselect" update="frmList:toolbar" />
+                <p:dataTable emptyMessage="sem registros" id="tabela" var="r"
+                             widgetVar="rTable" value="#{requerimentoBean.lista}"
+                             selectionMode="single" selection="#{requerimentoBean.cadastro}"
+                             rowKey="#{r.id}" >
 
-				<p:column headerText="Protocolo"
-					style="width:10% ;text-align: center">
-                                    <h:outputText value="#{r.numeroProtocolo}" />
-					<f:facet name="footer">
-						<h:outputText value="Qtd #{requerimentoBean.size}" />
-					</f:facet>
-				</p:column>
+                    <p:ajax event="rowSelect" listener="#{requerimentoBean.onRowSelect}"
+                            update="frmList:toolbar" />
+                    <p:ajax event="rowUnselect" update="frmList:toolbar" />
 
-				<p:column headerText="Data Abertura" priority="1"
-					style="width:10% ;text-align: center">
-					<h:outputText value="#{r.dataAbertura}">
-						<f:convertDateTime pattern="dd/MM/yy" timeZone="America/Sao_Paulo" />
-					</h:outputText>
-				</p:column>
+                    <p:column headerText="Protocolo"
+                              style="width:10% ;text-align: center">
+                        <h:outputText value="#{r.numeroProtocolo}" />
+                        <f:facet name="footer">
+                            <h:outputText value="Qtd #{requerimentoBean.size}" />
+                        </f:facet>
+                    </p:column>
 
-				<p:column headerText="Tipo Requerimento"
-					style="width:15% ;text-align: center">
-                                    <h:outputText value="#{r.tipoRequerimento.nome}" />
-				</p:column>
+                    <p:column headerText="Data Abertura" priority="1"
+                              style="width:10% ;text-align: center">
+                        <h:outputText value="#{r.dataAbertura}">
+                            <f:convertDateTime pattern="dd/MM/yy" timeZone="America/Sao_Paulo" />
+                        </h:outputText>
+                    </p:column>
 
-				<p:column headerText="Descricao" style="width:40%"
-					sortBy="#{r.descricao}">
-					<h:outputText value="#{r.descricao}" />
-				</p:column>
-				
-				<p:column headerText="Aluno" style="width:15%">
-					<h:outputText value="#{r.aluno.nome}" />
-				</p:column>
+                    <p:column headerText="Tipo Requerimento"
+                              style="width:15% ;text-align: center">
+                        <h:outputText value="#{r.tipoRequerimento.nome}" />
+                    </p:column>
 
-				<p:column headerText="Revisao" style="width:10% ;text-align: center"
-					sortBy="#{r.revisao}">
-					<h:outputText value="#{r.revisao}" />
-				</p:column>
+                    <p:column headerText="Descricao" style="width:40%"
+                              sortBy="#{r.descricao}">
+                        <h:outputText value="#{r.descricao}" />
+                    </p:column>
 
-			</p:dataTable>
-		</h:form>
+                    <p:column headerText="Aluno" style="width:15%">
+                        <h:outputText value="#{r.aluno.nome}" />
+                    </p:column>
 
-		<!-- carregamento.gif  -->
-		<ui:include src="/comum/carregamento.xhtml" />
+                    <p:column headerText="Revisao" style="width:10% ;text-align: center"
+                              sortBy="#{r.revisao}">
+                        <h:outputText value="#{r.revisao}" />
+                    </p:column>
 
-		<!-- inclui dialogo de cadastro e alteração  -->
-		<ui:include src="DialAbrirReq.xhtml" />
+                </p:dataTable>
+            </h:form>
 
-	</ui:define>
-</ui:composition>
+            <!-- carregamento.gif  -->
+            <ui:include src="/comum/carregamento.xhtml" />
+
+            <!-- inclui dialogo de cadastro e alteração  -->
+            <ui:include src="DialAbrirReq.xhtml" />
+
+        </ui:define>
+    </ui:composition>
 </html>

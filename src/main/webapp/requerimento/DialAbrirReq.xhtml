@@ -9,7 +9,7 @@
       xmlns:fn="http://java.sun.com/jsp/jstl/functions">
 
     <!-- 		Dialogo para cadastro, alteração -->
-    <p:dialog header="Abrir - Requerimento" widgetVar="dialogo"
+    <p:dialog header="#{requerimentoBean.acao} - Requerimento" widgetVar="dialogo"
               id="dial" draggable="true" resizable="true" modal="true"
               closable="false" minimizable="false" maximizable="true"
               showEffect="fade" hideEffect="fade" appendTo="@(body)"
@@ -34,56 +34,23 @@
                                      value="#{requerimentoBean.cadastro.numeroProtocolo}" required="true"
                                      requiredMessage="O Campo 'PROTOCOLO' é obrigatório." disabled="true"/>
                         <!-- Código no git o de cima é pra inserir o protocolo automaticamente, está faltando acrescimo da lógica.
-                        <p:outputLabel for="prot" value="Protocolo.:" />
-                        <p:inputText id="prot"
-                                     value="#{requerimentoBean.cadastro.numeroProtocolo}" required="true"
-                                     requiredMessage="O Campo 'PROTOCOLO' é obrigatório." />
                         
                         -->
-
-                        <!--  -->
                         <p:outputLabel for="nome" value="Tipo de Requerimento.: " />
                         <p:selectOneMenu id="nome" value="#{requerimentoBean.cadastro.tipoRequerimento}" 
+                                         converter="omnifaces.SelectItemsConverter"
                                          required="true"  requiredMessage="O campo 'TIPO DE REQUERIMENTO' é obrigatório.">
                             <f:selectItem itemLabel="Selecione um tipo de requerimento" noSelectionOption="true"/> 
                             <f:selectItems value="#{requerimentoBean.listatipo}" var="tipo" itemLabel="#{tipo.nome}" itemValue="#{tipo}"/>
                         </p:selectOneMenu>    
-                        <!-- 
-                        <p:selectOneMenu id="tpreq" filter="true" 
-                                         value="#{requerimentoBean.cadastro.tipoRequerimento.nome}" style="width:100%;"
-                                         converter="omnifaces.SelectItemsConverter" required="true"
-                                         requiredMessage="O Campo 'TIPO DE REQUERIMENTO' é obrigatório.">
-                            <f:selectItem noSelectionOption="true"
-                                          itemLabel="Selecione um Tipo de requerimento..." />
-                            <f:selectItem itemLabel="Assinatura do contrato de estágio" itemValue="1" />
-                            <f:selectItem itemLabel="Cancelamento de Matrícula" itemValue="2" />
-                            <f:selectItem itemLabel="...." itemValue="3" />
-                        </p:selectOneMenu>
-                        -->
+                        
 
 
                         <p:outputLabel for="descricao" value="Descricao.: " />
                         <p:inputTextarea id="descricao" value="#{requerimentoBean.cadastro.descricao}" rows="6" cols="33" />
-                        <!-- -->
-                        <!-- 
-                        <p:outputLabel for="descricao" value="Descricao.: " />
-                        <p:inputText id="descricao" value="#{requerimentoBean.cadastro.descricao}" />
-                        -->
+                       
 
-                        <!-- 
-                        <p:outputLabel for="aluno" value="Aluno.: " />
-                        <p:selectOneMenu id="aluno" filter="true" 
-                                         value="#{requerimentoBean.cadastro.aluno}" style="width:100%;"
-                                         converter="omnifaces.SelectItemsConverter" required="true"
-                                         requiredMessage="O Campo 'ALUNO' é obrigatório.">
-                            <f:selectItem noSelectionOption="true"
-                                          itemLabel="Selecione um Aluno..." />
-                            <f:selectItem itemLabel="Alex" itemValue="1" />
-                            <f:selectItem itemLabel="Gustavo" itemValue="2" />
-                            <f:selectItem itemLabel="Jocimar" itemValue="4" />
-                            <f:selectItem itemLabel="...." itemValue="3" />
-                        </p:selectOneMenu>
-                        -->
+                        
                         <p:outputLabel value="Status.: " />
                         <p:inputText  value="#{requerimentoBean.cadastro.statusRequerimento}" disabled="true" />
 
@@ -97,6 +64,7 @@
                 <p:panel>
                     <h:panelGrid columns="3">
                         <p:commandButton value="Salvar" icon="salvar-icon"
+                                         actionListener="#{requerimentoBean.merge}"
                                          process="@this :frmCad"
                                          update=":frmCad :frmList:tabela"
                                          partialSubmit="true" />

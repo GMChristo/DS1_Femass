@@ -41,61 +41,49 @@ public class RequerimentoBean {
     @EJB
     private TipoRequerimentoDao tipoDao;
     
-
+    
+//    Método para abrir e editar
+    
+    public void merge(){
+        try {
+            if (acao.equals("salvar")) {
+                dao.incluir(cadastro);
+            }else{
+                dao.alterar(cadastro);
+            }
+            carregar();
+            novo();
+            Messages.addGlobalInfo("Requerimento Salvo com sucesso!");
+        } catch (Exception e) {
+            Messages.addGlobalError(">>>> ERRO: Não foi possivel Salvar o Requerimento: " + cadastro.getNumeroProtocolo());
+        }
+    }
+    
+    /**
+     * Metodo de exclusão
+     */
+    public void excluir(){
+        try{
+            dao.excluir(cadastro);
+            carregar();
+            Messages.addGlobalInfo("Requerimento excluído com sucesso!");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            Messages.addGlobalError(">>>> ERRO: Não foi possivel excluir o Requerimento: "+cadastro.getNumeroProtocolo()+" - "+ e.getMessage());
+        }
+    }
+    
     /**
      * Metodo de abertura
      */
     public void carregar() {
         try {
-            // cria aluno
-            Aluno aluno = new Aluno();
-            aluno.setId(1L);
-            aluno.setNome("Jocimar Galante");
-
-            Aluno aluno2 = new Aluno();
-            aluno2.setId(2L);
-            aluno2.setNome("Alex Santos");
-
-            // cria tipo do requerimento
-            TipoRequerimento treq = new TipoRequerimento();
-            treq.setId(1L);
-            treq.setNome("Assinatura do Contrato de estágio");
-            treq.setSetor("Recepção");
-
-            TipoRequerimento treq2 = new TipoRequerimento();
-            treq2.setId(2L);
-            treq2.setNome("Dispensa de Disciplina");
-            treq2.setSetor("Coordenação");
-
-            lista = new ArrayList<>();
-
-            Requerimento req = new Requerimento();
-            req.setId(1L);
-            req.setNumeroProtocolo("0001/2018");
-            req.setDescricao("Entrega de contrato para avaliação e assinatura.");
-            req.setRevisao(false);
-            req.setStatusRequerimento(StatusRequerimento.Aberto);
-            req.setTipoRequerimento(treq);
-            req.setAluno(aluno);
-            req.setDataAbertura(new Date());
-            lista.add(req);
-
-            Requerimento req2 = new Requerimento();
-            req2.setId(2L);
-            req2.setNumeroProtocolo("0002/2018");
-            req2.setDescricao("Em anexo seguem as comprovações das matérias concluídas em outro curso técnico para avaliação.");
-            req2.setRevisao(false);
-            req2.setStatusRequerimento(StatusRequerimento.Aberto);
-            req2.setTipoRequerimento(treq2);
-            req2.setAluno(aluno2);
-            req2.setDataAbertura(new Date());
-            lista.add(req2);
-
+            lista = dao.getRequerimentos();
             size = lista.size();
-            System.out.println("Tamanho da lista = " + size);
-
+            
+            listatipo = tipoDao.getTipoRequerimentos();
         } catch (RuntimeException e) {
-            System.out.println("Erro ao tentar gerar a lista.");
+            Messages.addGlobalError(">>>> ERRO: Não foi possível carregar os Requerimentos.");
         }
 
     }

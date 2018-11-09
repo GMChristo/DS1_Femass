@@ -29,9 +29,12 @@ public class RequerimentoDao {
         em.merge(requerimento);
     }
     public void excluir (Requerimento requerimento){
+        if (!em.contains(requerimento)) {
+            requerimento = em.merge(requerimento);
+        }        
         em.remove(requerimento);
     }
-    public List<Requerimento> getCursos(){
+    public List<Requerimento> getRequerimentos(){
         Query q = em.createQuery("select r from Requerimento r order by r.numeroProtocolo");
         return q.getResultList();
     }
