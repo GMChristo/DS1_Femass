@@ -44,17 +44,38 @@
                         <!-- Salvamento de data -->
                         <p:outputLabel for="button" value="Data Limite:" />
                         <p:calendar id="button" value="#{tiporequerimentoBean.cadastro.dataLimite.time}" showOn="button" />
-                        
+
                         <p:outputLabel for="@next" value="Ativo:" />
                         <p:selectBooleanCheckbox 
-                                                 value="#{tiporequerimentoBean.cadastro.ativo}"
-                                                 disabled="#{tiporequerimentoBean.acao eq 'Novo' ?false : true}">
+                            value="#{tiporequerimentoBean.cadastro.ativo}"
+                            disabled="#{tiporequerimentoBean.acao eq 'Novo' ?false : true}">
                         </p:selectBooleanCheckbox>
-                        
-                        <!-- Exemplo de hiperlink: <a href="https://www.google.com/" target="_blank" >Google </a> -->
-                        <!-- Exemplo de hiperlink: <a href="C:\Users\Gabriel\Desktop\Diagrama de Classe v4.0 - DS1.asta" " Download </a> -->
 
                     </p:panelGrid>
+                    <p:outputLabel for="@next" value="Documentos Necessários:" />
+                    <p:panelGrid id="painelDocumento" layout="grid" styleClass="pgrid-nobor-nobk"
+                                 columns="2"
+                                 columnClasses="ui-grid-col-4,ui-grid-col-8">
+                        <p:outputLabel for="@next" value="Título:" />
+                        <p:inputText id="titulo" maxlength="200" />
+                        <p:outputLabel for="@next" value="Link:" />
+                        <p:inputText id="link" maxlength="200" />
+
+                        <p:commandButton value="Adicionar" icon="novo-icon" style="width: 100px"
+                                         />
+                        <p:commandButton value="Remover" icon="excluir-x-icon" style="width: 100px"/>
+
+                    </p:panelGrid>
+                    <p:dataTable var="docs" value="#{dtBasicView.cars}" style="width: 500px">
+                        <p:column headerText="Título">
+                            style="width:30% ;text-align: center"
+                        </p:column>
+
+                        <p:column headerText="Link">
+                            text-align: center"
+                        </p:column>
+                    </p:dataTable>
+
                 </p:panel>
 
                 <p:separator />
