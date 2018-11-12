@@ -5,6 +5,7 @@
  */
 package com.femass.ds1.requerimentosfemass.dao;
 
+import com.femass.ds1.requerimentosfemass.model.Documento;
 import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -24,6 +25,16 @@ public class TipoRequerimentoDao {
 
     public void incluir(TipoRequerimento tipoRequerimento) {
         em.persist(tipoRequerimento);
+    }
+    
+    public void incluir2(TipoRequerimento tipoRequerimento, List<Documento> lidoc){
+        em.persist(tipoRequerimento);
+        for(int i=0; i<lidoc.size(); i++){
+            Documento doc = lidoc.get(i);
+            doc.setTipoRequerimento(tipoRequerimento);
+            em.persist(doc);
+        }
+        
     }
 
     public void alterar(TipoRequerimento tipoRequerimento) {

@@ -11,6 +11,7 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
 import javax.ejb.EJB;
+import org.eclipse.jdt.internal.core.DocumentAdapter;
 import org.omnifaces.util.Messages;
 
 @ManagedBean
@@ -21,10 +22,12 @@ public class TiporequerimentoBean {
     private List<TipoRequerimento> lista;
     private List<Documento> lidoc;
     private int size;
+    private Documento documento;
     private String acao;
 
     @EJB
     TipoRequerimentoDao dao;
+    
 
     /**
      * Metodo de abertura
@@ -95,6 +98,11 @@ public class TiporequerimentoBean {
     public void fechar(){
         novo();
     }
+    
+    public void adicionar(){
+        lidoc.add(documento);
+        System.out.println("Adicionei" + documento.getTitulo());
+    }
 
     //gets e sets 
     
@@ -128,4 +136,24 @@ public class TiporequerimentoBean {
     public String getAcao() {
         return acao;
     }
+
+    public List<Documento> getLidoc() {
+        return lidoc;
+    }
+
+    public void setLidoc(List<Documento> lidoc) {
+        this.lidoc = lidoc;
+    }
+
+    public Documento getDocumento() {
+        if(documento == null){
+            documento = new Documento();
+        }
+        return documento;
+    }
+
+    public void setDocumento(Documento documento) {
+        this.documento = documento;
+    }
+    
 }

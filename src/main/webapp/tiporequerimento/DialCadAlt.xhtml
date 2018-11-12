@@ -57,22 +57,25 @@
                                  columns="2"
                                  columnClasses="ui-grid-col-4,ui-grid-col-8">
                         <p:outputLabel for="@next" value="Título:" />
-                        <p:inputText id="titulo" maxlength="200" />
+                        <p:inputText id="titulo" value="#{tiporequerimentoBean.documento.titulo}" maxlength="200" />
                         <p:outputLabel for="@next" value="Link:" />
-                        <p:inputText id="link" maxlength="200" />
+                        <p:inputText id="link" value="#{tiporequerimentoBean.documento.link}" maxlength="200" />
 
-                        <p:commandButton value="Adicionar" icon="novo-icon" style="width: 100px"
+                        <p:commandButton value="Adicionar" action="#{tiporequerimentoBean.adicionar}" 
+                                         icon="novo-icon" style="width: 100px"
+                                         update=":frmCad:pnlList"
+                                         process="@this painelDocumento"
                                          />
                         <p:commandButton value="Remover" icon="excluir-x-icon" style="width: 100px"/>
 
                     </p:panelGrid>
-                    <p:dataTable var="docs" value="#{dtBasicView.cars}" style="width: 500px">
-                        <p:column headerText="Título">
-                            style="width:30% ;text-align: center"
+                    <p:dataTable id="pnlList" var="docs" value="#{tiporequerimentoBean.lidoc}" style="width: 500px">
+                        <p:column headerText="Título" style="width:30%">
+                            <p:outputLabel value="#{docs.titulo}"/>
                         </p:column>
 
-                        <p:column headerText="Link">
-                            text-align: center"
+                        <p:column headerText="Link" style="text-align: center;">
+                            <p:outputLabel value="#{docs.link}"/>
                         </p:column>
                     </p:dataTable>
 

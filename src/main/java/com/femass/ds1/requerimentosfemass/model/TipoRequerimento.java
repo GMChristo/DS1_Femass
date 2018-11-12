@@ -10,9 +10,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -30,7 +32,9 @@ public class TipoRequerimento implements Serializable {
    
     private String nome;
     private Boolean ativo;
-    private List<Documento> documentos = new ArrayList();
+    
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "tipoRequerimento")
+    private List<Documento> documentos;
     private String setor;
     @Temporal(TemporalType.DATE)
     private Calendar dataLimite = Calendar.getInstance();

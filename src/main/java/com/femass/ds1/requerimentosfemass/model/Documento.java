@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -24,16 +26,30 @@ public class Documento implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; //sera usado como codigo do tipo de requerimento
    
-    private String nome;
+    private String titulo;
+    private String link;
     
+    @ManyToOne
+    @JoinColumn(nullable = true)
+    private TipoRequerimento tipoRequerimento;
 
-    public String getNome() {
-        return nome;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+   
 
     public Long getId() {
         return id;
@@ -42,6 +58,15 @@ public class Documento implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public TipoRequerimento getTipoRequerimento() {
+        return tipoRequerimento;
+    }
+
+    public void setTipoRequerimento(TipoRequerimento tipoRequerimento) {
+        this.tipoRequerimento = tipoRequerimento;
+    }
+    
 
     @Override
     public int hashCode() {
@@ -70,6 +95,6 @@ public class Documento implements Serializable {
 
     @Override
     public String toString() {
-        return "Documento{" + "id=" + id + ", nome=" + nome + '}'; 
+        return "Documento{" + "id=" + id + ", titulo=" + titulo + '}'; 
     }
 }
