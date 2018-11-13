@@ -28,28 +28,30 @@ public class Requerimento implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataAbertura;
-    
-    private String numeroProtocolo = "0008/2018";
+
+    private String numeroProtocolo = "0001/2018";
     private String descricao;
     private boolean revisao;
-    
+
+   
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Calendar dataEncerramento;
-    
+
     @ManyToOne
     private Aluno aluno;
-   
-    private TipoRequerimento tipoRequerimento;    
+
+    private TipoRequerimento tipoRequerimento;
     private StatusRequerimento statusRequerimento;
 
-    public String GerarNumeroProtocolo(){
-        
-        return id.toString();        
+    public String GerarNumeroProtocolo() {
+
+        return id.toString();
     }
-    
+
     public Aluno getAluno() {
         return aluno;
     }
@@ -106,8 +108,6 @@ public class Requerimento implements Serializable {
         this.revisao = revisao;
     }
 
-    
-
     public Calendar getDataEncerramento() {
         return dataEncerramento;
     }
@@ -115,7 +115,7 @@ public class Requerimento implements Serializable {
     public void setDataEncerramento(Calendar dataEncerramento) {
         this.dataEncerramento = dataEncerramento;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -148,5 +148,5 @@ public class Requerimento implements Serializable {
     public String toString() {
         return "model.Requerimento[ id=" + id + " ]";
     }
-    
+
 }

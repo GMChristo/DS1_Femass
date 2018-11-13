@@ -32,14 +32,22 @@ public class RequerimentoBean {
     private int size;
     private String acao;
     private RequerimentoFilter filtro;
-    
-    
+    private Aluno aluno;
+
+    public Aluno getAluno() {
+        return aluno;
+    }
+
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
+    }
+//    aluno para tentar gravar o aluno no banco junto com o requerimento
     
     @EJB
-    private RequerimentoDao dao;
+    RequerimentoDao dao;
     
     @EJB
-    private TipoRequerimentoDao tipoDao;
+    TipoRequerimentoDao tipoDao;
     
     
 //    Método para abrir e editar
@@ -83,7 +91,7 @@ public class RequerimentoBean {
             
             listatipo = tipoDao.getTipoRequerimentos();
         } catch (RuntimeException e) {
-            Messages.addGlobalError(">>>> ERRO: Não foi possível carregar os Requerimentos.");
+            Messages.addGlobalError(">>>> ERRO: Não foi possível carregar os Requerimentos." + "Erro: " + e.getMessage());
         }
 
     }
@@ -136,7 +144,7 @@ public class RequerimentoBean {
         listatipo = tipoDao.getTipoRequerimentos();
         acao = "Salvar";
         cadastro.setDataAbertura(new Date());
-        cadastro.setStatusRequerimento(StatusRequerimento.Aberto);
+        //cadastro.setStatusRequerimento(StatusRequerimento.Aberto);
     }
     
     

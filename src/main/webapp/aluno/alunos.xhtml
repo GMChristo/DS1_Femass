@@ -68,7 +68,7 @@
                              var="r" widgetVar="rTable" value="#{alunoBean.lista}">
 
                     <p:column headerText="#"
-                              style="width:10% ;text-align: center">
+                              style="width:10% ;text-align: center" sortBy="#{r.id}">
                         <h:outputText value="#{r.id}" />
                         <f:facet name="footer">
                             <h:outputText value="Qtd #{alunoBean.size}" />
@@ -76,7 +76,7 @@
                     </p:column>
 
                     <p:column headerText="Nome"
-                              filterBy="#{r.nome}" filterStyle="width:80%;">
+                              filterBy="#{r.nome}" filterStyle="width:80%;" sortBy="#{r.nome}">
                         <h:outputText value="#{r.nome}" />
                     </p:column>
 
@@ -94,6 +94,10 @@
                     
                     <p:column headerText="Curso" style="width:15% ;text-align: center">
                         <h:outputText value="#{r.curso.nome}" />
+                    </p:column>
+                    
+                    <p:column headerText="Status" style="width:15% ;text-align: center" sortBy="#{r.statusMatricula}">
+                        <h:outputText value="#{r.statusMatricula}" />
                     </p:column>
 
                 </p:dataTable>

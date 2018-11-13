@@ -24,6 +24,11 @@
                                  columns="2" style="min-width: 600px;max-width: 800px;"
                                  columnClasses="ui-grid-col-4,ui-grid-col-8">
 
+                        <p:outputLabel value="Matricula:"/>
+                        <p:inputText id="matr" value="#{requerimentoBean.cadastro.aluno.id}"/>
+<!--                        tentativa de gravar o ID do aluno no banco junto com as outras informações-->
+                        
+                        
                         <p:outputLabel  value="Data.:" />
                         <p:calendar value="#{requerimentoBean.cadastro.dataAbertura}" disabled="true"
                                     mask="true" pattern="dd/MM/yyyy" showOn="button" navigator="true" />
@@ -32,13 +37,13 @@
                         <p:outputLabel for="prot" value="Protocolo.:"/>
                         <p:inputText id="prot"
                                      value="#{requerimentoBean.cadastro.numeroProtocolo}" required="true"
-                                     requiredMessage="O Campo 'PROTOCOLO' é obrigatório." disabled="true"/>
+                                     requiredMessage="O Campo 'PROTOCOLO' é obrigatório." disabled="false"/>
                         <!-- Código no git o de cima é pra inserir o protocolo automaticamente, está faltando acrescimo da lógica.
                         
                         -->
                         <p:outputLabel for="nome" value="Tipo de Requerimento.: " />
                         <p:selectOneMenu id="nome" value="#{requerimentoBean.cadastro.tipoRequerimento}" 
-                                         converter="omnifaces.SelectItemsConverter"
+                                         converter="omnifaces.SelectItemsConverter" 
                                          required="true"  requiredMessage="O campo 'TIPO DE REQUERIMENTO' é obrigatório.">
                             <f:selectItem itemLabel="Selecione um tipo de requerimento" noSelectionOption="true"/> 
                             <f:selectItems value="#{requerimentoBean.listatipo}" var="tipo" itemLabel="#{tipo.nome}" itemValue="#{tipo}"/>
