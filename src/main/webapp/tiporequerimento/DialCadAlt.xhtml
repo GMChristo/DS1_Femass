@@ -56,20 +56,26 @@
                     <p:panelGrid id="painelDocumento" layout="grid" styleClass="pgrid-nobor-nobk"
                                  columns="2"
                                  columnClasses="ui-grid-col-4,ui-grid-col-8">
-                        <p:outputLabel for="@next" value="Título:" />
-                        <p:inputText id="titulo" value="#{tiporequerimentoBean.documento.titulo}" maxlength="200" />
-                        <p:outputLabel for="@next" value="Link:" />
-                        <p:inputText id="link" value="#{tiporequerimentoBean.documento.link}" maxlength="200" />
+                        <p:outputLabel for="titulo" value="Título:" />
+                        <p:inputText id="titulo" value="#{tiporequerimentoBean.documento.titulo}" 
+                                     required="true" requiredMessage="Campo 'TITULO' é obrigatório"
+                                     maxlength="200" />
+                        <p:outputLabel for="link" value="Link:" />
+                        <p:inputText id="link" value="#{tiporequerimentoBean.documento.link}"
+                                     required="true" requiredMessage="Campo 'LINK' é obrigatório"
+                                     maxlength="200" />
 
                         <p:commandButton value="Adicionar" action="#{tiporequerimentoBean.adicionar}" 
                                          icon="novo-icon" style="width: 100px"
-                                         update=":frmCad:pnlList"
+                                         update=":frmCad:pnlList :msgGlobal :frmCad:painelDocumento"
                                          process="@this painelDocumento"
                                          />
                         <p:commandButton value="Remover" icon="excluir-x-icon" style="width: 100px"/>
 
                     </p:panelGrid>
-                    <p:dataTable id="pnlList" var="docs" value="#{tiporequerimentoBean.lidoc}" style="width: 500px">
+                    <p:dataTable id="pnlList" var="docs" value="#{tiporequerimentoBean.lidoc}"
+                                 style="width: 500px"
+                                 scrollable="true" scrollHeight="110">
                         <p:column headerText="Título" style="width:30%">
                             <p:outputLabel value="#{docs.titulo}"/>
                         </p:column>
@@ -87,8 +93,8 @@
                     <h:panelGrid columns="3">
                         <p:commandButton value="Salvar" icon="salvar-icon"
                                          actionListener="#{tiporequerimentoBean.merge}"
-                                         process="@this :frmCad"
-                                         update=":msgGlobal :frmCad :frmList:tabela"
+                                         process="@this :frmCad:pnlList :frmCad:painel"
+                                         update=":msgGlobal :frmList:tabela  :frmCad:pnlList :frmCad:painel"
                                          partialSubmit="true" />
 
                         <p:spacer width="10px"/>

@@ -57,6 +57,7 @@ public class TiporequerimentoBean {
      */
     public void novo() {
         cadastro = new TipoRequerimento();
+        documento = new Documento();
         lidoc = new ArrayList<>();
         acao = "Salvar";
         cadastro.setAtivo(Boolean.TRUE);
