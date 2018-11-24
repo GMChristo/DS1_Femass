@@ -37,8 +37,10 @@
                         <p:outputLabel for="senha" value="Senha.:" />
                         <p:password id="senha" maxlength="200"
                                     value="#{responsavelBean.cadastro.senha}" required="#{responsavelBean.acao eq 'Editar' ?false :true}"
-                                     requiredMessage="#{responsavelBean.acao eq 'Editar' ?false  :'O Campo SENHA é obrigatório.'}"
-                                     />
+                                     requiredMessage="#{responsavelBean.acao eq 'Editar' ?false :'O Campo SENHA é obrigatório.'}"
+                                     feedback="true" inline="true" 
+                                     weakLabel="Fraca" goodLabel="Boa" strongLabel="Forte"
+                                     promptLabel="Digite sua Senha"/>
                         
                         <p:outputLabel for="carg" value="Cargo.: " />
                         <p:selectOneMenu id="carg" filter="true"
