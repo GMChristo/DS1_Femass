@@ -36,8 +36,6 @@ public class Responsavel implements Serializable {
     @Column(length = 14, nullable = false, unique = true)
     private String cpf;
     
-    @NotEmpty(message = "O campo senha é obrigatório.")
-    @Size(min = 6, max = 50, message = "Tamanho inválido para o campo senha (6 - 8)")
     @Column(length = 50, nullable = false)
     private String senha;
     
