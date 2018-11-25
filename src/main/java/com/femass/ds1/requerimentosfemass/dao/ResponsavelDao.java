@@ -52,4 +52,14 @@ public class ResponsavelDao {
          
         return resp;
     }
+    
+    public Responsavel buscarPorCPF(String cpf){
+        String q = "select r FROM Responsavel r WHERE r.cpf=:cpf";
+        Responsavel resp = this.em.createQuery(q , Responsavel.class)
+        .setParameter("cpf", cpf)
+        .getSingleResult(); 
+        
+        System.out.println("Responsavel = "+resp.getId()+" - " + resp.getNome());
+        return resp != null ?resp :null;
+    }
 }

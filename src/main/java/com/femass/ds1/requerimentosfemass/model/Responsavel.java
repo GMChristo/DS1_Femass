@@ -46,6 +46,8 @@ public class Responsavel implements Serializable {
     
     @ManyToOne
     private Curso curso;
+    
+    private String email;
 
     public String getNome() {
         return nome;
@@ -103,6 +105,14 @@ public class Responsavel implements Serializable {
         this.curso = curso;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

@@ -6,8 +6,14 @@
 package com.femass.ds1.requerimentosfemass.bean;
 
 import com.femass.ds1.requerimentofemass.util.Constantes;
+import com.femass.ds1.requerimentofemass.util.SimpleMailTemplete;
 import com.femass.ds1.requerimentosfemass.dao.ResponsavelDao;
 import com.femass.ds1.requerimentosfemass.model.Responsavel;
+import com.outjected.email.api.MailMessage;
+import com.outjected.email.impl.MailMessageImpl;
+import com.outjected.email.impl.templating.velocity.VelocityTemplate;
+import java.io.IOException;
+import java.util.Locale;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -40,7 +46,7 @@ public class AutenticacaoBean {
         try {
             System.out.println("Usuário Deslogado...");
             respLogado = null;
-            System.out.println("Responsavel nulo = "+respLogado);
+            System.out.println("Responsavel nulo = " + respLogado);
             return "/comum/autenticacao/autenticacao.xhtml?faces-redirect=true";
         } catch (RuntimeException ex) {
             Messages.addGlobalError("Erro ao tentar sair do sistema: " + ex.getMessage());
@@ -69,6 +75,46 @@ public class AutenticacaoBean {
             Messages.addGlobalError("Erro ao tentar entrar no sistema: " + ex.getMessage());
             return null; // permanecer na pagina onde estou
         }
+    }
+
+    /**
+     * Envio de senha ppor email.
+     *
+     * @throws IOException
+     */
+    public void recuperarSenha() throws IOException {
+//		FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
+        if (respLogado.getCpf() == null || respLogado.getCpf().equals("")) {
+            Messages.addGlobalError("ERRO: >>>> Favor informar o CPF e clicar em 'ESQUECI MINHA SENHA'.");
+            System.out.println("faltou informar o CPF.");
+            return;
+        } else {
+            Responsavel resp = new Responsavel();
+            resp = respDao.buscarPorCPF(respLogado.getCpf());
+            if (resp != null) {
+                if (resp.getEmail() != null) {
+                    SimpleMailTemplete smt = new SimpleMailTemplete();
+                    MailMessage message = new MailMessageImpl(smt.enviarEmail());
+
+                    message.to(resp.getEmail())
+                            .subject("Pedido de Envio de senha.")
+                            .bodyHtml(new VelocityTemplate(getClass().getResourceAsStream("/emails/recupera_senha.html")))
+                            .charset("UTF-8")
+                            .put("responsavel", resp)
+                            .put("locale", new Locale("pt", "BR"))
+                            .send();
+//                    Template template = Velocity.getTemplate("subject.vm", "UTF-8");
+                    Messages.addGlobalInfo("Sua senha foi enviada por Email com sucesso!");
+                } else {
+                    Messages.addGlobalError("ERRO: >>>> Não possui email em seu cadastro, favor procurar o Desenvolvedor do Sistema.");
+                    return;
+                }
+            } else {
+                Messages.addGlobalError("ERRO: >>>> Este CPF não possui cadastro no sistema.");
+                return;
+            }
+        }
+
     }
 
     public Responsavel getRespLogado() {

@@ -99,11 +99,42 @@
             <artifactId>all-themes</artifactId>
             <version>1.0.10</version>
         </dependency>
+        
+        <!-- simple-email-0.2.5-SNAPSHOT.jar -->
+        <dependency>
+            <groupId>com.outjected</groupId>
+            <artifactId>simple-email</artifactId>
+            <version>0.2.5-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        
+        <!-- Dependencias do java mail -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+		
+        <!-- Usamos para templates de emails -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Usamos para formatar números em templates -->
+        <dependency>
+            <groupId>velocity-tools</groupId>
+            <artifactId>velocity-tools-generic</artifactId>
+            <version>1.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
+            <!--            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
@@ -114,7 +145,20 @@
                         <endorseddirs>${endorsed.dir}</endorseddirs>
                     </compilerArguments>
                 </configuration>
+            </plugin>-->
+            
+            <!-- Compilador -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <!-- <version>3.3</version> -->
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
             </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>

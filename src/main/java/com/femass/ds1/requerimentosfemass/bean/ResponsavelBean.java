@@ -1,5 +1,6 @@
 package com.femass.ds1.requerimentosfemass.bean;
 
+import com.femass.ds1.requerimentofemass.util.SimpleMailTemplete;
 import com.femass.ds1.requerimentosfemass.dao.CursoDao;
 import com.femass.ds1.requerimentosfemass.dao.ResponsavelDao;
 import com.femass.ds1.requerimentosfemass.model.Cargo;
@@ -12,7 +13,12 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 
 import com.femass.ds1.requerimentosfemass.model.Responsavel;
+import com.outjected.email.api.MailMessage;
+import com.outjected.email.impl.MailMessageImpl;
+import com.outjected.email.impl.templating.velocity.VelocityTemplate;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Locale;
 import javax.ejb.EJB;
 import org.omnifaces.util.Messages;
 
@@ -29,7 +35,7 @@ public class ResponsavelBean {
 
     @EJB
     ResponsavelDao dao;
-    
+
     @EJB
     CursoDao cursoDao;
 
@@ -40,7 +46,7 @@ public class ResponsavelBean {
         try {
             lista = dao.getResponsaveis();
             size = lista.size();
-            
+
             licargos = Arrays.asList(Cargo.values());
             licursos = cursoDao.getCursos();
 
@@ -103,6 +109,29 @@ public class ResponsavelBean {
 
     public void fechar() {
         novo();
+    }
+
+    /**
+     * Envio de email com Template do apacheVelocity
+     *
+     * @throws IOException
+     */
+    public void enviarSenha() throws IOException {
+        if (cadastro.getEmail() != null) {
+            SimpleMailTemplete smt = new SimpleMailTemplete();
+            MailMessage message = new MailMessageImpl(smt.enviarEmail());
+
+            message.to(cadastro.getEmail())
+                    .subject("Pedido de Envio de senha.")
+                    .bodyHtml(new VelocityTemplate(getClass().getResourceAsStream("/emails/recupera_senha.template")))
+                    .put("responsavel", cadastro)
+                    .put("locale", new Locale("pt", "BR"))
+                    .send();
+
+            Messages.addGlobalInfo("Email enviado com sucesso!");
+        } else {
+            Messages.addGlobalError("ERRO: >>>> Email não pode ser enviado porque o usuário não possui email cadastrado.");
+        }
     }
 
     //gets e sets

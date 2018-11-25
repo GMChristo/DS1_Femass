@@ -61,6 +61,11 @@
                                            itemValue="#{curso}"/>
                         </p:selectOneMenu>
                         
+                        <p:outputLabel for="email" value="Email.:" />
+                        <p:inputText id="email"
+                                     value="#{responsavelBean.cadastro.email}" required="true"
+                                     requiredMessage="O Campo 'EMAIL' é obrigatório." />
+                        
                         <p:outputLabel for="st" value="Status.: " />
                         <p:selectBooleanCheckbox id="st" value="#{responsavelBean.cadastro.status}" 
                                                  disabled="#{responsavelBean.acao eq 'Salvar' ?true :false}"/>
