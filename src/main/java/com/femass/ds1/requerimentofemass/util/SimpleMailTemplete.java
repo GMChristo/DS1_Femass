@@ -61,7 +61,7 @@ public class SimpleMailTemplete {
         // mistura o contexto com o template  
         t.merge(context, writer);
 //      saida writer
-        System.out.println("resultado do writer = " + writer.toString());
+//        System.out.println("resultado do writer = " + writer.toString());
         return writer;
     }
 }
