@@ -11,12 +11,13 @@ import com.femass.ds1.requerimentosfemass.dao.ResponsavelDao;
 import com.femass.ds1.requerimentosfemass.model.Responsavel;
 import com.outjected.email.api.MailMessage;
 import com.outjected.email.impl.MailMessageImpl;
-import com.outjected.email.impl.templating.velocity.VelocityTemplate;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Locale;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import org.apache.velocity.VelocityContext;
 import org.omnifaces.util.Messages;
 
 /**
@@ -93,17 +94,23 @@ public class AutenticacaoBean {
             resp = respDao.buscarPorCPF(respLogado.getCpf());
             if (resp != null) {
                 if (resp.getEmail() != null) {
+                    //configuração do email return configsession
                     SimpleMailTemplete smt = new SimpleMailTemplete();
                     MailMessage message = new MailMessageImpl(smt.enviarEmail());
+                    
+                    // envia variaveis para o template
+                    VelocityContext context = new VelocityContext();
+                    context.put("responsavel", resp);
+                    
+                    //prepara o conteúdo do email em html com codificação
+                    StringWriter writer = smt.escreveTempate("recupera_senha.html", context);
 
                     message.to(resp.getEmail())
                             .subject("Pedido de Envio de senha.")
-                            .bodyHtml(new VelocityTemplate(getClass().getResourceAsStream("/emails/recupera_senha.html")))
-                            .charset("UTF-8")
-                            .put("responsavel", resp)
+                            .bodyHtml(writer.toString())
                             .put("locale", new Locale("pt", "BR"))
                             .send();
-//                    Template template = Velocity.getTemplate("subject.vm", "UTF-8");
+                    
                     Messages.addGlobalInfo("Sua senha foi enviada por Email com sucesso!");
                 } else {
                     Messages.addGlobalError("ERRO: >>>> Não possui email em seu cadastro, favor procurar o Desenvolvedor do Sistema.");
