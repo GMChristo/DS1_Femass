@@ -14,6 +14,13 @@ import org.apache.velocity.runtime.RuntimeConstants;
 
 public class SimpleMailTemplete {
 
+    /**
+     * Método reponsável por pegar as configurações do arquivo de configurações
+     * do email e retorna um configsession
+     *
+     * @return
+     * @throws IOException
+     */
     public SessionConfig enviarEmail() throws IOException {
         Properties props = new Properties();
         props.load(getClass().getResourceAsStream("/emails/configSimpleMail.properties"));
@@ -32,7 +39,7 @@ public class SimpleMailTemplete {
         return configsession;
 
         /*fazer esta parte no bean*/
-        /*MailMessage message = new MailMessageImpl(configsession);
+ /*MailMessage message = new MailMessageImpl(configsession);
 
 	message.to("alexmansan@gmail.com").subject("Pedido de Envio de senha.")
             .bodyHtml(new VelocityTemplate(getClass().getResourceAsStream("/emails/" + template)))
@@ -41,11 +48,21 @@ public class SimpleMailTemplete {
             .send();*/
     }
 
+    /**
+     * Método escreve o template codificando em utf-8. 
+     * Precisa:
+     * 1) nome do arquivo referente ao template 
+     * 2) um VelocityContext onde contém as variáveis com as informações que serão mostradas no template.
+     *
+     * @param nomeTemplate
+     * @param context
+     * @return
+     */
     public StringWriter escreveTempate(String nomeTemplate, VelocityContext context) {
 //      setando propriedades
 //      Properties props = new Properties();
 //      props.put("input.encoding", "utf-8");
-        
+
         // inicializando o velocity  
         VelocityEngine ve = new VelocityEngine();
         ve.setProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, FacesContext.getCurrentInstance().getExternalContext().getRealPath("/resources/template_velocity/"));
