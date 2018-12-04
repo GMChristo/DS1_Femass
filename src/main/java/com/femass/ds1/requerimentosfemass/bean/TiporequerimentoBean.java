@@ -11,7 +11,6 @@ import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
 import javax.ejb.EJB;
-import org.eclipse.jdt.internal.core.DocumentAdapter;
 import org.omnifaces.util.Messages;
 
 @ManagedBean

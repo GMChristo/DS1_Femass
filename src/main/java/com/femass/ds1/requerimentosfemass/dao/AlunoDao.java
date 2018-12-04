@@ -6,7 +6,6 @@
 package com.femass.ds1.requerimentosfemass.dao;
 
 import com.femass.ds1.requerimentosfemass.model.Aluno;
-import com.femass.ds1.requerimentosfemass.model.Responsavel;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

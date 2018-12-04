@@ -6,9 +6,7 @@
 package com.femass.ds1.requerimentosfemass.bean;
 
 import com.femass.ds1.requerimentosfemass.dao.AlunoDao;
-import com.femass.ds1.requerimentosfemass.dao.TipoRequerimentoDao;
 import com.femass.ds1.requerimentosfemass.model.Aluno;
-import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;

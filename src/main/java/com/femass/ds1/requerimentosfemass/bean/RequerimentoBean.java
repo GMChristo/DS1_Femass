@@ -3,7 +3,6 @@ package com.femass.ds1.requerimentosfemass.bean;
 import com.femass.ds1.requerimentosfemass.dao.AlunoDao;
 import com.femass.ds1.requerimentosfemass.dao.RequerimentoDao;
 import com.femass.ds1.requerimentosfemass.dao.TipoRequerimentoDao;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,8 +17,6 @@ import com.femass.ds1.requerimentosfemass.model.Requerimento;
 import com.femass.ds1.requerimentosfemass.model.StatusRequerimento;
 import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
 import com.femass.ds1.requerimentosfemass.filter.RequerimentoFilter;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import javax.ejb.EJB;
 
 @ManagedBean
@@ -34,67 +31,28 @@ public class RequerimentoBean {
     private String acao;
     private RequerimentoFilter filtro;
     private Aluno aluno;
+    private boolean liTodos;
 
-    public Aluno getAluno() {
-        return aluno;
-    }
-
-    public void setAluno(Aluno aluno) {
-        this.aluno = aluno;
-    }
-//    aluno para tentar gravar o aluno no banco junto com o requerimento
-    
     @EJB
     RequerimentoDao dao;
-    
+
     @EJB
     TipoRequerimentoDao tipoDao;
-    
+
     @EJB
     AlunoDao alunoDAO;
-    
-    
-//    Método para abrir e editar
-    
-    public void merge(){
-        try {
-            if (acao.equals("salvar")) {
-                dao.incluir(cadastro);
-                Messages.addGlobalInfo("Requerimento Salvo com sucesso!");
-            }else{
-                dao.alterar(cadastro);
-                Messages.addGlobalInfo("Requerimento Editado com sucesso!");
-            }
-            carregar();
-            fechar();
-            
-        } catch (Exception e) {
-            Messages.addGlobalError(">>>> ERRO: Não foi possivel Salvar o Requerimento: " + cadastro.getNumeroProtocolo());
-        }
-    }
-    
-    /**
-     * Metodo de exclusão
-     */
-    public void excluir(){
-        try{
-            dao.excluir(cadastro);
-            carregar();
-            Messages.addGlobalInfo("Requerimento excluído com sucesso!");
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            Messages.addGlobalError(">>>> ERRO: Não foi possivel excluir o Requerimento: "+cadastro.getNumeroProtocolo()+" - "+ e.getMessage());
-        }
-    }
-    
+
     /**
      * Metodo de abertura
      */
     public void carregar() {
         try {
-            lista = dao.getRequerimentos();
+            if(liTodos == true){
+                lista = dao.getRequerimentos();
+            }else{
+                lista = dao.getRequerimentosAbertos();
+            }
             size = lista.size();
-            
             listatipo = tipoDao.getTipoRequerimentos();
         } catch (RuntimeException e) {
             Messages.addGlobalError(">>>> ERRO: Não foi possível carregar os Requerimentos." + "Erro: " + e.getMessage());
@@ -102,19 +60,16 @@ public class RequerimentoBean {
 
     }
 
+    /**
+     * Método de Consulta
+     */
     public void consultar() {
         try {
-            lipesq = dao.getRequerimentos(filtro.getProtocolo());
+            lipesq = dao.pesqRequerimentos(filtro.getProtocolo());
         } catch (RuntimeException e) {
             Messages.addGlobalError("Erro ao tentar consultar um processo." + e.getMessage());
         }
 
-    }
-
-    public void revisar() {
-        if (cadastro != null) {
-            cadastro.setRevisao(true);
-        }
     }
 
     /**
@@ -140,13 +95,67 @@ public class RequerimentoBean {
         Aluno aluno = alunoDAO.porID(1L);
         cadastro.setAluno(aluno);
     }
-    
+
+    /**
+     * Método Salva ou edita
+     */
+    public void merge() {
+        try {
+            if (acao.equals("Salvar")) {
+                dao.incluir(cadastro);
+                Messages.addGlobalInfo("Requerimento Salvo com sucesso!");
+            } else {
+                dao.alterar(cadastro);
+                Messages.addGlobalInfo("Requerimento Editado com sucesso!");
+            }
+            carregar();
+            fechar();
+
+        } catch (Exception e) {
+            Messages.addGlobalError(">>>> ERRO: Não foi possivel Salvar o Requerimento: " + cadastro.getNumeroProtocolo());
+        }
+    }
+
+    /**
+     * Metodo de exclusão alterado para cancelamento de requerimento
+     */
+    public void cancelar() {
+        try {
+            cadastro.setStatusRequerimento(StatusRequerimento.Cancelado);
+            dao.alterar(cadastro);
+            carregar();
+            Messages.addGlobalInfo("Requerimento Cancelado com sucesso!");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            Messages.addGlobalError(">>>> ERRO: Não foi possivel Cancelar o Requerimento: " + cadastro.getNumeroProtocolo() + " - " + e.getMessage());
+        }
+    }
+
+    /**
+     * Método para revisão
+     */
+    public void revisar() {
+        if (cadastro != null) {
+            cadastro.setRevisao(true);
+        }
+    }
+
+    /**
+     * Método fechar
+     */
     public void fechar() {
         cadastro = new Requerimento();
         acao = "";
     }
-    
-    
+
+    public Aluno getAluno() {
+        return aluno;
+    }
+
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
+    }
+
     public Requerimento getCadastro() {
         if (cadastro == null) {
             cadastro = new Requerimento();
@@ -203,6 +212,14 @@ public class RequerimentoBean {
 
     public void setListatipo(List<TipoRequerimento> listatipo) {
         this.listatipo = listatipo;
+    }
+
+    public boolean isLiTodos() {
+        return liTodos;
+    }
+
+    public void setLiTodos(boolean liTodos) {
+        this.liTodos = liTodos;
     }
 
 }

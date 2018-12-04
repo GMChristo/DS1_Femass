@@ -6,7 +6,7 @@
 package com.femass.ds1.requerimentosfemass.dao;
 
 import com.femass.ds1.requerimentosfemass.model.Requerimento;
-import com.femass.ds1.requerimentosfemass.model.Responsavel;
+import com.femass.ds1.requerimentosfemass.model.StatusRequerimento;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -38,6 +38,14 @@ public class RequerimentoDao {
     public List<Requerimento> getRequerimentos(){
         Query q = em.createQuery("select r from Requerimento r order by r.numeroProtocolo");
         return q.getResultList();
+    }
+    
+    public List<Requerimento> getRequerimentosAbertos(){
+        String q = "select r from Requerimento r where r.statusRequerimento=:Aberto order by r.numeroProtocolo";
+        
+        return this.em.createQuery(q , Requerimento.class)
+        .setParameter("Aberto", StatusRequerimento.Aberto)
+        .getResultList(); 
     }
     
     public List<Requerimento> pesqRequerimentos(String numProtocolo){

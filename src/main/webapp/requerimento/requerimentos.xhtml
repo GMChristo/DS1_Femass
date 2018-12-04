@@ -25,13 +25,12 @@
                 <p:toolbar id="toolbar">
                     <f:facet name="left">
                         <p:commandButton icon="novo-icon" title="Novo"
-                                         actionListener="#{requerimentoBean.novo}" process="@this"
-                                         update=":msgGlobal :frmCad :frmList:tabela edit delete"
+                                         actionListener="#{requerimentoBean.novo}" 
+                                         update="dial :frmList:tabela edit delete"
+                                         process="@this"
                                          oncomplete="PF('dialogo').show();">
 
                             <p:resetInput target="dial" />
-                            <f:actionListener
-                                type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
                         </p:commandButton>
 
                         <p:spacer width="10px" />
@@ -45,25 +44,34 @@
 
                         <p:spacer width="10px" />
 
-                        <p:commandButton title="Excluir" icon="excluir-x-icon"
-                                         actionListener="#{requerimentoBean.excluir()}"
+                        <p:commandButton title="Cancelar" icon="excluir-x-icon"
+                                         actionListener="#{requerimentoBean.cancelar}"
                                          disabled="#{requerimentoBean.acao eq 'Editar' ?false : true}"
                                          id="delete" update="msgGlobal tabela toolbar" process="@this">
 
-                            <p:confirm header="Exluir"
-                                       message="Deseja excluir este Requerimento?" icon="perigo-icon" />
+                            <p:confirm header="Cancelamento de Requerimento"
+                                       message="Deseja Cancelar este Requerimento Nº #{requerimentoBean.cadastro.numeroProtocolo} ?" 
+                                       icon="perigo-icon" />
                         </p:commandButton>
 
                         <p:spacer width="10px" />
 
-                        <!--					<p:commandButton value="Notificar Responsável" title="Notificar Responsável" 
-                                                                        disabled="#{requerimentoBean.acao eq 'Editar' ?false : true}"
-                                                                        id="notif" oncomplete="PF('dialogo').show()" update="dial"
-                                                                        process="@this">
-                                                                        <p:resetInput target="dial" />
-                                                                </p:commandButton>-->
+                        <p:commandButton value="Atribuir/Movimentar" title="Atribuir Requerimento" 
+                                         disabled="#{requerimentoBean.acao eq 'Editar' ?false : true}"
+                                         id="atrib" oncomplete="PF('dialogo').show()" update="dial"
+                                         process="@this">
+                            <p:resetInput target="dial" />
+                        </p:commandButton>
 
                         <p:spacer width="10px" />
+
+                        <p:outputLabel value="Todos:"/>
+                        <p:spacer width="10px" />
+
+                        <p:selectBooleanCheckbox value="#{requerimentoBean.liTodos}">
+                            <p:ajax update=":frmList:tabela"
+                                    listener="#{requerimentoBean.carregar}" />
+                        </p:selectBooleanCheckbox>
                     </f:facet>
                 </p:toolbar>
 
@@ -72,7 +80,8 @@
                 <p:dataTable emptyMessage="sem registros" id="tabela" var="r"
                              widgetVar="rTable" value="#{requerimentoBean.lista}"
                              selectionMode="single" selection="#{requerimentoBean.cadastro}"
-                             rowKey="#{r.id}" >
+                             rowKey="#{r.id}" 
+                             rowStyleClass="#{r.statusRequerimento eq 'Cancelado' ?'tabVinPre' :null}">
 
                     <p:ajax event="rowSelect" listener="#{requerimentoBean.onRowSelect}"
                             update="frmList:toolbar" />
@@ -110,6 +119,11 @@
                     <p:column headerText="Revisao" style="width:10% ;text-align: center"
                               sortBy="#{r.revisao}">
                         <h:outputText value="#{r.revisao}" />
+                    </p:column>
+
+                    <p:column headerText="Status" style="width:10% ;text-align: center"
+                              sortBy="#{r.statusRequerimento}">
+                        <h:outputText value="#{r.statusRequerimento}" />
                     </p:column>
 
                 </p:dataTable>
