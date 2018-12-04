@@ -6,6 +6,7 @@
 package com.femass.ds1.requerimentosfemass.dao;
 
 import com.femass.ds1.requerimentosfemass.model.Requerimento;
+import com.femass.ds1.requerimentosfemass.model.Responsavel;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -37,5 +38,13 @@ public class RequerimentoDao {
     public List<Requerimento> getRequerimentos(){
         Query q = em.createQuery("select r from Requerimento r order by r.numeroProtocolo");
         return q.getResultList();
+    }
+    
+    public List<Requerimento> pesqRequerimentos(String numProtocolo){
+        String q = "select r from Requerimento r where r.numeroProtocolo=:numProtocolo";
+       
+        return this.em.createQuery(q , Requerimento.class)
+        .setParameter("numProtocolo", numProtocolo)
+        .getResultList(); 
     }
 }

@@ -32,7 +32,7 @@ public class Requerimento implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dataAbertura;
 
-    private String numeroProtocolo = "0001/2018";
+    private String numeroProtocolo;
     private String descricao;
     private boolean revisao;
 

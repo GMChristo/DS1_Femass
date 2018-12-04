@@ -25,7 +25,7 @@
                                  columnClasses="ui-grid-col-4,ui-grid-col-8">
 
                         <p:outputLabel value="Matricula:"/>
-                        <p:inputText id="matr" value="#{requerimentoBean.cadastro.aluno.id}"/>
+                        <p:inputText id="matr" value="#{requerimentoBean.cadastro.aluno.matricula}"/>
 <!--                        tentativa de gravar o ID do aluno no banco junto com as outras informações-->
                         
                         
@@ -71,13 +71,13 @@
                         <p:commandButton value="Salvar" icon="salvar-icon"
                                          actionListener="#{requerimentoBean.merge}"
                                          process="@this :frmCad"
-                                         update=":frmCad :frmList:tabela"
+                                         update="msgGlobal :frmCad :frmList:tabela"
                                          partialSubmit="true" />
 
                         <p:spacer width="10px"/>
 
                         <p:commandButton value="Fechar" icon="fechar-icon"
-                                         actionListener="#{requerimentoBean.novo}"
+                                         actionListener="#{requerimentoBean.fechar}"
                                          update=":frmList"
                                          process="@this :frmList" oncomplete="PF('dialogo').hide();" />
                     </h:panelGrid>

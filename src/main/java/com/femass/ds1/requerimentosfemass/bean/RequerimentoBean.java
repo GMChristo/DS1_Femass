@@ -1,5 +1,6 @@
 package com.femass.ds1.requerimentosfemass.bean;
 
+import com.femass.ds1.requerimentosfemass.dao.AlunoDao;
 import com.femass.ds1.requerimentosfemass.dao.RequerimentoDao;
 import com.femass.ds1.requerimentosfemass.dao.TipoRequerimentoDao;
 import java.util.ArrayList;
@@ -49,6 +50,9 @@ public class RequerimentoBean {
     @EJB
     TipoRequerimentoDao tipoDao;
     
+    @EJB
+    AlunoDao alunoDAO;
+    
     
 //    Método para abrir e editar
     
@@ -56,12 +60,14 @@ public class RequerimentoBean {
         try {
             if (acao.equals("salvar")) {
                 dao.incluir(cadastro);
+                Messages.addGlobalInfo("Requerimento Salvo com sucesso!");
             }else{
                 dao.alterar(cadastro);
+                Messages.addGlobalInfo("Requerimento Editado com sucesso!");
             }
             carregar();
-            novo();
-            Messages.addGlobalInfo("Requerimento Salvo com sucesso!");
+            fechar();
+            
         } catch (Exception e) {
             Messages.addGlobalError(">>>> ERRO: Não foi possivel Salvar o Requerimento: " + cadastro.getNumeroProtocolo());
         }
@@ -98,22 +104,7 @@ public class RequerimentoBean {
 
     public void consultar() {
         try {
-
-            carregar();
-
-            Requerimento req2 = null;
-            for (Requerimento req : lista) {
-                if (filtro.getProtocolo().equals(req.getNumeroProtocolo())) {
-                    lipesq = new ArrayList<>();
-                    lipesq.add(req);
-                    req2 = req;
-                }
-            }
-
-            if (req2 == null) {
-                Messages.addGlobalInfo("Protocolo Não encontrado.");
-                return;
-            }
+            lipesq = dao.getRequerimentos(filtro.getProtocolo());
         } catch (RuntimeException e) {
             Messages.addGlobalError("Erro ao tentar consultar um processo." + e.getMessage());
         }
@@ -143,8 +134,16 @@ public class RequerimentoBean {
         cadastro = new Requerimento();
         listatipo = tipoDao.getTipoRequerimentos();
         acao = "Salvar";
+        cadastro.setNumeroProtocolo("001/2018");
         cadastro.setDataAbertura(new Date());
-        //cadastro.setStatusRequerimento(StatusRequerimento.Aberto);
+        cadastro.setStatusRequerimento(StatusRequerimento.Aberto);
+        Aluno aluno = alunoDAO.porID(1L);
+        cadastro.setAluno(aluno);
+    }
+    
+    public void fechar() {
+        cadastro = new Requerimento();
+        acao = "";
     }
     
     
