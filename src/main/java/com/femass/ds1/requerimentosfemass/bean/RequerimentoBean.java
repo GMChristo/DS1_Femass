@@ -17,6 +17,7 @@ import com.femass.ds1.requerimentosfemass.model.Requerimento;
 import com.femass.ds1.requerimentosfemass.model.StatusRequerimento;
 import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
 import com.femass.ds1.requerimentosfemass.filter.RequerimentoFilter;
+import java.util.Arrays;
 import javax.ejb.EJB;
 
 @ManagedBean
@@ -27,6 +28,7 @@ public class RequerimentoBean {
     private List<Requerimento> lista;
     private List<Requerimento> lipesq;
     private List<TipoRequerimento> listatipo;
+    private List<StatusRequerimento> liStatusReq;
     private int size;
     private String acao;
     private RequerimentoFilter filtro;
@@ -54,6 +56,7 @@ public class RequerimentoBean {
             }
             size = lista.size();
             listatipo = tipoDao.getTipoRequerimentos();
+            liStatusReq = Arrays.asList(StatusRequerimento.values());
         } catch (RuntimeException e) {
             Messages.addGlobalError(">>>> ERRO: Não foi possível carregar os Requerimentos." + "Erro: " + e.getMessage());
         }
@@ -181,6 +184,14 @@ public class RequerimentoBean {
 
     public void setLipesq(List<Requerimento> lipesq) {
         this.lipesq = lipesq;
+    }
+
+    public List<StatusRequerimento> getLiStatusReq() {
+        return liStatusReq;
+    }
+
+    public void setLiStatusReq(List<StatusRequerimento> liStatusReq) {
+        this.liStatusReq = liStatusReq;
     }
 
     public int getSize() {

@@ -26,14 +26,14 @@
 
                         <p:outputLabel value="Matricula:"/>
                         <p:inputText id="matr" value="#{requerimentoBean.cadastro.aluno.matricula}"/>
-<!--                        tentativa de gravar o ID do aluno no banco junto com as outras informações-->
-                        
-                        
+                        <!--                        tentativa de gravar o ID do aluno no banco junto com as outras informações-->
+
+
                         <p:outputLabel  value="Data.:" />
                         <p:calendar value="#{requerimentoBean.cadastro.dataAbertura}" disabled="true"
                                     mask="true" pattern="dd/MM/yyyy" showOn="button" navigator="true" />
 
-                        
+
                         <p:outputLabel for="prot" value="Protocolo.:"/>
                         <p:inputText id="prot"
                                      value="#{requerimentoBean.cadastro.numeroProtocolo}" required="true"
@@ -48,17 +48,20 @@
                             <f:selectItem itemLabel="Selecione um tipo de requerimento" noSelectionOption="true"/> 
                             <f:selectItems value="#{requerimentoBean.listatipo}" var="tipo" itemLabel="#{tipo.nome}" itemValue="#{tipo}"/>
                         </p:selectOneMenu>    
-                        
-
 
                         <p:outputLabel for="descricao" value="Descricao.: " />
                         <p:inputTextarea id="descricao" value="#{requerimentoBean.cadastro.descricao}" rows="6" cols="33" />
-                       
-
                         
                         <p:outputLabel value="Status.: " />
-                        <p:inputText  value="#{requerimentoBean.cadastro.statusRequerimento}" disabled="true" />
-
+                        <p:selectOneMenu id="status" value="#{requerimentoBean.cadastro.statusRequerimento}" 
+                                         converter="omnifaces.SelectItemsConverter" 
+                                         required="true"  
+                                         requiredMessage="O campo 'STATUS DO REQUERIMENTO' é obrigatório."
+                                         disabled="true">
+                            <f:selectItem itemLabel="Selecione um Status do requerimento" noSelectionOption="true"/> 
+                            <f:selectItems value="#{requerimentoBean.liStatusReq}" var="status" itemLabel="#{status}" itemValue="#{status}"/>
+                        </p:selectOneMenu> 
+                        
                         <p:outputLabel value="Revisar.: " />
                         <p:selectBooleanCheckbox value="#{requerimentoBean.cadastro.revisao}" disabled="true"/>
                     </p:panelGrid>
