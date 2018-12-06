@@ -8,8 +8,6 @@ package com.femass.ds1.requerimentosfemass.model;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,21 +26,23 @@ public class Movimentacao implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dataMovimentacao;
-    private String descricao;
+    
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataRecebimento;
+    
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dataDevolucao;
     
     @ManyToOne
     private Requerimento requerimento;
     
     @ManyToOne
-    private Responsavel responsavelAtual; // Responsável "de" "para"
+    private Responsavel responsavel;
     
-    @ManyToOne
-    private Responsavel responsavelSeguinte; // Responsável "de" "para"    
+    private String deliberacao;
     
-    @Enumerated(EnumType.STRING)
-    private StatusMovimentacao statusMovimentacao;
 
     public Requerimento getRequerimento() {
         return requerimento;
@@ -52,28 +52,20 @@ public class Movimentacao implements Serializable {
         this.requerimento = requerimento;
     }
 
-    public Responsavel getResponsavelAtual() {
-        return responsavelAtual;
+    public Responsavel getResponsavel() {
+        return responsavel;
     }
 
-    public void setResponsavelAtual(Responsavel responsavelAtual) {
-        this.responsavelAtual = responsavelAtual;
+    public void setResponsavel(Responsavel responsavel) {
+        this.responsavel = responsavel;
     }
 
-    public Responsavel getResponsavelSeguinte() {
-        return responsavelSeguinte;
+    public String getDeliberacao() {
+        return deliberacao;
     }
 
-    public void setResponsavelSeguinte(Responsavel responsavelSeguinte) {
-        this.responsavelSeguinte = responsavelSeguinte;
-    }
-
-    public StatusMovimentacao getStatusMovimentacao() {
-        return statusMovimentacao;
-    }
-
-    public void setStatusMovimentacao(StatusMovimentacao statusMovimentacao) {
-        this.statusMovimentacao = statusMovimentacao;
+    public void setDeliberacao(String deliberacao) {
+        this.deliberacao = deliberacao;
     }
 
     public Date getDataMovimentacao() {
@@ -83,14 +75,21 @@ public class Movimentacao implements Serializable {
     public void setDataMovimentacao(Date dataMovimentacao) {
         this.dataMovimentacao = dataMovimentacao;
     }
-    
 
-    public String getDescricao() {
-        return descricao;
+    public Date getDataRecebimento() {
+        return dataRecebimento;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDataRecebimento(Date dataRecebimento) {
+        this.dataRecebimento = dataRecebimento;
+    }
+
+    public Date getDataDevolucao() {
+        return dataDevolucao;
+    }
+
+    public void setDataDevolucao(Date dataDevolucao) {
+        this.dataDevolucao = dataDevolucao;
     }
     
     public Long getId() {

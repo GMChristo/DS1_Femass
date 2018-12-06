@@ -1,7 +1,9 @@
 package com.femass.ds1.requerimentosfemass.bean;
 
 import com.femass.ds1.requerimentosfemass.dao.AlunoDao;
+import com.femass.ds1.requerimentosfemass.dao.MovimentacaoDao;
 import com.femass.ds1.requerimentosfemass.dao.RequerimentoDao;
+import com.femass.ds1.requerimentosfemass.dao.ResponsavelDao;
 import com.femass.ds1.requerimentosfemass.dao.TipoRequerimentoDao;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +19,8 @@ import com.femass.ds1.requerimentosfemass.model.Requerimento;
 import com.femass.ds1.requerimentosfemass.model.StatusRequerimento;
 import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
 import com.femass.ds1.requerimentosfemass.filter.RequerimentoFilter;
+import com.femass.ds1.requerimentosfemass.model.Movimentacao;
+import com.femass.ds1.requerimentosfemass.model.Responsavel;
 import java.util.Arrays;
 import javax.ejb.EJB;
 
@@ -34,6 +38,8 @@ public class RequerimentoBean {
     private RequerimentoFilter filtro;
     private Aluno aluno;
     private boolean liTodos;
+    private Movimentacao movimentacao;
+    private List<Responsavel> liResponsavel;
 
     @EJB
     RequerimentoDao dao;
@@ -43,6 +49,12 @@ public class RequerimentoBean {
 
     @EJB
     AlunoDao alunoDAO;
+    
+    @EJB
+    MovimentacaoDao movDAO;
+    
+    @EJB
+    ResponsavelDao respDAO;
 
     /**
      * Metodo de abertura
@@ -133,6 +145,45 @@ public class RequerimentoBean {
             Messages.addGlobalError(">>>> ERRO: Não foi possivel Cancelar o Requerimento: " + cadastro.getNumeroProtocolo() + " - " + e.getMessage());
         }
     }
+    
+    public void atribuir(){
+        try{
+            liResponsavel = respDAO.getResponsaveis();
+            movimentacao.setDataMovimentacao(new Date());
+            movimentacao.setRequerimento(cadastro);
+            Responsavel responsavel = respDAO.buscarPorCurso(cadastro.getAluno().getCurso());
+            if(responsavel != null){
+                movimentacao.setResponsavel(responsavel);
+            }else{
+                Messages.addGlobalError(">>>> ERRO: Não foi possivel Identificar o responsável do curso " + cadastro.getAluno().getCurso().getNome());
+                return;
+            }
+            Messages.addGlobalInfo("Requerimento Atribuído com sucesso!");
+        }catch(RuntimeException e){
+            e.printStackTrace();
+            Messages.addGlobalError(">>>> ERRO: Não foi possivel Atribuir o Requerimento: " + cadastro.getNumeroProtocolo() + " - " + e.getMessage());
+        }
+    }
+    
+    public void salvarMovimentacao(){
+        try{
+            if(movimentacao.getResponsavel() != null){
+                movDAO.incluir(movimentacao);
+                Requerimento req = movimentacao.getRequerimento();
+                req.setStatusRequerimento(StatusRequerimento.Em_Análise);
+                dao.alterar(req);
+                
+                fechar();
+            }else{
+                Messages.addGlobalError(">>>> ERRO: Não foi possivel registrar a movimentação! - (Não possui responsável) ");
+                return;
+            }
+            Messages.addGlobalInfo("Movimentação registrada com sucesso!");
+        }catch(RuntimeException e){
+            e.printStackTrace();
+            Messages.addGlobalError(">>>> ERRO: Não foi possivel registrar a movimentação do processo:" + cadastro.getNumeroProtocolo() + " - " + e.getMessage());
+        }
+    }
 
     /**
      * Método para revisão
@@ -148,6 +199,7 @@ public class RequerimentoBean {
      */
     public void fechar() {
         cadastro = new Requerimento();
+        movimentacao = new Movimentacao();
         acao = "";
     }
 
@@ -233,4 +285,23 @@ public class RequerimentoBean {
         this.liTodos = liTodos;
     }
 
+    public Movimentacao getMovimentacao() {
+        if(movimentacao == null){
+            movimentacao = new Movimentacao();
+        }
+        return movimentacao;
+    }
+
+    public void setMovimentacao(Movimentacao movimentacao) {
+        this.movimentacao = movimentacao;
+    }
+
+    public List<Responsavel> getLiResponsavel() {
+        return liResponsavel;
+    }
+
+    public void setLiResponsavel(List<Responsavel> liResponsavel) {
+        this.liResponsavel = liResponsavel;
+    }
+    
 }

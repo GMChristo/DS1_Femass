@@ -57,8 +57,9 @@
                         <p:spacer width="10px" />
 
                         <p:commandButton value="Atribuir/Movimentar" title="Atribuir Requerimento" 
+                                         actionListener="#{requerimentoBean.atribuir}"
                                          disabled="#{requerimentoBean.acao eq 'Editar' ?false : true}"
-                                         id="atrib" oncomplete="PF('dialogo').show()" update="dial"
+                                         id="atrib" oncomplete="PF('dialogoMov').show()" update="dialMov"
                                          process="@this">
                             <p:resetInput target="dial" />
                         </p:commandButton>
@@ -134,6 +135,9 @@
 
             <!-- inclui dialogo de cadastro e alteração  -->
             <ui:include src="DialAbrirReq.xhtml" />
+            
+            <!-- inclui dialogo de movimentação  -->
+            <ui:include src="DialMov.xhtml" />
 
         </ui:define>
     </ui:composition>

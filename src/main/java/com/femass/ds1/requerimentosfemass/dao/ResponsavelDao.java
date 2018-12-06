@@ -5,6 +5,7 @@
  */
 package com.femass.ds1.requerimentosfemass.dao;
 
+import com.femass.ds1.requerimentosfemass.model.Curso;
 import com.femass.ds1.requerimentosfemass.model.Responsavel;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -57,6 +58,16 @@ public class ResponsavelDao {
         String q = "select r FROM Responsavel r WHERE r.cpf=:cpf";
         Responsavel resp = this.em.createQuery(q , Responsavel.class)
         .setParameter("cpf", cpf)
+        .getSingleResult(); 
+        
+        System.out.println("Responsavel = "+resp.getId()+" - " + resp.getNome());
+        return resp != null ?resp :null;
+    }
+    
+    public Responsavel buscarPorCurso(Curso curso){
+        String q = "select r FROM Responsavel r WHERE r.curso=:curso";
+        Responsavel resp = this.em.createQuery(q , Responsavel.class)
+        .setParameter("curso", curso)
         .getSingleResult(); 
         
         System.out.println("Responsavel = "+resp.getId()+" - " + resp.getNome());

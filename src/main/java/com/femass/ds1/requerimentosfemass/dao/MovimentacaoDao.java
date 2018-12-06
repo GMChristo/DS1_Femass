@@ -31,8 +31,13 @@ public class MovimentacaoDao {
     public void excluir (Movimentacao movimentacao){
         em.remove(movimentacao);
     }
-    public List<Movimentacao> getCursos(){
+    public List<Movimentacao> getMovimentacoes(){
         Query q = em.createQuery("select m from Movimentacao m order by m.id");
         return q.getResultList();
+    }
+    
+    public List<Movimentacao> getMovAbertas(){
+        Query q = em.createQuery("select m from Movimentacao m where m.dataDevolucao is NULL order by m.id");
+        return q.getResultList(); 
     }
 }

@@ -1,141 +1,152 @@
 <!-- <?xml version="1.0" encoding="UTF-8" ?> -->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:jsf="http://xmlns.jcp.org/jsf">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-<ui:composition template="/template/Layout.xhtml">
-	<ui:define name="metadata">
-		<f:metadata>
-			<f:viewAction action="#{movimentacaoBean.carregar}" />
-		</f:metadata>
-	</ui:define>
+    <ui:composition template="/template/Layout.xhtml">
+        <ui:define name="metadata">
+            <f:metadata>
+                <f:viewAction action="#{movimentacaoBean.carregar}" />
+            </f:metadata>
+        </ui:define>
 
-	<ui:define name="conteudo">
+        <ui:define name="conteudo">
 
-		<!-- <p:separator /> -->
-		<h3>Movimentações</h3>
-		<!-- <p:separator /> -->
+            <!-- <p:separator /> -->
+            <h3>Movimentações</h3>
+            <!-- <p:separator /> -->
 
-		<h:form id="frmList">
-			<!-- toobar pesquisa, botões e exportação -->
-			<p:toolbar id="toolbar">
-				<f:facet name="left">
-					<p:commandButton value="Avaliar"
-						disabled="#{movimentacaoBean.acao eq 'Editar' ?false : true}"
-						process="@this" update=":msgGlobal :frmCad :frmList:tabela">
-					</p:commandButton>
+            <h:form id="frmList">
+                <!-- toobar pesquisa, botões e exportação -->
+                <p:toolbar id="toolbar">
+                    <f:facet name="left">
+                        <p:commandButton value="Avaliar"
+                                         disabled="#{movimentacaoBean.acao eq 'Editar' ?false : true}"
+                                         process="@this" update=":msgGlobal :frmCadMov :frmList:tabela">
+                        </p:commandButton>
 
-					<p:spacer width="10px" />
+                        <p:spacer width="10px" />
 
-					<p:commandButton value="Finalizar"
-						disabled="#{movimentacaoBean.acao eq 'Editar' ?false : true}"
-						process="@this">
-					</p:commandButton>
-					
-					<p:spacer width="10px" />
-					
-					<p:commandButton value="Acusar Recebimento"
-						disabled="#{movimentacaoBean.acao eq 'Editar' ?false : true}"
-						process="@this">
-					</p:commandButton>
+                        <p:commandButton value="Finalizar"
+                                         disabled="#{movimentacaoBean.acao eq 'Editar' ?false : true}"
+                                         process="@this">
+                        </p:commandButton>
 
-				</f:facet>
-			</p:toolbar>
+                        <p:spacer width="10px" />
 
-			<p:spacer width="10px" />
+                        <p:commandButton value="Acusar Recebimento"
+                                         actionListener="#{movimentacaoBean.receber}"
+                                         disabled="#{movimentacaoBean.acao eq 'Editar' ?false : true}"
+                                         process="@this" update=":msgGlobal :frmList:tabela">
+                        </p:commandButton>
 
-			<p:dataTable emptyMessage="sem registros" id="tabela" var="m"
-				widgetVar="mTable" value="#{movimentacaoBean.lista}"
-				selectionMode="single" selection="#{movimentacaoBean.cadastro}"
-                                rowKey="#{m.id}">
+                    </f:facet>
+                </p:toolbar>
 
-				<p:ajax event="rowSelect" listener="#{movimentacaoBean.onRowSelect}"
-					update=":frmList:toolbar" />
-				<p:ajax event="rowUnselect" update=":frmList:toolbar" />
+                <p:spacer width="10px" />
 
-				<p:column style="width:35px">
-					<p:rowToggler />
-				</p:column>
+                <p:dataTable emptyMessage="sem registros" id="tabela" var="m"
+                             widgetVar="mTable" value="#{movimentacaoBean.lista}"
+                             selectionMode="single" selection="#{movimentacaoBean.cadastro}"
+                             rowKey="#{m.id}">
 
-				<p:column headerText="Data" priority="1"
-					style="width:10% ;text-align: center">
-                                    <h:outputText value="#{m.dataMovimentacao}">
-						<f:convertDateTime pattern="dd/MM/yy" timeZone="America/Sao_Paulo" />
-					</h:outputText>
-					<f:facet name="footer">
-						<h:outputText value="Qtd #{requerimentoBean.size}" />
-					</f:facet>
-				</p:column>
+                    <p:ajax event="rowSelect" listener="#{movimentacaoBean.onRowSelect}"
+                            update=":frmList:toolbar" />
+                    <p:ajax event="rowUnselect" update=":frmList:toolbar" />
 
-				<p:column headerText="Descrição">
-					<h:outputText value="#{m.descricao}" />
-				</p:column>
+                    <p:column style="width:35px">
+                        <p:rowToggler />
+                    </p:column>
 
-				<p:column headerText="Protocolo"
-					style="width:10%;text-align: center">
-                                    <h:outputText value="#{m.requerimento.numeroProtocolo}" />
-				</p:column>
+                    <p:column headerText="Data Movimentação" priority="1"
+                              style="width:12% ;text-align: center">
+                        <h:outputText value="#{m.dataMovimentacao}">
+                            <f:convertDateTime pattern="dd/MM/yy HH:mm" timeZone="America/Sao_Paulo" />
+                        </h:outputText>
+                        <f:facet name="footer">
+                            <h:outputText value="Qtd #{requerimentoBean.size}" />
+                        </f:facet>
+                    </p:column>
 
-				<p:column headerText="Responsável"
-					style="width:15%;text-align: center">
-                                    <h:outputText value="#{m.responsavelAtual.nome}" />
-				</p:column>
+                    <p:column headerText="Data Recebimento" priority="1"
+                              style="width:12% ;text-align: center">
+                        <h:outputText value="#{m.dataRecebimento}">
+                            <f:convertDateTime pattern="dd/MM/yy HH:mm" timeZone="America/Sao_Paulo" />
+                        </h:outputText>
+                    </p:column>
 
-				<p:column headerText="Status" style="width:10%;text-align: center">
-                                    <h:outputText value="#{m.statusMovimentacao}" />
-				</p:column>
+                    <p:column headerText="Data Devolução" priority="1"
+                              style="width:12% ;text-align: center">
+                        <h:outputText value="#{m.dataDevolucao}">
+                            <f:convertDateTime pattern="dd/MM/yy HH:mm" timeZone="America/Sao_Paulo" />
+                        </h:outputText>
+                    </p:column>
 
-				<p:rowExpansion>
-					<p:dataTable emptyMessage="sem registros" id="tabela2" var="req"
-						widgetVar="mTable2" value="#{m.requerimento}">
+                    <p:column headerText="Protocolo"
+                              style="width:10%;text-align: center">
+                        <h:outputText value="#{m.requerimento.numeroProtocolo}" />
+                    </p:column>
 
-						<f:facet name="header">
-							<p:outputLabel value="Dados do Requerimento" />
-						</f:facet>
+                    <p:column headerText="Tipo Requerimento" style="text-align: center">
+                        <h:outputText value="#{m.requerimento.tipoRequerimento.nome}"/>
+                    </p:column>
 
-						<p:column headerText="Data" style="width:10%;text-align: center">
-							<h:outputText value="#{m.requerimento.dataAbertura}">
-								<f:convertDateTime pattern="dd/MM/yy"
-									timeZone="America/Sao_Paulo" />
-							</h:outputText>
-						</p:column>
-						
-						<p:column headerText="Protocolo" style="width:10%;text-align: center">
-                                                    <h:outputText value="#{m.requerimento.numeroProtocolo}"/>
-						</p:column>
-						
-						<p:column headerText="Aluno" style="width:10%;text-align: center">
-							<h:outputText value="#{m.requerimento.aluno.nome}" />
-						</p:column>
-						
-						<p:column headerText="Tipo Requerimento" style="width:25%;text-align: center">
-                                                    <h:outputText value="#{m.requerimento.tipoRequerimento.nome}"/>
-						</p:column>
-						
-						<p:column headerText="Descrição">
-							<h:outputText value="#{m.requerimento.descricao}" />
-						</p:column>
-						
-						<p:column headerText="Revisão" style="width:8%;text-align: center">
-							<h:outputText value="#{m.requerimento.revisao}" />
-						</p:column>
+                    <p:column headerText="Responsável"
+                              style="width:15%;text-align: center">
+                        <h:outputText value="#{m.responsavel.nome}" />
+                    </p:column>
 
-					</p:dataTable>
-				</p:rowExpansion>
+                    <p:rowExpansion>
+                        <p:dataTable emptyMessage="sem registros" id="tabela2" var="req"
+                                     widgetVar="mTable2" value="#{m.requerimento}">
 
-			</p:dataTable>
-		</h:form>
+                            <f:facet name="header">
+                                <p:outputLabel value="Dados do Requerimento" />
+                            </f:facet>
 
-		<!-- carregamento.gif  -->
-		<ui:include src="/comum/carregamento.xhtml" />
+                            <p:column headerText="Data" style="width:10%;text-align: center">
+                                <h:outputText value="#{m.requerimento.dataAbertura}">
+                                    <f:convertDateTime pattern="dd/MM/yy"
+                                                       timeZone="America/Sao_Paulo" />
+                                </h:outputText>
+                            </p:column>
 
-		<!-- inclui dialogo de cadastro e alteração  -->
-		<ui:include src="DialCadAlt.xhtml" />
+                            <p:column headerText="Protocolo" style="width:10%;text-align: center">
+                                <h:outputText value="#{m.requerimento.numeroProtocolo}"/>
+                            </p:column>
 
-	</ui:define>
-</ui:composition>
+                            <p:column headerText="Aluno" style="width:10%;text-align: center">
+                                <h:outputText value="#{m.requerimento.aluno.nome}" />
+                            </p:column>
+
+                            <p:column headerText="Tipo Requerimento" style="width:25%;text-align: center">
+                                <h:outputText value="#{m.requerimento.tipoRequerimento.nome}"/>
+                            </p:column>
+
+                            <p:column headerText="Descrição">
+                                <h:outputText value="#{m.requerimento.descricao}" />
+                            </p:column>
+
+                            <p:column headerText="Revisão" style="width:8%;text-align: center">
+                                <h:outputText value="#{m.requerimento.revisao}" />
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:rowExpansion>
+
+                </p:dataTable>
+            </h:form>
+
+            <!-- carregamento.gif  -->
+            <ui:include src="/comum/carregamento.xhtml" />
+
+            <!-- inclui dialogo de cadastro e alteração  -->
+            <ui:include src="DialMov.xhtml" />
+
+        </ui:define>
+    </ui:composition>
 </html>
