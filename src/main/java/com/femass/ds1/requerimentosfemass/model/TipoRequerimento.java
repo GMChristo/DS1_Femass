@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,7 +36,10 @@ public class TipoRequerimento implements Serializable {
     
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "tipoRequerimento")
     private List<Documento> documentos;
-    private String setor;
+    
+    @Enumerated(EnumType.STRING)
+    private Cargo setor;
+    
     @Temporal(TemporalType.DATE)
     private Calendar dataLimite = Calendar.getInstance();
 
@@ -70,14 +75,14 @@ public class TipoRequerimento implements Serializable {
         this.documentos = documentos;
     }
 
-    public String getSetor() {
+    public Cargo getSetor() {
         return setor;
     }
 
-    public void setSetor(String setor) {
+    public void setSetor(Cargo setor) {
         this.setor = setor;
     }
-    
+
     public Long getId() {
         return id;
     }

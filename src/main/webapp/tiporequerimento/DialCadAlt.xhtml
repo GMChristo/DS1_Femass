@@ -36,9 +36,7 @@
                                          requiredMessage="O Campo 'SETOR' é obrigatório.">
                             <f:selectItem noSelectionOption="true"
                                           itemLabel="Selecione um Setor..." />
-                            <f:selectItem itemLabel="Coordenação" itemValue="Coordenação" />
-                            <f:selectItem itemLabel="Direção" itemValue="Direção" />
-                            <f:selectItem itemLabel="Secretaria" itemValue="Secretaria" />
+                            <f:selectItems value="#{tiporequerimentoBean.lisetor}"/>
                         </p:selectOneMenu>
 
                         <!-- Salvamento de data -->

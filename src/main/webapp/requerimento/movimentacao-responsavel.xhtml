@@ -24,16 +24,18 @@
                 <!-- toobar pesquisa, botões e exportação -->
                 <p:toolbar id="toolbar">
                     <f:facet name="left">
-                        <p:commandButton value="Avaliar"
+                        <p:commandButton value="Transferir"
                                          disabled="#{movimentacaoBean.acao eq 'Editar' ?false : true}"
-                                         process="@this" update=":msgGlobal :frmCadMov :frmList:tabela">
+                                         process="@this" update=":msgGlobal :frmCadRes :frmList:tabela">
                         </p:commandButton>
 
                         <p:spacer width="10px" />
 
-                        <p:commandButton value="Finalizar"
-                                         disabled="#{movimentacaoBean.acao eq 'Editar' ?false : true}"
-                                         process="@this">
+                        <p:commandButton value="Informar Resultado"
+                                         disabled="#{movimentacaoBean.cadastro.dataRecebimento eq null ?true : false}"
+                                         process="@this" update="dialRes"
+                                         oncomplete="PF('dialogoRes').show();">
+                            <p:resetInput target="dialRes" />
                         </p:commandButton>
 
                         <p:spacer width="10px" />
@@ -43,6 +45,16 @@
                                          disabled="#{movimentacaoBean.acao eq 'Editar' ?false : true}"
                                          process="@this" update=":msgGlobal :frmList:tabela">
                         </p:commandButton>
+                        
+                        <p:spacer width="10px" />
+
+                        <p:outputLabel value="Todos:"/>
+                        <p:spacer width="10px" />
+
+                        <p:selectBooleanCheckbox value="#{movimentacaoBean.liTodos}">
+                            <p:ajax update=":frmList:tabela"
+                                    listener="#{movimentacaoBean.carregar}" />
+                        </p:selectBooleanCheckbox>
 
                     </f:facet>
                 </p:toolbar>
@@ -145,7 +157,7 @@
             <ui:include src="/comum/carregamento.xhtml" />
 
             <!-- inclui dialogo de cadastro e alteração  -->
-            <ui:include src="DialMov.xhtml" />
+            <ui:include src="/requerimento/DialResultado.xhtml" />
 
         </ui:define>
     </ui:composition>

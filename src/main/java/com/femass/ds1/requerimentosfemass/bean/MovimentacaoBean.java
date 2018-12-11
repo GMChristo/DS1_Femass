@@ -10,9 +10,15 @@ import org.primefaces.event.SelectEvent;
 
 import com.femass.ds1.requerimentosfemass.model.Movimentacao;
 import com.femass.ds1.requerimentosfemass.filter.RequerimentoFilter;
+import com.femass.ds1.requerimentosfemass.model.Requerimento;
+import com.femass.ds1.requerimentosfemass.model.Responsavel;
+import com.femass.ds1.requerimentosfemass.model.StatusRequerimento;
+import java.util.Arrays;
 import java.util.Date;
 import javax.ejb.EJB;
+import javax.faces.bean.ManagedProperty;
 import org.omnifaces.util.Messages;
+import org.primefaces.event.FlowEvent;
 
 @ManagedBean
 @ViewScoped
@@ -24,18 +30,28 @@ public class MovimentacaoBean {
     private int size;
     private String acao;
     private RequerimentoFilter filtro;
-
+    @ManagedProperty(value = "#{autenticacaoBean}")
+    private AutenticacaoBean autenticacaoBean;
+    private boolean liTodos;
+    private boolean skip;
+    private List<StatusRequerimento> liStatusReq;
+ 
     @EJB
     MovimentacaoDao dao;
 
     /**
-     * Metodo de abertura
+     * Metodo de abertura carrega somente as movimentações do responsavel
+     * logado.
      */
     public void carregar() {
         try {
-            lista = dao.getMovAbertas();
+            if (liTodos == true) {
+                lista = dao.getMovAbertas();
+            } else {
+                lista = dao.getMovAbertasPorResponsavel(autenticacaoBean.getRespLogado());
+            }
             size = lista.size();
-
+            liStatusReq = Arrays.asList(StatusRequerimento.values());
         } catch (RuntimeException e) {
             System.out.println(">>>> Erro ao tentar gerar a lista de movimentações abertas.");
         }
@@ -59,21 +75,45 @@ public class MovimentacaoBean {
         acao = "Salvar";
     }
 
+    /**
+     * Registra a data e hora que o responsável recebeu o requerimento.
+     */
     public void receber() {
         try {
             if (cadastro.getDataRecebimento() != null) {
                 Messages.addGlobalError(">>>> ERRO: esta movimentação já foi recebida.");
                 return;
             } else {
-                cadastro.setDataRecebimento(new Date());
-                dao.alterar(cadastro);
-                cadastro = new Movimentacao();
+                Responsavel resp = autenticacaoBean.getRespLogado();
+                if (cadastro.getResponsavel().equals(resp)) {
+                    cadastro.setDataRecebimento(new Date());
+                    dao.alterar(cadastro);
+                    cadastro = new Movimentacao();
+                } else {
+                    Messages.addGlobalError(">>>> ERRO: Você não é responsável por este CURSO.");
+                    return;
+                }
                 Messages.addGlobalInfo("Movimentação recebida com sucesso!");
             }
-
         } catch (RuntimeException e) {
-            e.printStackTrace();
             Messages.addGlobalError(">>>> ERRO: Não foi possivel registrar o recebimento da movimentação" + e.getMessage());
+        }
+    }
+
+    /**
+     * Método fechar
+     */
+    public void fechar() {
+        cadastro = new Movimentacao();
+        acao = "";
+    }
+
+    public String onFlowProcess(FlowEvent event) {
+        if (skip) {
+            skip = false; // reset in case user goes back
+            return "conclusao";
+        } else {
+            return event.getNewStep();
         }
     }
 
@@ -127,4 +167,36 @@ public class MovimentacaoBean {
         this.filtro = filtro;
     }
 
+    public AutenticacaoBean getAutenticacaoBean() {
+        return autenticacaoBean;
+    }
+
+    public void setAutenticacaoBean(AutenticacaoBean autenticacaoBean) {
+        this.autenticacaoBean = autenticacaoBean;
+    }
+
+    public boolean isLiTodos() {
+        return liTodos;
+    }
+
+    public void setLiTodos(boolean liTodos) {
+        this.liTodos = liTodos;
+    }
+
+    public boolean isSkip() {
+        return skip;
+    }
+
+    public void setSkip(boolean skip) {
+        this.skip = skip;
+    }
+
+    public List<StatusRequerimento> getLiStatusReq() {
+        return liStatusReq;
+    }
+
+    public void setLiStatusReq(List<StatusRequerimento> liStatusReq) {
+        this.liStatusReq = liStatusReq;
+    }
+    
 }

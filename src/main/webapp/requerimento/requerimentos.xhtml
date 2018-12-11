@@ -59,7 +59,8 @@
                         <p:commandButton value="Atribuir/Movimentar" title="Atribuir Requerimento" 
                                          actionListener="#{requerimentoBean.atribuir}"
                                          disabled="#{requerimentoBean.acao eq 'Editar' ?false : true}"
-                                         id="atrib" oncomplete="PF('dialogoMov').show()" update="dialMov"
+                                         id="atrib" oncomplete="PF('dialogoMov').show()" 
+                                         update="msgGlobal dialMov"
                                          process="@this">
                             <p:resetInput target="dial" />
                         </p:commandButton>

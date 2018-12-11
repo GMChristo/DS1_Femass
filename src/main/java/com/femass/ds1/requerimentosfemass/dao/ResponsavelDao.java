@@ -5,11 +5,13 @@
  */
 package com.femass.ds1.requerimentosfemass.dao;
 
+import com.femass.ds1.requerimentosfemass.model.Cargo;
 import com.femass.ds1.requerimentosfemass.model.Curso;
 import com.femass.ds1.requerimentosfemass.model.Responsavel;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -30,47 +32,60 @@ public class ResponsavelDao {
     public void alterar(Responsavel responsavel) {
         em.merge(responsavel);
     }
-    public void excluir (Responsavel responsavel){
+
+    public void excluir(Responsavel responsavel) {
         // resolve erro de: Entity must be managed to call remove: try merging the detached and try the remove again.
         if (!em.contains(responsavel)) {
             responsavel = em.merge(responsavel);
         }
     }
-    
-    public List<Responsavel> getResponsaveis(){
+
+    public List<Responsavel> getResponsaveis() {
         Query q = em.createQuery("select r from Responsavel r order by r.nome");
         return q.getResultList();
     }
 
     public Responsavel autenticar(String cpf, String senha) {
         String q = "select r FROM Responsavel r WHERE r.cpf=:cpf and r.senha=:senha";
-        Responsavel resp = this.em.createQuery(q , Responsavel.class)
-        .setParameter("cpf", cpf)
-        .setParameter("senha", senha)
-        .getSingleResult(); 
-        
-        System.out.println("Responsavel = "+resp.getId());
-         
+        Responsavel resp = this.em.createQuery(q, Responsavel.class)
+                .setParameter("cpf", cpf)
+                .setParameter("senha", senha)
+                .getSingleResult();
+
+        System.out.println("Responsavel = " + resp.getId());
+
         return resp;
     }
-    
-    public Responsavel buscarPorCPF(String cpf){
-        String q = "select r FROM Responsavel r WHERE r.cpf=:cpf";
-        Responsavel resp = this.em.createQuery(q , Responsavel.class)
-        .setParameter("cpf", cpf)
-        .getSingleResult(); 
-        
-        System.out.println("Responsavel = "+resp.getId()+" - " + resp.getNome());
-        return resp != null ?resp :null;
+
+    public Responsavel buscarPorCPF(String cpf) {
+        try {
+            String q = "select r FROM Responsavel r WHERE r.cpf=:cpf";
+            Responsavel resp = this.em.createQuery(q, Responsavel.class)
+                    .setParameter("cpf", cpf)
+                    .getSingleResult();
+
+//        System.out.println("Responsavel = "+resp.getId()+" - " + resp.getNome());
+            return resp;
+        } catch (NoResultException e) {
+            return null;
+        }
     }
-    
-    public Responsavel buscarPorCurso(Curso curso){
-        String q = "select r FROM Responsavel r WHERE r.curso=:curso";
-        Responsavel resp = this.em.createQuery(q , Responsavel.class)
-        .setParameter("curso", curso)
-        .getSingleResult(); 
-        
-        System.out.println("Responsavel = "+resp.getId()+" - " + resp.getNome());
-        return resp != null ?resp :null;
+
+    public Responsavel buscarPorCargoCurso(Cargo cargo, Curso curso) {
+        try {
+            String q = "select r FROM Responsavel r WHERE r.cargo=:cargo AND r.curso=:curso";
+            System.out.println("cargo.name() = " + cargo.name());
+            
+            Responsavel resp = this.em.createQuery(q, Responsavel.class)
+                    .setParameter("cargo", cargo.Coordenador)
+                    .setParameter("curso", curso)
+                    .getSingleResult();
+
+            System.out.println("Responsavel = "+resp.getId()+" - " + resp.getNome());
+            return resp;
+        } catch (NoResultException e) {
+            System.out.println("ERRO = "+e.getCause()+" - "+e.getMessage());
+            return null;
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.femass.ds1.requerimentosfemass.bean;
 
+import com.femass.ds1.requerimentofemass.util.SimpleMailTemplete;
 import com.femass.ds1.requerimentosfemass.dao.AlunoDao;
 import com.femass.ds1.requerimentosfemass.dao.MovimentacaoDao;
 import com.femass.ds1.requerimentosfemass.dao.RequerimentoDao;
@@ -21,8 +22,17 @@ import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
 import com.femass.ds1.requerimentosfemass.filter.RequerimentoFilter;
 import com.femass.ds1.requerimentosfemass.model.Movimentacao;
 import com.femass.ds1.requerimentosfemass.model.Responsavel;
+import com.outjected.email.api.MailMessage;
+import com.outjected.email.impl.MailMessageImpl;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Locale;
 import javax.ejb.EJB;
+import org.apache.velocity.VelocityContext;
 
 @ManagedBean
 @ViewScoped
@@ -49,10 +59,10 @@ public class RequerimentoBean {
 
     @EJB
     AlunoDao alunoDAO;
-    
+
     @EJB
     MovimentacaoDao movDAO;
-    
+
     @EJB
     ResponsavelDao respDAO;
 
@@ -61,18 +71,18 @@ public class RequerimentoBean {
      */
     public void carregar() {
         try {
-            if(liTodos == true){
+            if (liTodos == true) {
                 lista = dao.getRequerimentos();
-            }else{
+            } else {
                 lista = dao.getRequerimentosAbertos();
             }
+            verificaRequerimentosACancelar();
             size = lista.size();
             listatipo = tipoDao.getTipoRequerimentos();
             liStatusReq = Arrays.asList(StatusRequerimento.values());
         } catch (RuntimeException e) {
             Messages.addGlobalError(">>>> ERRO: Não foi possível carregar os Requerimentos." + "Erro: " + e.getMessage());
         }
-
     }
 
     /**
@@ -84,7 +94,6 @@ public class RequerimentoBean {
         } catch (RuntimeException e) {
             Messages.addGlobalError("Erro ao tentar consultar um processo." + e.getMessage());
         }
-
     }
 
     /**
@@ -141,45 +150,46 @@ public class RequerimentoBean {
             carregar();
             Messages.addGlobalInfo("Requerimento Cancelado com sucesso!");
         } catch (RuntimeException e) {
-            e.printStackTrace();
             Messages.addGlobalError(">>>> ERRO: Não foi possivel Cancelar o Requerimento: " + cadastro.getNumeroProtocolo() + " - " + e.getMessage());
         }
     }
-    
-    public void atribuir(){
-        try{
+
+    public void atribuir() throws IOException {
+        try {
             liResponsavel = respDAO.getResponsaveis();
             movimentacao.setDataMovimentacao(new Date());
             movimentacao.setRequerimento(cadastro);
-            Responsavel responsavel = respDAO.buscarPorCurso(cadastro.getAluno().getCurso());
-            if(responsavel != null){
+            Responsavel responsavel = respDAO.buscarPorCargoCurso(cadastro.getTipoRequerimento().getSetor(),
+                    cadastro.getAluno().getCurso());
+            if (responsavel != null) {
                 movimentacao.setResponsavel(responsavel);
-            }else{
+                System.out.println("responsavel = " + responsavel.getNome());
+//                notificarResponsavel(cadastro, responsavel);
+            } else {
                 Messages.addGlobalError(">>>> ERRO: Não foi possivel Identificar o responsável do curso " + cadastro.getAluno().getCurso().getNome());
                 return;
             }
             Messages.addGlobalInfo("Requerimento Atribuído com sucesso!");
-        }catch(RuntimeException e){
-            e.printStackTrace();
+        } catch (RuntimeException e) {
             Messages.addGlobalError(">>>> ERRO: Não foi possivel Atribuir o Requerimento: " + cadastro.getNumeroProtocolo() + " - " + e.getMessage());
         }
     }
-    
-    public void salvarMovimentacao(){
-        try{
-            if(movimentacao.getResponsavel() != null){
+
+    public void salvarMovimentacao() {
+        try {
+            if (movimentacao.getResponsavel() != null) {
                 movDAO.incluir(movimentacao);
                 Requerimento req = movimentacao.getRequerimento();
                 req.setStatusRequerimento(StatusRequerimento.Em_Análise);
                 dao.alterar(req);
-                
+
                 fechar();
-            }else{
+            } else {
                 Messages.addGlobalError(">>>> ERRO: Não foi possivel registrar a movimentação! - (Não possui responsável) ");
                 return;
             }
             Messages.addGlobalInfo("Movimentação registrada com sucesso!");
-        }catch(RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
             Messages.addGlobalError(">>>> ERRO: Não foi possivel registrar a movimentação do processo:" + cadastro.getNumeroProtocolo() + " - " + e.getMessage());
         }
@@ -201,6 +211,65 @@ public class RequerimentoBean {
         cadastro = new Requerimento();
         movimentacao = new Movimentacao();
         acao = "";
+    }
+
+    /**
+     * Método que verifica os requerimentos em aberto com a data limite do tipo
+     * de requerimento se essa data for ultrapassada o sistema cancelará o
+     * requerimento automaticamente.
+     *
+     * se for -1 a data final é menor que a data Atual se for 0 a data final é
+     * igual a data Atual se for 1 a data final é maior que a data Atual
+     */
+    private void verificaRequerimentosACancelar() {
+        final DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar hoje = Calendar.getInstance();
+
+        for (Requerimento req : lista) {
+            if (req.getStatusRequerimento().equals(StatusRequerimento.Aberto)) {
+                String reqdata = df.format(req.getTipoRequerimento().getDataLimite().getTime());
+                String hj = df.format(hoje.getTime());
+                System.out.println("está aberto Requerimento n: " + req.GerarNumeroProtocolo() + " - " + reqdata);
+
+                if (reqdata.compareTo(hj) == -1) {
+                    System.out.println("é menor : " + reqdata + " - " + hj);
+                    req.setStatusRequerimento(StatusRequerimento.Cancelado);
+                    dao.alterar(req);
+                }
+            }
+        }
+    }
+
+    /**
+     * Método que notifica por email o responsável a existência de um requerimento atribuido a ele.
+     * @param req
+     * @param resp
+     * @throws IOException 
+     */
+    private void notificarResponsavel(Requerimento req, Responsavel resp) throws IOException {
+        if (resp.getEmail() != null) {
+            //configuração do email return configsession
+            SimpleMailTemplete smt = new SimpleMailTemplete();
+            MailMessage message = new MailMessageImpl(smt.enviarEmail());
+
+            // envia variaveis para o template
+            VelocityContext context = new VelocityContext();
+            context.put("requerimento", req);
+
+            //prepara o conteúdo do email em html com codificação
+            StringWriter writer = smt.escreveTempate("notifica_responsavel.html", context);
+
+            message.to(resp.getEmail())
+                    .subject("Requerimento Nº " + req.getNumeroProtocolo() + " Encaminhado.")
+                    .bodyHtml(writer.toString())
+                    .put("locale", new Locale("pt", "BR"))
+                    .send();
+
+            Messages.addGlobalInfo("Envio de notificação para o responsável enviada com sucesso para o Requerimento Nº " + req.getNumeroProtocolo());
+        } else {
+            Messages.addGlobalError("ERRO: >>>> Responsável Não possui email em seu cadastro, favor cadastrar para o envio das notificações.");
+            return;
+        }
     }
 
     public Aluno getAluno() {
@@ -286,7 +355,7 @@ public class RequerimentoBean {
     }
 
     public Movimentacao getMovimentacao() {
-        if(movimentacao == null){
+        if (movimentacao == null) {
             movimentacao = new Movimentacao();
         }
         return movimentacao;
@@ -303,5 +372,5 @@ public class RequerimentoBean {
     public void setLiResponsavel(List<Responsavel> liResponsavel) {
         this.liResponsavel = liResponsavel;
     }
-    
+
 }

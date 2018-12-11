@@ -1,6 +1,7 @@
 package com.femass.ds1.requerimentosfemass.bean;
 
 import com.femass.ds1.requerimentosfemass.dao.TipoRequerimentoDao;
+import com.femass.ds1.requerimentosfemass.model.Cargo;
 import com.femass.ds1.requerimentosfemass.model.Documento;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.faces.bean.ViewScoped;
 
 import org.primefaces.event.SelectEvent;
 import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
+import java.util.Arrays;
 import javax.ejb.EJB;
 import org.omnifaces.util.Messages;
 
@@ -20,6 +22,7 @@ public class TiporequerimentoBean {
     private TipoRequerimento cadastro;
     private List<TipoRequerimento> lista;
     private List<Documento> lidoc;
+    private List<Cargo> lisetor;
     private int size;
     private Documento documento;
     private String acao;
@@ -35,6 +38,7 @@ public class TiporequerimentoBean {
         try {
             lista = dao.getTipoRequerimentos();
             size = lista.size();
+            lisetor = Arrays.asList(Cargo.values());
 
         } catch (RuntimeException e) {
             Messages.addGlobalError(">>>> ERRO: Não foi possível carregar os tipos de Requerimento.");
@@ -155,5 +159,14 @@ public class TiporequerimentoBean {
     public void setDocumento(Documento documento) {
         this.documento = documento;
     }
+
+    public List<Cargo> getLisetor() {
+        return lisetor;
+    }
+
+    public void setLisetor(List<Cargo> lisetor) {
+        this.lisetor = lisetor;
+    }
+    
     
 }

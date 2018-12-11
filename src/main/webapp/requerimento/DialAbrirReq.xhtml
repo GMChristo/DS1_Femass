@@ -43,6 +43,7 @@
                         -->
                         <p:outputLabel for="nome" value="Tipo de Requerimento.: " />
                         <p:selectOneMenu id="nome" value="#{requerimentoBean.cadastro.tipoRequerimento}" 
+                                         filter="true"
                                          converter="omnifaces.SelectItemsConverter" 
                                          required="true"  requiredMessage="O campo 'TIPO DE REQUERIMENTO' é obrigatório.">
                             <f:selectItem itemLabel="Selecione um tipo de requerimento" noSelectionOption="true"/> 
