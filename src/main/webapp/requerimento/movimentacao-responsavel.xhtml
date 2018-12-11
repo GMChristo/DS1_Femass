@@ -32,7 +32,7 @@
                         <p:spacer width="10px" />
 
                         <p:commandButton value="Informar Resultado"
-                                         disabled="#{movimentacaoBean.cadastro.dataRecebimento eq null ?true : false}"
+                                         disabled="#{movimentacaoBean.cadastro.dataConclusao eq null and movimentacaoBean.acao eq 'Editar' and movimentacaoBean.cadastro.dataRecebimento != null ?false : true}"
                                          process="@this" update="dialRes"
                                          oncomplete="PF('dialogoRes').show();">
                             <p:resetInput target="dialRes" />
@@ -42,10 +42,10 @@
 
                         <p:commandButton value="Acusar Recebimento"
                                          actionListener="#{movimentacaoBean.receber}"
-                                         disabled="#{movimentacaoBean.acao eq 'Editar' ?false : true}"
+                                         disabled="#{movimentacaoBean.cadastro.dataRecebimento eq null and movimentacaoBean.acao eq 'Editar' ?false : true}"
                                          process="@this" update=":msgGlobal :frmList:tabela">
                         </p:commandButton>
-                        
+
                         <p:spacer width="10px" />
 
                         <p:outputLabel value="Todos:"/>
@@ -80,7 +80,7 @@
                             <f:convertDateTime pattern="dd/MM/yy HH:mm" timeZone="America/Sao_Paulo" />
                         </h:outputText>
                         <f:facet name="footer">
-                            <h:outputText value="Qtd #{requerimentoBean.size}" />
+                            <h:outputText value="Qtd #{movimentacaoBean.size}" />
                         </f:facet>
                     </p:column>
 
@@ -91,9 +91,9 @@
                         </h:outputText>
                     </p:column>
 
-                    <p:column headerText="Data Devolução" priority="1"
+                    <p:column headerText="Data Conclusão" priority="1"
                               style="width:12% ;text-align: center">
-                        <h:outputText value="#{m.dataDevolucao}">
+                        <h:outputText value="#{m.dataConclusao}">
                             <f:convertDateTime pattern="dd/MM/yy HH:mm" timeZone="America/Sao_Paulo" />
                         </h:outputText>
                     </p:column>
@@ -113,41 +113,58 @@
                     </p:column>
 
                     <p:rowExpansion>
-                        <p:dataTable emptyMessage="sem registros" id="tabela2" var="req"
-                                     widgetVar="mTable2" value="#{m.requerimento}">
+                        <p:panel style="background-color: #999;">
+                            <p:panelGrid id="painel" styleClass="pgrid-nobor-nobk"
+                                         columns="4">
+                                <f:facet name="header">
+                                    <p:row>
+                                        <p:column colspan="4">Dados do Resultado</p:column>
+                                    </p:row>
+                                </f:facet>
+                                <p:outputLabel value="Resultado.:"/>
+                                <p:outputLabel value="#{m.requerimento.statusRequerimento}"/>
+                                <p:outputLabel value="Delberação.:"/>
+                                <p:outputLabel value="#{m.deliberacao}"/>
+                            </p:panelGrid>
 
-                            <f:facet name="header">
-                                <p:outputLabel value="Dados do Requerimento" />
-                            </f:facet>
+                            <p:separator />
 
-                            <p:column headerText="Data" style="width:10%;text-align: center">
-                                <h:outputText value="#{m.requerimento.dataAbertura}">
-                                    <f:convertDateTime pattern="dd/MM/yy"
-                                                       timeZone="America/Sao_Paulo" />
-                                </h:outputText>
-                            </p:column>
+                            <p:dataTable emptyMessage="sem registros" id="tabela2" var="req"
+                                         widgetVar="mTable2" value="#{m.requerimento}">
 
-                            <p:column headerText="Protocolo" style="width:10%;text-align: center">
-                                <h:outputText value="#{m.requerimento.numeroProtocolo}"/>
-                            </p:column>
+                                <f:facet name="header">
+                                    <p:outputLabel value="Dados do Requerimento" />
+                                </f:facet>
 
-                            <p:column headerText="Aluno" style="width:10%;text-align: center">
-                                <h:outputText value="#{m.requerimento.aluno.nome}" />
-                            </p:column>
+                                <p:column headerText="Data" style="width:10%;text-align: center">
+                                    <h:outputText value="#{m.requerimento.dataAbertura}">
+                                        <f:convertDateTime pattern="dd/MM/yy"
+                                                           timeZone="America/Sao_Paulo" />
+                                    </h:outputText>
+                                </p:column>
 
-                            <p:column headerText="Tipo Requerimento" style="width:25%;text-align: center">
-                                <h:outputText value="#{m.requerimento.tipoRequerimento.nome}"/>
-                            </p:column>
+                                <p:column headerText="Protocolo" style="width:10%;text-align: center">
+                                    <h:outputText value="#{m.requerimento.numeroProtocolo}"/>
+                                </p:column>
 
-                            <p:column headerText="Descrição">
-                                <h:outputText value="#{m.requerimento.descricao}" />
-                            </p:column>
+                                <p:column headerText="Aluno" style="width:10%;text-align: center">
+                                    <h:outputText value="#{m.requerimento.aluno.nome}" />
+                                </p:column>
 
-                            <p:column headerText="Revisão" style="width:8%;text-align: center">
-                                <h:outputText value="#{m.requerimento.revisao}" />
-                            </p:column>
+                                <p:column headerText="Tipo Requerimento" style="width:25%;text-align: center">
+                                    <h:outputText value="#{m.requerimento.tipoRequerimento.nome}"/>
+                                </p:column>
 
-                        </p:dataTable>
+                                <p:column headerText="Descrição">
+                                    <h:outputText value="#{m.requerimento.descricao}" />
+                                </p:column>
+
+                                <p:column headerText="Revisão" style="width:8%;text-align: center">
+                                    <h:outputText value="#{m.requerimento.revisao}" />
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:panel>
                     </p:rowExpansion>
 
                 </p:dataTable>

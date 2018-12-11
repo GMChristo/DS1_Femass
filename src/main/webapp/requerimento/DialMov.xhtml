@@ -61,7 +61,7 @@
                     <h:panelGrid columns="3">
                         <p:commandButton value="Salvar" icon="salvar-icon"
                                          actionListener="#{requerimentoBean.salvarMovimentacao}"
-                                         process="@this :frmCadMov"
+                                         process="@this :frmCadMov :frmList"
                                          update="msgGlobal :frmCadMov :frmList:tabela"
                                          partialSubmit="true" />
 

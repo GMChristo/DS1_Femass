@@ -6,7 +6,6 @@
 package com.femass.ds1.requerimentosfemass.model;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -27,7 +27,7 @@ public class Requerimento implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(TemporalType.DATE)
     private Date dataAbertura;
 
     private String numeroProtocolo;
@@ -36,12 +36,13 @@ public class Requerimento implements Serializable {
 
    
 
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Calendar dataEncerramento;
+    @Temporal(TemporalType.DATE)
+    private Date dataEncerramento;
 
     @ManyToOne
     private Aluno aluno;
-
+    
+    @ManyToOne
     private TipoRequerimento tipoRequerimento;
     private StatusRequerimento statusRequerimento;
 
@@ -106,11 +107,11 @@ public class Requerimento implements Serializable {
         this.revisao = revisao;
     }
 
-    public Calendar getDataEncerramento() {
+    public Date getDataEncerramento() {
         return dataEncerramento;
     }
 
-    public void setDataEncerramento(Calendar dataEncerramento) {
+    public void setDataEncerramento(Date dataEncerramento) {
         this.dataEncerramento = dataEncerramento;
     }
 

@@ -68,14 +68,11 @@
 
                                 <p:outputLabel value="Resultado.: " />
                                 <p:selectOneMenu id="status" value="#{movimentacaoBean.cadastro.requerimento.statusRequerimento}" 
-                                                 converter="omnifaces.SelectItemsConverter" 
-                                                 required="true"  
-                                                 requiredMessage="O campo 'RESULTADO DO REQUERIMENTO' é obrigatório."
-                                                 >
+                                                 converter="omnifaces.SelectItemsConverter" >
                                     <f:selectItem itemLabel="Selecione um resultado do requerimento" noSelectionOption="true"/> 
                                     <f:selectItems value="#{movimentacaoBean.liStatusReq}" 
                                                    var="status" itemLabel="#{status}" itemValue="#{status}"
-                                                   itemDisabled="#{status == 'Cancelado' or status == 'Concluido' or status == 'Aberto' or status == 'Em_Análise'}"/>
+                                                   itemDisabled="#{status == 'Cancelado' or status == 'Concluido' or status == 'Aberto'}"/>
                                 </p:selectOneMenu> 
         <!--                                    <p:textEditor value="#{movimentacaoBean.cadastro.deliberacao}"
                                                           widgetVar="editorWidget" height="150" style="width:980px;margin-bottom:10px;">
@@ -103,7 +100,7 @@
                         <p:panel>
                             <h:panelGrid columns="3">
                                 <p:commandButton value="Salvar" icon="salvar-icon"
-
+                                                 actionListener="#{movimentacaoBean.informarResultado}"
                                                  process="@this :frmCadRes"
                                                  update="msgGlobal :frmCadRes :frmList:tabela"
                                                  />

@@ -6,7 +6,7 @@
 package com.femass.ds1.requerimentosfemass.model;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -41,7 +41,7 @@ public class TipoRequerimento implements Serializable {
     private Cargo setor;
     
     @Temporal(TemporalType.DATE)
-    private Calendar dataLimite = Calendar.getInstance();
+    private Date dataLimite;
 
     public Boolean getAtivo() {
         return ativo;
@@ -51,14 +51,14 @@ public class TipoRequerimento implements Serializable {
         this.ativo = ativo;
     }
 
-    public Calendar getDataLimite() {
+    public Date getDataLimite() {
         return dataLimite;
     }
 
-    public void setDataLimite(Calendar dataLimite) {
+    public void setDataLimite(Date dataLimite) {
         this.dataLimite = dataLimite;
     }
-    
+
     public String getNome() {
         return nome;
     }

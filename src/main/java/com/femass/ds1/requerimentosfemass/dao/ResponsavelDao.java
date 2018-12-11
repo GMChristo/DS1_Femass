@@ -77,13 +77,13 @@ public class ResponsavelDao {
             System.out.println("cargo.name() = " + cargo.name());
             
             Responsavel resp = this.em.createQuery(q, Responsavel.class)
-                    .setParameter("cargo", cargo.Coordenador)
+                    .setParameter("cargo", cargo)
                     .setParameter("curso", curso)
                     .getSingleResult();
 
             System.out.println("Responsavel = "+resp.getId()+" - " + resp.getNome());
             return resp;
-        } catch (NoResultException e) {
+        } catch (NoResultException | IllegalArgumentException e) {
             System.out.println("ERRO = "+e.getCause()+" - "+e.getMessage());
             return null;
         }

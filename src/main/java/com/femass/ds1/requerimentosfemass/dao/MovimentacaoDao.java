@@ -40,7 +40,7 @@ public class MovimentacaoDao {
     }
     
     public List<Movimentacao> getMovAbertasPorResponsavel(Responsavel resp){
-        String q = "select m from Movimentacao m where m.dataDevolucao is NULL AND m.responsavel=:responsavel order by m.id";
+        String q = "select m from Movimentacao m where m.dataConclusao is NULL AND m.responsavel=:responsavel order by m.id";
         
         return this.em.createQuery(q , Movimentacao.class)
         .setParameter("responsavel", resp)
@@ -48,7 +48,7 @@ public class MovimentacaoDao {
     }
     
     public List<Movimentacao> getMovAbertas(){
-        Query q = em.createQuery("select m from Movimentacao m where m.dataDevolucao is NULL order by m.id");
+        Query q = em.createQuery("select m from Movimentacao m where m.dataConclusao is NULL order by m.id");
         return q.getResultList();
     }
 }

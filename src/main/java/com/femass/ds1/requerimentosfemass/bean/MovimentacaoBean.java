@@ -1,6 +1,8 @@
 package com.femass.ds1.requerimentosfemass.bean;
 
+import com.femass.ds1.requerimentofemass.util.SimpleMailTemplete;
 import com.femass.ds1.requerimentosfemass.dao.MovimentacaoDao;
+import com.femass.ds1.requerimentosfemass.dao.RequerimentoDao;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -10,13 +12,20 @@ import org.primefaces.event.SelectEvent;
 
 import com.femass.ds1.requerimentosfemass.model.Movimentacao;
 import com.femass.ds1.requerimentosfemass.filter.RequerimentoFilter;
+import com.femass.ds1.requerimentosfemass.model.Aluno;
 import com.femass.ds1.requerimentosfemass.model.Requerimento;
 import com.femass.ds1.requerimentosfemass.model.Responsavel;
 import com.femass.ds1.requerimentosfemass.model.StatusRequerimento;
+import com.outjected.email.api.MailMessage;
+import com.outjected.email.impl.MailMessageImpl;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedProperty;
+import org.apache.velocity.VelocityContext;
 import org.omnifaces.util.Messages;
 import org.primefaces.event.FlowEvent;
 
@@ -35,9 +44,12 @@ public class MovimentacaoBean {
     private boolean liTodos;
     private boolean skip;
     private List<StatusRequerimento> liStatusReq;
- 
+
     @EJB
     MovimentacaoDao dao;
+
+    @EJB
+    RequerimentoDao reqDao;
 
     /**
      * Metodo de abertura carrega somente as movimentações do responsavel
@@ -46,15 +58,39 @@ public class MovimentacaoBean {
     public void carregar() {
         try {
             if (liTodos == true) {
-                lista = dao.getMovAbertas();
+                lista = dao.getMovimentacoes();
             } else {
                 lista = dao.getMovAbertasPorResponsavel(autenticacaoBean.getRespLogado());
             }
             size = lista.size();
             liStatusReq = Arrays.asList(StatusRequerimento.values());
         } catch (RuntimeException e) {
-            System.out.println(">>>> Erro ao tentar gerar a lista de movimentações abertas.");
+            Messages.addGlobalError(">>>> ERRO: Erro ao tentar gerar a lista de movimentações abertas." + e.getMessage());
         }
+    }
+
+    public void informarResultado() throws IOException {
+        try {
+            if (cadastro.getRequerimento().getStatusRequerimento().equals(StatusRequerimento.Em_Análise)) {
+                Messages.addGlobalError(">>>> ERRO: Favor informar o resultado DEFERIDO OU INDEERIDO.");
+                return;
+            } else {
+                if (!cadastro.getDeliberacao().equals("")) {
+                    cadastro.setDataConclusao(new Date());
+                    dao.alterar(cadastro);
+                    reqDao.alterar(cadastro.getRequerimento());
+                    Messages.addGlobalInfo("Resultado informado com sucesso!");
+                    notificarAluno(cadastro.getRequerimento());
+                    carregar();
+                } else {
+                    Messages.addGlobalError(">>>> ERRO: Favor informar sus considerações.");
+                    return;
+                }
+            }
+        } catch (RuntimeException e) {
+            Messages.addGlobalError(">>>> ERRO: Erro ao tentar informar o resultado da movimentação." + e.getMessage());
+        }
+
     }
 
     /**
@@ -65,14 +101,6 @@ public class MovimentacaoBean {
     public void onRowSelect(SelectEvent evento) {
         cadastro = (Movimentacao) evento.getObject();
         acao = "Editar";
-    }
-
-    /**
-     * Metodo Bean novo - Cria um novo objeto.
-     */
-    public void novo() {
-        cadastro = new Movimentacao();
-        acao = "Salvar";
     }
 
     /**
@@ -108,12 +136,44 @@ public class MovimentacaoBean {
         acao = "";
     }
 
+    /**
+     * Método pra uso no wizard
+     *
+     * @param event
+     * @return
+     */
     public String onFlowProcess(FlowEvent event) {
         if (skip) {
             skip = false; // reset in case user goes back
             return "conclusao";
         } else {
             return event.getNewStep();
+        }
+    }
+    
+    private void notificarAluno(Requerimento req) throws IOException{
+        if (req.getAluno().getEmail() != null) {
+            //configuração do email return configsession
+            SimpleMailTemplete smt = new SimpleMailTemplete();
+            MailMessage message = new MailMessageImpl(smt.enviarEmail());
+
+            // envia variaveis para o template
+            VelocityContext context = new VelocityContext();
+            context.put("requerimento", req);
+
+            //prepara o conteúdo do email em html com codificação
+            StringWriter writer = smt.escreveTempate("notifica_aluno.html", context);
+
+            message.to(req.getAluno().getEmail())
+                    .subject("Requerimento Nº " + req.getNumeroProtocolo() + " Analisado.")
+                    .bodyHtml(writer.toString())
+                    .put("locale", new Locale("pt", "BR"))
+                    .send();
+
+            Messages.addGlobalInfo("Envio de notificação para o aluno enviada com sucesso para o Requerimento Nº " + req.getNumeroProtocolo());
+        } else {
+            Messages.addGlobalError("ERRO: >>>> Não foi possível enviar notificação para o Aluno: " +req.getAluno().getNome());
+            return;
         }
     }
 
@@ -198,5 +258,5 @@ public class MovimentacaoBean {
     public void setLiStatusReq(List<StatusRequerimento> liStatusReq) {
         this.liStatusReq = liStatusReq;
     }
-    
+
 }

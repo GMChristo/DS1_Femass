@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -26,14 +27,14 @@ public class Movimentacao implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dataMovimentacao;
     
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date dataRecebimento;
     
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date dataDevolucao;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataConclusao;
     
     @ManyToOne
     private Requerimento requerimento;
@@ -84,14 +85,14 @@ public class Movimentacao implements Serializable {
         this.dataRecebimento = dataRecebimento;
     }
 
-    public Date getDataDevolucao() {
-        return dataDevolucao;
+    public Date getDataConclusao() {
+        return dataConclusao;
     }
 
-    public void setDataDevolucao(Date dataDevolucao) {
-        this.dataDevolucao = dataDevolucao;
+    public void setDataConclusao(Date dataConclusao) {
+        this.dataConclusao = dataConclusao;
     }
-    
+
     public Long getId() {
         return id;
     }

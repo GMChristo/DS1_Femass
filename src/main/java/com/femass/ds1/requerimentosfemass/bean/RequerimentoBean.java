@@ -33,6 +33,8 @@ import java.util.Calendar;
 import java.util.Locale;
 import javax.ejb.EJB;
 import org.apache.velocity.VelocityContext;
+import org.primefaces.PrimeFaces;
+import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @ViewScoped
@@ -50,6 +52,7 @@ public class RequerimentoBean {
     private boolean liTodos;
     private Movimentacao movimentacao;
     private List<Responsavel> liResponsavel;
+    private Responsavel responsavel;
 
     @EJB
     RequerimentoDao dao;
@@ -126,8 +129,13 @@ public class RequerimentoBean {
     public void merge() {
         try {
             if (acao.equals("Salvar")) {
-                dao.incluir(cadastro);
-                Messages.addGlobalInfo("Requerimento Salvo com sucesso!");
+                if (verificaDataLimite() == -1) {
+                    Messages.addGlobalError(">>>> ERRO: Data limite atingida, não é possível abrir requerimento pra esse tipo: " + cadastro.getTipoRequerimento().getNome());
+                    return;
+                } else {
+                    dao.incluir(cadastro);
+                    Messages.addGlobalInfo("Requerimento Salvo com sucesso!");
+                }
             } else {
                 dao.alterar(cadastro);
                 Messages.addGlobalInfo("Requerimento Editado com sucesso!");
@@ -156,39 +164,41 @@ public class RequerimentoBean {
 
     public void atribuir() throws IOException {
         try {
-            liResponsavel = respDAO.getResponsaveis();
-            movimentacao.setDataMovimentacao(new Date());
-            movimentacao.setRequerimento(cadastro);
-            Responsavel responsavel = respDAO.buscarPorCargoCurso(cadastro.getTipoRequerimento().getSetor(),
+            responsavel = respDAO.buscarPorCargoCurso(cadastro.getTipoRequerimento().getSetor(),
                     cadastro.getAluno().getCurso());
             if (responsavel != null) {
                 movimentacao.setResponsavel(responsavel);
-                System.out.println("responsavel = " + responsavel.getNome());
-//                notificarResponsavel(cadastro, responsavel);
+                movimentacao.setDataMovimentacao(new Date());
+                movimentacao.setRequerimento(cadastro);
+                
+                Messages.addGlobalInfo("Requerimento Atribuído com sucesso!");
+                salvarMovimentacao();
             } else {
                 Messages.addGlobalError(">>>> ERRO: Não foi possivel Identificar o responsável do curso " + cadastro.getAluno().getCurso().getNome());
                 return;
             }
-            Messages.addGlobalInfo("Requerimento Atribuído com sucesso!");
         } catch (RuntimeException e) {
             Messages.addGlobalError(">>>> ERRO: Não foi possivel Atribuir o Requerimento: " + cadastro.getNumeroProtocolo() + " - " + e.getMessage());
         }
     }
 
-    public void salvarMovimentacao() {
+    private void salvarMovimentacao() throws IOException {
         try {
             if (movimentacao.getResponsavel() != null) {
                 movDAO.incluir(movimentacao);
                 Requerimento req = movimentacao.getRequerimento();
                 req.setStatusRequerimento(StatusRequerimento.Em_Análise);
                 dao.alterar(req);
-
+                Messages.addGlobalInfo("Movimentação registrada com sucesso!");
+                
+                notificarResponsavel(cadastro, responsavel);
+                
                 fechar();
+                carregar();
             } else {
                 Messages.addGlobalError(">>>> ERRO: Não foi possivel registrar a movimentação! - (Não possui responsável) ");
                 return;
             }
-            Messages.addGlobalInfo("Movimentação registrada com sucesso!");
         } catch (RuntimeException e) {
             e.printStackTrace();
             Messages.addGlobalError(">>>> ERRO: Não foi possivel registrar a movimentação do processo:" + cadastro.getNumeroProtocolo() + " - " + e.getMessage());
@@ -241,10 +251,30 @@ public class RequerimentoBean {
     }
 
     /**
-     * Método que notifica por email o responsável a existência de um requerimento atribuido a ele.
+     * Verifica se pode abrir um requerimento comparando a data.
+     */
+    private int verificaDataLimite() {
+        final DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar hoje = Calendar.getInstance();
+        String reqdata = df.format(cadastro.getTipoRequerimento().getDataLimite().getTime());
+        String hj = df.format(hoje.getTime());
+
+        if (reqdata.compareTo(hj) == -1) {
+            System.out.println("é menor : " + reqdata + " - " + hj);
+//            Messages.addGlobalError(">>>> ERRO: Data limite atingida, não é possível abrir requerimento pra esse tipo: " + cadastro.getTipoRequerimento().getNome());
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Método que notifica por email o responsável a existência de um
+     * requerimento atribuido a ele.
+     *
      * @param req
      * @param resp
-     * @throws IOException 
+     * @throws IOException
      */
     private void notificarResponsavel(Requerimento req, Responsavel resp) throws IOException {
         if (resp.getEmail() != null) {
@@ -371,6 +401,13 @@ public class RequerimentoBean {
 
     public void setLiResponsavel(List<Responsavel> liResponsavel) {
         this.liResponsavel = liResponsavel;
+    }
+
+    public Responsavel getResponsavel() {
+        if (responsavel == null) {
+            responsavel = new Responsavel();
+        }
+        return responsavel;
     }
 
 }
