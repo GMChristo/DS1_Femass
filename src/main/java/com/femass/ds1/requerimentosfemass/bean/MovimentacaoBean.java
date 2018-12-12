@@ -12,7 +12,6 @@ import org.primefaces.event.SelectEvent;
 
 import com.femass.ds1.requerimentosfemass.model.Movimentacao;
 import com.femass.ds1.requerimentosfemass.filter.RequerimentoFilter;
-import com.femass.ds1.requerimentosfemass.model.Aluno;
 import com.femass.ds1.requerimentosfemass.model.Requerimento;
 import com.femass.ds1.requerimentosfemass.model.Responsavel;
 import com.femass.ds1.requerimentosfemass.model.StatusRequerimento;
@@ -71,7 +70,7 @@ public class MovimentacaoBean {
 
     public void informarResultado() throws IOException {
         try {
-            if (cadastro.getRequerimento().getStatusRequerimento().equals(StatusRequerimento.Em_Análise)) {
+            if (cadastro.getRequerimento().getStatusRequerimento().equals(StatusRequerimento.Em_Analise)) {
                 Messages.addGlobalError(">>>> ERRO: Favor informar o resultado DEFERIDO OU INDEERIDO.");
                 return;
             } else {

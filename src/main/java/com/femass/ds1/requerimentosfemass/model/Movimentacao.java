@@ -42,6 +42,9 @@ public class Movimentacao implements Serializable {
     @ManyToOne
     private Responsavel responsavel;
     
+    @ManyToOne
+    private Responsavel usuario;
+    
     private String deliberacao;
     
 
@@ -59,6 +62,14 @@ public class Movimentacao implements Serializable {
 
     public void setResponsavel(Responsavel responsavel) {
         this.responsavel = responsavel;
+    }
+
+    public Responsavel getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Responsavel usuario) {
+        this.usuario = usuario;
     }
 
     public String getDeliberacao() {

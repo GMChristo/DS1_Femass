@@ -9,6 +9,7 @@ import com.femass.ds1.requerimentosfemass.model.Aluno;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -18,29 +19,62 @@ import javax.persistence.Query;
  */
 @Stateless
 public class AlunoDao {
-    
+
     @PersistenceContext
     EntityManager em;
-    
-    public void incluir (Aluno aluno){
+
+    public void incluir(Aluno aluno) {
         em.persist(aluno);
     }
-    public void alterar (Aluno aluno){
+
+    public void alterar(Aluno aluno) {
         em.merge(aluno);
     }
-    public void excluir (Aluno aluno){
+
+    public void excluir(Aluno aluno) {
         em.remove(aluno);
     }
-    public List<Aluno> getAlunos(){
+
+    public List<Aluno> getAlunos() {
         Query q = em.createQuery("select a from Aluno a order by a.nome");
         return q.getResultList();
     }
-    
-    public Aluno porID(Long id){
+
+    public Aluno porID(Long id) {
         String q = "select a from Aluno a where a.id=:id";
-         Aluno aluno = this.em.createQuery(q , Aluno.class)
-        .setParameter("id", id)
-        .getSingleResult(); 
+        Aluno aluno = this.em.createQuery(q, Aluno.class)
+                .setParameter("id", id)
+                .getSingleResult();
         return aluno;
+    }
+    
+    public Aluno buscarPorMat(String matricula) {
+        try {
+            String q = "select a FROM Aluno a WHERE a.matricula=:matricula";
+            Aluno aluno = this.em.createQuery(q, Aluno.class)
+                    .setParameter("matricula", matricula)
+                    .getSingleResult();
+
+            return aluno;
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public Aluno autenticar(String mat, String senha) {
+        try {
+            String q = "select a FROM Aluno a WHERE a.matricula=:matricula and a.senha=:senha";
+            Aluno aluno = this.em.createQuery(q, Aluno.class)
+                    .setParameter("matricula", mat)
+                    .setParameter("senha", senha)
+                    .getSingleResult();
+
+            System.out.println("Aluno = " + aluno.getId() + " - " + aluno.getNome());
+
+            return aluno;
+        } catch (NoResultException e) {
+            System.out.println("Aluno = " + e.getMessage());
+            return null;
+        }
     }
 }

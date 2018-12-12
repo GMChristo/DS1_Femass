@@ -21,7 +21,7 @@
             <h3>Listagem de Responsáveis</h3>
             <!-- <p:separator /> -->
 
-            <h:form id="frmList">
+            <h:form id="frmList" rendered="#{autenticacaoBean.respLogado.cpf != null}">
                 <!-- toobar pesquisa, botões e exportação -->
                 <p:toolbar id="toolbar">
                     <f:facet name="left">

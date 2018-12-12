@@ -55,8 +55,33 @@
                             <b:container style="max-width:320px;">
                                 <b:row style="margin-top:10px;">
                                     <b:column medium-screen="12">
-                                        <b:inputText id="cpf" value="#{autenticacaoBean.respLogado.cpf}"
+                                        <p:selectBooleanButton id="check" value="#{autenticacaoBean.responsavel}" 
+                                                               onLabel="Responsável" 
+                                                               offLabel="Responsável" 
+                                                               onIcon="fa fa-check" 
+                                                               offIcon="fa fa-close" 
+                                                               style="width:130px">
+                                            <p:ajax update="cpfrow cpf matrirow matri" process="@this cpfrow cpf matrirow matri" />
+                                        </p:selectBooleanButton>
+                                    </b:column>
+                                </b:row>
+
+                                <b:row id="cpfrow" style="margin-top:10px;">
+                                    <b:column medium-screen="12">
+                                        <b:inputText id="cpf" value="#{autenticacaoBean.cpf_mat}" rendered="#{autenticacaoBean.responsavel == true}"
                                                      placeholder="CPF:" autocomplete="false" mask="999.999.999-99">
+                                            <f:facet name="prepend">
+                                                <b:icon name="user" style-class="iconTxt" />
+                                            </f:facet>
+                                            <f:validateBean />
+                                        </b:inputText>
+                                    </b:column>
+                                </b:row>
+                                
+                                <b:row id="matrirow" style="margin-top:10px;">
+                                    <b:column medium-screen="12">
+                                        <b:inputText id="matri" value="#{autenticacaoBean.cpf_mat}" rendered="#{autenticacaoBean.responsavel == false}"
+                                                     placeholder="MATRÍCULA:" autocomplete="false" >
                                             <f:facet name="prepend">
                                                 <b:icon name="user" style-class="iconTxt" />
                                             </f:facet>
@@ -67,7 +92,7 @@
 
                                 <b:row>
                                     <b:column medium-screen="12">
-                                        <b:inputSecret value="#{autenticacaoBean.respLogado.senha}"
+                                        <b:inputSecret value="#{autenticacaoBean.senha}"
                                                        placeholder="SENHA:" autocomplete="false">
                                             <f:facet name="prepend">
                                                 <b:iconAwesome name="key" style-class="iconTxt" />
@@ -84,7 +109,7 @@
 
                                         <p:commandLink value="Esqueci minha senha."
                                                        actionListener="#{autenticacaoBean.recuperarSenha}"
-                                                       process="cpf @this" update=":msgGlobal"
+                                                       process="cpf matri @this" update=":msgGlobal"
                                                        style="margin-left: 28%; color: #0000a0;" />
 
                                     </b:column>
@@ -104,8 +129,8 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- inclui status de carregamento com um arquivo.gif  -->
-	<ui:include src="/comum/carregamento.xhtml" />
+        <ui:include src="/comum/carregamento.xhtml" />
     </h:body>
 </html>

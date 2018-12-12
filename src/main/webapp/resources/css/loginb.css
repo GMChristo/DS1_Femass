@@ -143,7 +143,7 @@ body {
 
 @media ( max-width : 360px) {
 	.cxcontainer {
-		margin-left: 1.25414364640884%;
+		margin-left: 0%;
 		margin-top: 10%;
 	}
 	.formulario{
@@ -177,7 +177,7 @@ body {
 
 @media (max-width : 480px) and (min-width: 412px) {
 	.cxcontainer {
-		margin-left: 9%;
+		margin-left: 7%;
 		margin-top: 10%;
 	}
 	.input-group-addon{
@@ -190,7 +190,7 @@ body {
 
 @media (max-width : 640px) and (min-width: 481px) {
 	.cxcontainer {
-		margin-left: 19%;
+		margin-left: 17.6%;
 		margin-top: 6%;
 	}
 	.input-group-addon{
@@ -214,7 +214,7 @@ body {
 
 @media ( max-width : 800px) and (min-width: 769px) {
 	.cxcontainer {
-		margin-left: 24.8%;
+		margin-left: 23.3%;
 		margin-top: 4%;
 	}
 	.input-group-addon{
@@ -226,7 +226,7 @@ body {
 
 @media ( max-width : 1024px) and (min-width: 801px) {
 	.cxcontainer {
-		margin-left: 30%;
+		margin-left: 29.6%;
 		margin-top: 4.5%;
 	}
 	.input-group-addon{
@@ -238,7 +238,7 @@ body {
 
 @media ( max-width : 1280px) and (min-width: 1025px) {
 	.cxcontainer {
-		margin-left: 37%;
+		margin-left: 33.5%;
 		margin-top: 4%;
 	}
 	.input-group-addon{
@@ -250,7 +250,7 @@ body {
 
 @media ( max-width : 1366px) and (min-width: 1281px) {
 	.cxcontainer {
-		margin-left: 38.5%;
+		margin-left: 34.7%;
 		margin-top: 4%;
 	}
 	.input-group-addon{

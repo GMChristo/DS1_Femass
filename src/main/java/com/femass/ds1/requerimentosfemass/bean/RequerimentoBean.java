@@ -32,9 +32,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 import javax.ejb.EJB;
+import javax.faces.bean.ManagedProperty;
 import org.apache.velocity.VelocityContext;
-import org.primefaces.PrimeFaces;
-import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @ViewScoped
@@ -53,6 +52,8 @@ public class RequerimentoBean {
     private Movimentacao movimentacao;
     private List<Responsavel> liResponsavel;
     private Responsavel responsavel;
+    @ManagedProperty(value = "#{autenticacaoBean}")
+    private AutenticacaoBean autenticacaoBean;
 
     @EJB
     RequerimentoDao dao;
@@ -93,9 +94,19 @@ public class RequerimentoBean {
      */
     public void consultar() {
         try {
-            lipesq = dao.pesqRequerimentos(filtro.getProtocolo());
+            if(autenticacaoBean.getAluLogado().getMatricula() != null){
+                lipesq = dao.pesqRequerimentosAluno(filtro,autenticacaoBean.getAluLogado());
+            }else{
+                if(filtro.getDataInicio() == null && filtro.getDataFim() == null && filtro.getProtocolo().equals("")){
+                    Messages.addGlobalError(">>>> ERRO: informe algum parametro para pesquisa.");
+                    return;
+                }else{
+                    lipesq = dao.pesqRequerimentos(filtro);
+                }
+            }
+            size = lipesq.size();
         } catch (RuntimeException e) {
-            Messages.addGlobalError("Erro ao tentar consultar um processo." + e.getMessage());
+            Messages.addGlobalError(">>>> ERRO ao tentar consultar um ou mais processos." + e.getMessage());
         }
     }
 
@@ -170,7 +181,8 @@ public class RequerimentoBean {
                 movimentacao.setResponsavel(responsavel);
                 movimentacao.setDataMovimentacao(new Date());
                 movimentacao.setRequerimento(cadastro);
-                
+                movimentacao.setUsuario(autenticacaoBean.getRespLogado());
+
                 Messages.addGlobalInfo("Requerimento Atribuído com sucesso!");
                 salvarMovimentacao();
             } else {
@@ -187,12 +199,12 @@ public class RequerimentoBean {
             if (movimentacao.getResponsavel() != null) {
                 movDAO.incluir(movimentacao);
                 Requerimento req = movimentacao.getRequerimento();
-                req.setStatusRequerimento(StatusRequerimento.Em_Análise);
+                req.setStatusRequerimento(StatusRequerimento.Em_Analise);
                 dao.alterar(req);
                 Messages.addGlobalInfo("Movimentação registrada com sucesso!");
-                
+
                 notificarResponsavel(cadastro, responsavel);
-                
+
                 fechar();
                 carregar();
             } else {
@@ -210,7 +222,15 @@ public class RequerimentoBean {
      */
     public void revisar() {
         if (cadastro != null) {
-            cadastro.setRevisao(true);
+            if(verificaDataLimite() == -1){
+                Messages.addGlobalError("ERRO: Data Limite atingida! não é possível solicitar revisão para este Requerimento Nº " + cadastro.getNumeroProtocolo());
+                return;
+            }else{
+                cadastro.setRevisao(true);
+                cadastro.setStatusRequerimento(StatusRequerimento.Aberto);
+                dao.alterar(cadastro);
+                Messages.addGlobalInfo("Solicitação de revisão gerada com sucesso! para o requerimento Nº " + cadastro.getNumeroProtocolo());
+            }
         }
     }
 
@@ -408,6 +428,14 @@ public class RequerimentoBean {
             responsavel = new Responsavel();
         }
         return responsavel;
+    }
+
+    public AutenticacaoBean getAutenticacaoBean() {
+        return autenticacaoBean;
+    }
+
+    public void setAutenticacaoBean(AutenticacaoBean autenticacaoBean) {
+        this.autenticacaoBean = autenticacaoBean;
     }
 
 }

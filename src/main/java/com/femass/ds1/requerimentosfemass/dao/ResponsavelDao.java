@@ -46,15 +46,19 @@ public class ResponsavelDao {
     }
 
     public Responsavel autenticar(String cpf, String senha) {
-        String q = "select r FROM Responsavel r WHERE r.cpf=:cpf and r.senha=:senha";
-        Responsavel resp = this.em.createQuery(q, Responsavel.class)
-                .setParameter("cpf", cpf)
-                .setParameter("senha", senha)
-                .getSingleResult();
+        try {
+            String q = "select r FROM Responsavel r WHERE r.cpf=:cpf and r.senha=:senha";
+            Responsavel resp = this.em.createQuery(q, Responsavel.class)
+                    .setParameter("cpf", cpf)
+                    .setParameter("senha", senha)
+                    .getSingleResult();
 
-        System.out.println("Responsavel = " + resp.getId());
-
-        return resp;
+            System.out.println("Responsavel = " + resp.getId() + " - " + resp.getNome());
+            return resp;
+        } catch (NoResultException e) {
+            System.out.println("Responsavel = " + e.getMessage());
+            return null;
+        }
     }
 
     public Responsavel buscarPorCPF(String cpf) {
@@ -75,16 +79,16 @@ public class ResponsavelDao {
         try {
             String q = "select r FROM Responsavel r WHERE r.cargo=:cargo AND r.curso=:curso";
             System.out.println("cargo.name() = " + cargo.name());
-            
+
             Responsavel resp = this.em.createQuery(q, Responsavel.class)
                     .setParameter("cargo", cargo)
                     .setParameter("curso", curso)
                     .getSingleResult();
 
-            System.out.println("Responsavel = "+resp.getId()+" - " + resp.getNome());
+            System.out.println("Responsavel = " + resp.getId() + " - " + resp.getNome());
             return resp;
         } catch (NoResultException | IllegalArgumentException e) {
-            System.out.println("ERRO = "+e.getCause()+" - "+e.getMessage());
+            System.out.println("ERRO = " + e.getCause() + " - " + e.getMessage());
             return null;
         }
     }

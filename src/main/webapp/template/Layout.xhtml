@@ -57,7 +57,7 @@
             </f:facet>
 
             <f:facet name="right">
-                <h:outputText value="Usuário: #{autenticacaoBean.respLogado.nome}" />
+                <h:outputText value="Usuário: #{autenticacaoBean.responsavel == false ?autenticacaoBean.aluLogado.nome :autenticacaoBean.respLogado.nome}" />
                 <p:spacer width="5px" />
             </f:facet>
         </p:toolbar>
@@ -82,11 +82,18 @@
         <b:navBar fluid="true" style="margin-bottom: 0px;">
             <b:navbarLinks>
                 
-                <b:navLink value="" outcome="/comum/entrada/principal.xhtml">
+                <b:navLink value="" outcome="/comum/entrada/principal.xhtml"
+                           rendered="#{autenticacaoBean.respLogado.cpf != null}">
                     <b:iconAwesome name="home" spin="false" size="1x" />
                 </b:navLink>
                 
-                <b:dropMenu value="Cadastros" iconAwesome="fa-gears">
+                <b:navLink value="" outcome="/comum/entrada/principal_aluno.xhtml"
+                           rendered="#{autenticacaoBean.aluLogado.matricula != null}">
+                    <b:iconAwesome name="home" spin="false" size="1x" />
+                </b:navLink>
+                
+                <b:dropMenu value="Cadastros" iconAwesome="fa-gears" 
+                            rendered="#{autenticacaoBean.respLogado.cpf != null}">
 
                     <b:navLink value=" - Alunos" iconAwesome="fa-group"
                                outcome="/aluno/alunos.xhtml" />
@@ -122,19 +129,22 @@
                     <b:navLink value=" - Consultar Requerimento" iconAwesome="fa-search"
                                outcome="/requerimento/consulta-requerimento.xhtml"/>	
                     <b:navLink value=" - Requerimentos" iconAwesome="fa-file"
-                               outcome="/requerimento/requerimentos.xhtml"/>
+                               outcome="/requerimento/requerimentos.xhtml"
+                               rendered="#{autenticacaoBean.respLogado.cpf != null}"/>
 
 
                     <b:navLink></b:navLink>
-                    <b:navLink header="Movimentações"/>
+                    <b:navLink header="Movimentações" 
+                               rendered="#{autenticacaoBean.respLogado.cpf != null}"/>
 
                     <b:navLink value=" - Movimentação" iconAwesome="fa-arrows"
-                               outcome="/requerimento/movimentacao-responsavel.xhtml" />
+                               outcome="/requerimento/movimentacao-responsavel.xhtml" 
+                               rendered="#{autenticacaoBean.respLogado.cpf != null}"/>
                 </b:dropMenu>
 
-                <b:dropMenu value="Relatórios" iconAwesome="fa-file-pdf-o">
+                <!--<b:dropMenu value="Relatórios" iconAwesome="fa-file-pdf-o">-->
 
-                </b:dropMenu>
+                <!--</b:dropMenu>-->
             </b:navbarLinks>
         </b:navBar>
 

@@ -83,6 +83,11 @@
                             <h:outputText value="Qtd #{movimentacaoBean.size}" />
                         </f:facet>
                     </p:column>
+                    
+                    <p:column headerText="Usuário"
+                              style="width:15%;text-align: center">
+                        <h:outputText value="#{m.usuario.nome}" />
+                    </p:column>
 
                     <p:column headerText="Data Recebimento" priority="1"
                               style="width:12% ;text-align: center">
