@@ -9,7 +9,7 @@
       xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <ui:composition template="/template/Layout.xhtml">	
-        
+
         <ui:define name="metadata">
             <f:metadata>
                 <f:viewAction action="#{tiporequerimentoBean.carregar}" />
@@ -73,6 +73,10 @@
                     <p:ajax event="rowSelect" listener="#{tiporequerimentoBean.onRowSelect}"
                             update="frmList:toolbar" />
                     <p:ajax event="rowUnselect" update="frmList:toolbar" />
+                    
+                    <p:column style="width:35px">
+                        <p:rowToggler />
+                    </p:column>
 
                     <p:column headerText="#"
                               style="width:10% ;text-align: center" sortBy="#{r.id}">
@@ -90,7 +94,7 @@
                     <p:column headerText="Setor" style="width:10% ;text-align: center">
                         <h:outputText value="#{r.setor}" />
                     </p:column>
-                    
+
                     <p:column headerText="Ativo" style="width:10%; text-align: center">
                         <!--<h:outputText value="#{r.ativo ? 'Ativo': 'Inativo'}" />
                         <!h:outputText value="Ativo" rendered="#{r.ativo}"/>
@@ -101,9 +105,28 @@
                     <p:column headerText="Data Limite" style="width:10% ;text-align: center">
                         <!-- <f:convertDateTime pattern="dd/MM/yy" /> -->
                         <h:outputText value="#{r.dataLimite.time}" >
-                        <f:convertDateTime pattern="dd/MM/yy" /></h:outputText>
+                            <f:convertDateTime pattern="dd/MM/yy" /></h:outputText>
                     </p:column>
-                    
+
+                    <p:rowExpansion>
+                        <p:panel style="background-color: #999;">
+                            <p:dataTable emptyMessage="sem documentos" id="tabela2" var="rdoc"
+                                         widgetVar="mTable2" value="#{r.documentos}">
+
+                                <f:facet name="header">
+                                    <p:outputLabel value="Documentos do Tipo de Requerimento" />
+                                </f:facet>
+
+                                <p:column headerText="Título" style="width:30%;text-align: center">
+                                    <h:outputText value="#{rdoc.titulo}" />
+                                </p:column>
+
+                                <p:column headerText="Link" style="width:70%;text-align: center">
+                                    <h:outputText value="#{rdoc.link}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:panel>
+                    </p:rowExpansion>
 
                 </p:dataTable>
             </h:form>

@@ -26,15 +26,27 @@ public class TipoRequerimentoDao {
     public void incluir(TipoRequerimento tipoRequerimento) {
         em.persist(tipoRequerimento);
     }
-    
-    public void incluir2(TipoRequerimento tipoRequerimento, List<Documento> lidoc){
-        em.persist(tipoRequerimento);
-        for(int i=0; i<lidoc.size(); i++){
-            Documento doc = lidoc.get(i);
-            doc.setTipoRequerimento(tipoRequerimento);
-            em.persist(doc);
+
+    public void mergeTipDoc(TipoRequerimento tipoReq, List<Documento> itensDoc) {
+        try {
+            // Salvando ou editando
+            em.merge(tipoReq);
+
+            if (itensDoc != null) {
+                // salva ou edita os itens da solicitação de material
+                for (int posicao = 0; posicao < itensDoc.size(); posicao++) {
+                    Documento itemdoc = itensDoc.get(posicao);
+
+                    if (itemdoc.getTipoRequerimento() == null) {
+                        itemdoc.setTipoRequerimento(tipoReq);
+                    }
+                    em.merge(itemdoc);
+                }
+            }
+
+        } catch (RuntimeException e) {
+
         }
-        
     }
 
     public void alterar(TipoRequerimento tipoRequerimento) {
@@ -53,4 +65,5 @@ public class TipoRequerimentoDao {
         Query q = em.createQuery("select t from TipoRequerimento t order by t.nome");
         return q.getResultList();
     }
+
 }

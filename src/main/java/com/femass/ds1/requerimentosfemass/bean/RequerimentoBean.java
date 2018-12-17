@@ -94,13 +94,13 @@ public class RequerimentoBean {
      */
     public void consultar() {
         try {
-            if(autenticacaoBean.getAluLogado().getMatricula() != null){
-                lipesq = dao.pesqRequerimentosAluno(filtro,autenticacaoBean.getAluLogado());
-            }else{
-                if(filtro.getDataInicio() == null && filtro.getDataFim() == null && filtro.getProtocolo().equals("")){
+            if (autenticacaoBean.getAluLogado().getMatricula() != null) {
+                lipesq = dao.pesqRequerimentosAluno(filtro, autenticacaoBean.getAluLogado());
+            } else {
+                if (filtro.getDataInicio() == null && filtro.getDataFim() == null && filtro.getProtocolo().equals("")) {
                     Messages.addGlobalError(">>>> ERRO: informe algum parametro para pesquisa.");
                     return;
-                }else{
+                } else {
                     lipesq = dao.pesqRequerimentos(filtro);
                 }
             }
@@ -127,11 +127,27 @@ public class RequerimentoBean {
         cadastro = new Requerimento();
         listatipo = tipoDao.getTipoRequerimentos();
         acao = "Salvar";
-        cadastro.setNumeroProtocolo("001/2018");
+        // fazer forma de numeração automática
+//        cadastro.setNumeroProtocolo("001/2018");
         cadastro.setDataAbertura(new Date());
         cadastro.setStatusRequerimento(StatusRequerimento.Aberto);
         Aluno aluno = alunoDAO.porID(1L);
         cadastro.setAluno(aluno);
+        System.out.println("Metodo Novo >>>>>>>>");
+    }
+
+    /**
+     * Metodo Bean novo - Cria um novo objeto.
+     */
+    public void novoRequerimentoAluno() {
+        cadastro = new Requerimento();
+        listatipo = tipoDao.getTipoRequerimentos();
+        acao = "Salvar";
+        // fazer forma de numeração automática
+        cadastro.setNumeroProtocolo("001/2018");
+        cadastro.setDataAbertura(new Date());
+        cadastro.setStatusRequerimento(StatusRequerimento.Aberto);
+        cadastro.setAluno(autenticacaoBean.getAluLogado());
     }
 
     /**
@@ -222,10 +238,10 @@ public class RequerimentoBean {
      */
     public void revisar() {
         if (cadastro != null) {
-            if(verificaDataLimite() == -1){
+            if (verificaDataLimite() == -1) {
                 Messages.addGlobalError("ERRO: Data Limite atingida! não é possível solicitar revisão para este Requerimento Nº " + cadastro.getNumeroProtocolo());
                 return;
-            }else{
+            } else {
                 cadastro.setRevisao(true);
                 cadastro.setStatusRequerimento(StatusRequerimento.Aberto);
                 dao.alterar(cadastro);
@@ -260,8 +276,10 @@ public class RequerimentoBean {
                 String reqdata = df.format(req.getTipoRequerimento().getDataLimite().getTime());
                 String hj = df.format(hoje.getTime());
                 System.out.println("está aberto Requerimento n: " + req.GerarNumeroProtocolo() + " - " + reqdata);
+                int ret = reqdata.compareTo(hj);
+                System.out.println("Retorno da Comparação: " + ret + " - reqdata: " + reqdata + " - hj: " + hj);
 
-                if (reqdata.compareTo(hj) == -1) {
+                if (reqdata.compareTo(hj) < 0) {
                     System.out.println("é menor : " + reqdata + " - " + hj);
                     req.setStatusRequerimento(StatusRequerimento.Cancelado);
                     dao.alterar(req);
@@ -278,8 +296,10 @@ public class RequerimentoBean {
         Calendar hoje = Calendar.getInstance();
         String reqdata = df.format(cadastro.getTipoRequerimento().getDataLimite().getTime());
         String hj = df.format(hoje.getTime());
+        int ret = reqdata.compareTo(hj);
+        System.out.println("Retorno da Comparação: " + ret + " - reqdata: " + reqdata + " - hj: " + hj);
 
-        if (reqdata.compareTo(hj) == -1) {
+        if (reqdata.compareTo(hj) < 0) {
             System.out.println("é menor : " + reqdata + " - " + hj);
 //            Messages.addGlobalError(">>>> ERRO: Data limite atingida, não é possível abrir requerimento pra esse tipo: " + cadastro.getTipoRequerimento().getNome());
             return -1;

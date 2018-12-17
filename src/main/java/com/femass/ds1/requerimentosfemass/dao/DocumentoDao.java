@@ -6,6 +6,7 @@
 package com.femass.ds1.requerimentosfemass.dao;
 
 import com.femass.ds1.requerimentosfemass.model.Documento;
+import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -32,8 +33,15 @@ public class DocumentoDao{
         em.remove(documento);
     }
     public List<Documento> getDocumento(){
-        Query q = em.createQuery("select d from Documento d order by d.nome");
+        Query q = em.createQuery("select d from Documento d order by d.titulo");
         return q.getResultList();
+    }
+    
+    public List<Documento> listarDocsTP(TipoRequerimento tpreq){
+        String q = "select d from Documento d WHERE d.tipoRequerimento=:tpreq";
+        return this.em.createQuery(q, Documento.class)
+                .setParameter("tpreq", tpreq)
+                .getResultList();
     }
     
 }

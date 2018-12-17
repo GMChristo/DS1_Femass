@@ -81,17 +81,17 @@
         <!-- MENU -->
         <b:navBar fluid="true" style="margin-bottom: 0px;">
             <b:navbarLinks>
-                
+
                 <b:navLink value="" outcome="/comum/entrada/principal.xhtml"
                            rendered="#{autenticacaoBean.respLogado.cpf != null}">
                     <b:iconAwesome name="home" spin="false" size="1x" />
                 </b:navLink>
-                
+
                 <b:navLink value="" outcome="/comum/entrada/principal_aluno.xhtml"
                            rendered="#{autenticacaoBean.aluLogado.matricula != null}">
                     <b:iconAwesome name="home" spin="false" size="1x" />
                 </b:navLink>
-                
+
                 <b:dropMenu value="Cadastros" iconAwesome="fa-gears" 
                             rendered="#{autenticacaoBean.respLogado.cpf != null}">
 
@@ -125,7 +125,10 @@
                 </b:dropMenu>
 
                 <b:dropMenu value="Requerimento" iconAwesome="fa-file">
-                    <b:navLink value=" - Abrir Requerimento" iconAwesome="fa-file"/>
+                    <b:navLink value=" - Abrir Requerimento" iconAwesome="fa-file"
+                               outcome="/requerimento/abrir-requerimento-aluno.xhtml"
+                               rendered="#{autenticacaoBean.aluLogado.matricula != null}" />
+
                     <b:navLink value=" - Consultar Requerimento" iconAwesome="fa-search"
                                outcome="/requerimento/consulta-requerimento.xhtml"/>	
                     <b:navLink value=" - Requerimentos" iconAwesome="fa-file"
@@ -160,7 +163,6 @@
 
         <!-- inclui dialogo de confirmação  -->
         <ui:include src="/comum/ConfirExcluir.xhtml" />
-        <!-- </p:layout> -->
     </h:body>
 
 </html>

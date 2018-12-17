@@ -71,15 +71,24 @@
                         <p:commandButton value="Remover" icon="excluir-x-icon" style="width: 100px"/>
 
                     </p:panelGrid>
-                    <p:dataTable id="pnlList" var="docs" value="#{tiporequerimentoBean.lidoc}"
+                    <p:dataTable id="pnlList" var="doc" value="#{tiporequerimentoBean.lidocs}"
                                  style="width: 500px"
                                  scrollable="true" scrollHeight="110">
                         <p:column headerText="Título" style="width:30%">
-                            <p:outputLabel value="#{docs.titulo}"/>
+                            <p:outputLabel value="#{doc.titulo}"/>
                         </p:column>
 
                         <p:column headerText="Link" style="text-align: center;">
-                            <p:outputLabel value="#{docs.link}"/>
+                            <p:outputLabel value="#{doc.link}"/>
+                        </p:column>
+
+                        <p:column headerText="Opções" style="width:10%;text-align: center">
+                            <p:commandButton icon="excluir-x-icon" process="@this"
+                                             style="width:30px;" actionListener="#{tiporequerimentoBean.remover}"
+                                             update=":frmCad:pnlList" title="Remover Documento">
+                                <f:attribute name="docSel" value="#{doc}" />
+                            </p:commandButton>
+<!--                            <p:remoteCommand name="rc" update="pnlList" />-->
                         </p:column>
                     </p:dataTable>
 
