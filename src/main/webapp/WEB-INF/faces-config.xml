@@ -5,6 +5,6 @@
 	version="2.2">
 
 	<lifecycle>
-		<phase-listener>com.femass.ds1.requerimentofemass.util.AutenticacaoPhaseListener</phase-listener>
+		<phase-listener>com.femass.ds1.requerimentosfemass.util.AutenticacaoPhaseListener</phase-listener>
 	</lifecycle>	
 </faces-config>

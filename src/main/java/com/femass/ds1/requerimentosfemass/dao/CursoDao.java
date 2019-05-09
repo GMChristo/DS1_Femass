@@ -14,7 +14,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author Gabriel
+ * @author Alex Santos
  */
 @Stateless
 public class CursoDao {
@@ -38,5 +38,14 @@ public class CursoDao {
     public List<Curso> getCursos(){
         Query q = em.createQuery("select c from Curso c order by c.nome");
         return q.getResultList();
+    }
+    
+    public Curso BuscarPorNome(String nome){
+        String q = "select c from Curso c where c.nome like :nome";
+        
+        return this.em.createQuery(q , Curso.class)
+        .setParameter("nome", "%" + nome + "%")
+        .getSingleResult(); 
+        
     }
 }

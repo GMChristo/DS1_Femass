@@ -9,30 +9,50 @@ import com.femass.ds1.requerimentosfemass.model.Endereco;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
  *
- * @author Gabriel
+ * @author Alex Santos
  */
 @Stateless
 public class EnderecoDao {
-    
+
     @PersistenceContext
     EntityManager em;
-    
-    public void incluir (Endereco endereco){
+
+    public void incluir(Endereco endereco) {
         em.persist(endereco);
     }
-    public void alterar (Endereco endereco){
+
+    public void alterar(Endereco endereco) {
         em.merge(endereco);
     }
-    public void excluir (Endereco endereco){
+
+    public void excluir(Endereco endereco) {
         em.remove(endereco);
     }
-    public List<Endereco> getCursos(){
+
+    public List<Endereco> getEnderecos() {
         Query q = em.createQuery("select e from Endereco e order by e.logradouro");
         return q.getResultList();
+    }
+
+    public Endereco BuscarPorLogradouroBairroAndNumero(String logradouro, String num, String bairro) {
+        try {
+            String q = "select e from Endereco e where e.logradouro=:log AND e.numero=:num AND e.bairro=:bairro";
+
+            return this.em.createQuery(q, Endereco.class)
+                    .setParameter("log", logradouro)
+                    .setParameter("num", num)
+                    .setParameter("bairro", bairro)
+                    .getSingleResult();
+            
+        } catch (NoResultException e) {
+            System.out.println("Endereço NoResultException = " + e.getMessage());
+            return null;
+        }
     }
 }

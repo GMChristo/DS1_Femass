@@ -1,4 +1,4 @@
-package com.femass.ds1.requerimentofemass.util;
+package com.femass.ds1.requerimentosfemass.util;
 
 import java.io.IOException;
 import java.util.Properties;

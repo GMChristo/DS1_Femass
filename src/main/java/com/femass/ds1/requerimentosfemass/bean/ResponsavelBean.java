@@ -1,6 +1,6 @@
 package com.femass.ds1.requerimentosfemass.bean;
 
-import com.femass.ds1.requerimentofemass.util.SimpleMailTemplete;
+import com.femass.ds1.requerimentosfemass.util.SimpleMailTemplete;
 import com.femass.ds1.requerimentosfemass.dao.CursoDao;
 import com.femass.ds1.requerimentosfemass.dao.ResponsavelDao;
 import com.femass.ds1.requerimentosfemass.model.Cargo;
