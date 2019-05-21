@@ -29,11 +29,13 @@
         validate-atmost-once-period-in-seconds="0" 
         wrap-jdbc-objects="false">
         <!--property name="serverName" value="191.252.200.224"/-->
-        <property name="serverName" value="10.10.0.34"/>
+        <!--property name="serverName" value="10.10.0.34"/-->
+        <property name="serverName" value="localhost"/>
         <property name="portNumber" value="5432"/>
         <property name="databaseName" value="requerimento"/>
         <property name="User" value="postgres"/>
-        <property name="Password" value="poderosa"/>
+        <!--property name="Password" value="poderosa"/-->
+        <property name="Password" value="postgres"/>
         <!--property name="URL" value="jdbc:postgresql://191.252.200.224:5432/ibcweb"/-->
         <property name="URL" value="jdbc:postgresql://localhost:5432/requerimento"/>
         <property name="driverClass" value="org.postgresql.Driver"/>
