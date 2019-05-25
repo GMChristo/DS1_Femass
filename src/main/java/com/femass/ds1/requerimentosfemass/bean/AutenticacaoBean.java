@@ -22,9 +22,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
 import org.apache.velocity.VelocityContext;
 import org.omnifaces.util.Messages;
 
@@ -105,8 +103,8 @@ public class AutenticacaoBean {
                     } else {
                         System.out.println(alunoFemass.getCpf() + " - " + alunoFemass.getCurso());
                         Aluno aluno = new Aluno();
-//                        aluno.setNome(alunoFemass.getNome());
-                        aluno.setNome("teste - " + alunoFemass.getCr());
+                        aluno.setNome(alunoFemass.getNome());
+//                        aluno.setNome("teste - " + alunoFemass.getCr());
                         aluno.setSenha(senha);
                         aluno.setMatricula(cpf_mat);
                         aluno.setCpf(alunoFemass.getCpf());

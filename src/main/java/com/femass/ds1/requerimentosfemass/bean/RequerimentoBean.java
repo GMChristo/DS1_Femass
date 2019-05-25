@@ -3,6 +3,7 @@ package com.femass.ds1.requerimentosfemass.bean;
 import com.femass.ds1.requerimentosfemass.util.SimpleMailTemplete;
 import com.femass.ds1.requerimentosfemass.dao.AlunoDao;
 import com.femass.ds1.requerimentosfemass.dao.MovimentacaoDao;
+import com.femass.ds1.requerimentosfemass.dao.PeriodoLetivoDao;
 import com.femass.ds1.requerimentosfemass.dao.RequerimentoDao;
 import com.femass.ds1.requerimentosfemass.dao.ResponsavelDao;
 import com.femass.ds1.requerimentosfemass.dao.TipoRequerimentoDao;
@@ -21,7 +22,10 @@ import com.femass.ds1.requerimentosfemass.model.StatusRequerimento;
 import com.femass.ds1.requerimentosfemass.model.TipoRequerimento;
 import com.femass.ds1.requerimentosfemass.filter.RequerimentoFilter;
 import com.femass.ds1.requerimentosfemass.model.Movimentacao;
+import com.femass.ds1.requerimentosfemass.model.PeriodoLetivo;
 import com.femass.ds1.requerimentosfemass.model.Responsavel;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.outjected.email.api.MailMessage;
 import com.outjected.email.impl.MailMessageImpl;
 import java.io.IOException;
@@ -33,6 +37,9 @@ import java.util.Calendar;
 import java.util.Locale;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedProperty;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 import org.apache.velocity.VelocityContext;
 
 @ManagedBean
@@ -48,10 +55,12 @@ public class RequerimentoBean {
     private String acao;
     private RequerimentoFilter filtro;
     private Aluno aluno;
+    private List<Aluno> lialuno;
     private boolean liTodos;
     private Movimentacao movimentacao;
     private List<Responsavel> liResponsavel;
     private Responsavel responsavel;
+    private PeriodoLetivo pLetivo;
     @ManagedProperty(value = "#{autenticacaoBean}")
     private AutenticacaoBean autenticacaoBean;
 
@@ -70,6 +79,9 @@ public class RequerimentoBean {
     @EJB
     ResponsavelDao respDAO;
 
+    @EJB
+    PeriodoLetivoDao pLetDAO;
+
     /**
      * Metodo de abertura
      */
@@ -82,7 +94,7 @@ public class RequerimentoBean {
             }
             verificaRequerimentosACancelar();
             size = lista.size();
-            listatipo = tipoDao.getTipoRequerimentos();
+            this.listasFormulario();
             liStatusReq = Arrays.asList(StatusRequerimento.values());
         } catch (RuntimeException e) {
             Messages.addGlobalError(">>>> ERRO: Não foi possível carregar os Requerimentos." + "Erro: " + e.getMessage());
@@ -125,14 +137,11 @@ public class RequerimentoBean {
      */
     public void novo() {
         cadastro = new Requerimento();
-        listatipo = tipoDao.getTipoRequerimentos();
         acao = "Salvar";
         // fazer forma de numeração automática
 //        cadastro.setNumeroProtocolo("001/2018");
         cadastro.setDataAbertura(new Date());
         cadastro.setStatusRequerimento(StatusRequerimento.Aberto);
-        Aluno aluno = alunoDAO.porID(1L);
-        cadastro.setAluno(aluno);
         System.out.println("Metodo Novo >>>>>>>>");
     }
 
@@ -144,10 +153,61 @@ public class RequerimentoBean {
         listatipo = tipoDao.getTipoRequerimentos();
         acao = "Salvar";
         // fazer forma de numeração automática
-        cadastro.setNumeroProtocolo("001/2018");
+//        cadastro.setNumeroProtocolo(this.getNumProtocolo());
         cadastro.setDataAbertura(new Date());
         cadastro.setStatusRequerimento(StatusRequerimento.Aberto);
         cadastro.setAluno(autenticacaoBean.getAluLogado());
+        System.out.println("Metodo NovoRequerimentoAluno() >>>>>>>>");
+    }
+    
+    private void listasFormulario(){
+        listatipo = tipoDao.getTipoRequerimentos();
+        lialuno = alunoDAO.getAlunos();
+    }
+
+    /**
+     * Método responsável por verificar se existe um registro de período letivo
+     * se não tiver ele consulta no WebService e cria o primeiro registro.
+     *
+     * @return
+     */
+    private String getNumProtocolo() {
+        System.out.println("Entrei no getNumProtocolo()");
+        pLetivo = pLetDAO.getPeridoAtual();
+
+        if (pLetivo == null) {
+            pLetivo = new PeriodoLetivo();
+            Client cliente = ClientBuilder.newClient();
+            String path = "http://200.159.247.135:8083/WebAcademico/rest/usuario/buscarPeriodoLetivoAtual";
+            WebTarget caminho = cliente.target(path);
+
+            Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+
+            // recebendo o json da consulta
+            String json = caminho.request().get(String.class);
+            System.out.println(json);
+
+            pLetivo = gson.fromJson(json, PeriodoLetivo.class);
+            System.out.println(pLetivo);
+            pLetivo.setNumAtual(0);
+            pLetDAO.incluir(pLetivo);
+        }
+
+        Integer num = pLetivo.getNumAtual() + 1;
+        System.out.println(num + "/" + pLetivo.getAno() + "-" + pLetivo.getSemestre());
+        return num + "/" + pLetivo.getAno() + "-" + pLetivo.getSemestre();
+    }
+
+    /**
+     * Método responsável por incrementar a numeração caso o requirimento seja
+     * salvo
+     *
+     * @param pletivo
+     */
+    private void IncrementaNumAtual(PeriodoLetivo pletivo) {
+        System.out.println("Entrei no IncrementaNumAtual(PeriodoLetivo pletivo)");
+        pletivo.setNumAtual(pletivo.getNumAtual() + 1);
+        pLetDAO.alterar(pletivo);
     }
 
     /**
@@ -160,16 +220,21 @@ public class RequerimentoBean {
                     Messages.addGlobalError(">>>> ERRO: Data limite atingida, não é possível abrir requerimento pra esse tipo: " + cadastro.getTipoRequerimento().getNome());
                     return;
                 } else {
+                    cadastro.setNumeroProtocolo(this.getNumProtocolo());
                     dao.incluir(cadastro);
-                    Messages.addGlobalInfo("Requerimento Salvo com sucesso!");
+                    IncrementaNumAtual(pLetivo);
+                    Messages.addGlobalInfo("Requerimento Nº " +cadastro.getNumeroProtocolo()+ " Salvo com sucesso!");
                 }
             } else {
                 dao.alterar(cadastro);
-                Messages.addGlobalInfo("Requerimento Editado com sucesso!");
+                Messages.addGlobalInfo("Requerimento Nº " +cadastro.getNumeroProtocolo()+ " Editado com sucesso!");
             }
             carregar();
             fechar();
-
+            if(autenticacaoBean.getAluLogado() != null){
+                this.novoRequerimentoAluno();
+            }
+            
         } catch (Exception e) {
             Messages.addGlobalError(">>>> ERRO: Não foi possivel Salvar o Requerimento: " + cadastro.getNumeroProtocolo());
         }
@@ -416,6 +481,14 @@ public class RequerimentoBean {
         this.listatipo = listatipo;
     }
 
+    public List<Aluno> getLialuno() {
+        return lialuno;
+    }
+
+    public void setLialuno(List<Aluno> lialuno) {
+        this.lialuno = lialuno;
+    }
+    
     public boolean isLiTodos() {
         return liTodos;
     }

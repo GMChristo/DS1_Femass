@@ -35,6 +35,7 @@ public class AlunoDao {
         em.remove(aluno);
     }
 
+    // modificar pra buscar somente os matriculados
     public List<Aluno> getAlunos() {
         Query q = em.createQuery("select a from Aluno a order by a.nome");
         return q.getResultList();

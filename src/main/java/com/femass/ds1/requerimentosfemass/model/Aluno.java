@@ -12,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -28,12 +29,16 @@ public class Aluno implements Serializable {
     private String matricula;
     private String nome;
     private String cpf;
-    private String periodo;
+    private String periodo; //f
     private String cr;
     private String email;
-    private String telefone;
+    private String telefone; // f celular
     private String senha;
+    
+    @ManyToOne
     private Curso curso;
+    
+    @ManyToOne
     private Endereco endereco;
     
     @Enumerated(EnumType.STRING)

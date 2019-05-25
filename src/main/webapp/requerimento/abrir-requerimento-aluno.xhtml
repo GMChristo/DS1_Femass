@@ -10,7 +10,7 @@
     <ui:composition template="/template/Layout.xhtml">
         <ui:define name="metadata">
             <f:metadata>
-                <f:viewAction action="#{requerimentoBean.novo()}" />
+                <f:viewAction action="#{requerimentoBean.novoRequerimentoAluno()}" />
             </f:metadata>
         </ui:define>
 
@@ -35,10 +35,11 @@
                                             mask="true" pattern="dd/MM/yyyy" showOn="button" navigator="true" />
 
 
-                                <p:outputLabel for="prot" value="Protocolo.:"/>
+                                <p:outputLabel for="prot" value="Protocolo.:" rendered="#{requerimentoBean.acao eq 'Editar'}"/>
                                 <p:inputText id="prot"
                                              value="#{requerimentoBean.cadastro.numeroProtocolo}" 
-                                             disabled="false"/>
+                                             disabled="true"
+                                             rendered="#{requerimentoBean.acao eq 'Editar'}"/>
 
                                 <p:outputLabel for="nome" value="Tipo de Requerimento.: " />
                                 <p:selectOneMenu id="nome" value="#{requerimentoBean.cadastro.tipoRequerimento}" 

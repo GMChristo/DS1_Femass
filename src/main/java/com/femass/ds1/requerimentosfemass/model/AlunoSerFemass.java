@@ -6,6 +6,7 @@ package com.femass.ds1.requerimentosfemass.model;
  */
 public class AlunoSerFemass {
     
+    String nome; //"nome": "Alex Manhães dos Santos"
     String cpf; //"cpf": "107.877.577-05",
     String cr;  //"cr": 5.1,
     String curso; //"curso": "Sistemas de Informação",
@@ -16,6 +17,14 @@ public class AlunoSerFemass {
     String enderecoCidade; //"enderecoCidade": "Macaé",
     String enderecoComplemento; //"enderecoComplemento": "casa",
     String enderecoNumero; //"enderecoNumero": "160"
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
     public String getCpf() {
         return cpf;
