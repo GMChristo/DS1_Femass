@@ -29,6 +29,7 @@ public class AlunoDao {
 
     public void alterar(Aluno aluno) {
         em.merge(aluno);
+        System.out.println("Deveria ter alterado");
     }
 
     public void excluir(Aluno aluno) {

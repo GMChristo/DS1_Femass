@@ -17,12 +17,14 @@ import com.outjected.email.impl.MailMessageImpl;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Locale;
+import java.util.UUID;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.velocity.VelocityContext;
 import org.omnifaces.util.Messages;
 
@@ -79,7 +81,7 @@ public class AutenticacaoBean {
     public String autenticar() {
         try {
             if (responsavel) {
-                respLogado = respDao.autenticar(cpf_mat, senha);
+                respLogado = respDao.autenticar(cpf_mat, DigestUtils.md5Hex(senha));
 
                 if (respLogado == null) {
                     Messages.addGlobalError("CPF e/ou Senha inválidos.");
@@ -91,7 +93,7 @@ public class AutenticacaoBean {
                     return "/comum/entrada/principal.xhtml?faces-redirect=true";
                 }
             } else {
-                aluLogado = aluDao.autenticar(cpf_mat, senha);
+                aluLogado = aluDao.autenticar(cpf_mat, DigestUtils.md5Hex(senha));
 
                 if (aluLogado == null) {
                     // tentar buscar do web service do web academico da femass
@@ -101,11 +103,20 @@ public class AutenticacaoBean {
                         Messages.addGlobalError("Matrícula e/ou Senha inválidos.");
                         return null;
                     } else {
+                        boolean alterar = false;
+                        // verifica se existe aluno no banco interno
+                        Aluno aluno = aluDao.buscarPorMat(cpf_mat);
+                        if(aluno != null){
+                            alterar = true;
+                        }else{
+                            aluno = new Aluno();
+                        }
                         System.out.println(alunoFemass.getCpf() + " - " + alunoFemass.getCurso());
-                        Aluno aluno = new Aluno();
                         aluno.setNome(alunoFemass.getNome());
 //                        aluno.setNome("teste - " + alunoFemass.getCr());
-                        aluno.setSenha(senha);
+                        // convertendo a senha para MD5
+                        System.out.println("Senha criptografada = "+DigestUtils.md5Hex(senha));
+                        aluno.setSenha(DigestUtils.md5Hex(senha));
                         aluno.setMatricula(cpf_mat);
                         aluno.setCpf(alunoFemass.getCpf());
                         aluno.setCr(alunoFemass.getCr());
@@ -125,7 +136,15 @@ public class AutenticacaoBean {
                             System.out.println(endereco);
                             aluno.setEndereco(endereco);
                         }
-                        aluDao.incluir(aluno);
+                        
+                        // alterando
+                        if(alterar == true){
+                            aluDao.alterar(aluno);
+                            System.out.println("Alterando");
+                        }else{
+                            aluDao.incluir(aluno);
+                            System.out.println("Incluindo");
+                        }
                         aluLogado = aluno;
                         
                         Messages.addGlobalInfo("Usuário autenticado com sucesso.");
@@ -189,13 +208,20 @@ public class AutenticacaoBean {
             System.out.println("faltou informar o CPF OU MATRÍCULA.");
             return;
         } else {
-
+            senha = getRandomId();
             if (responsavel) {
                 Responsavel resp = new Responsavel();
                 resp = respDao.buscarPorCPF(cpf_mat);
+                                
                 if (resp != null) {
+                    System.out.println("Senha: " + senha);
+                    resp.setSenha(DigestUtils.md5Hex(senha));
+                    System.out.println("MD5 senha: " + DigestUtils.md5Hex(senha));
+                    respDao.alterar(resp);
+                    
                     email = resp.getEmail();
                     context.put("usuario", resp);
+                    context.put("senha", senha);
                     if (resp.getEmail().equals("")) {
                         Messages.addGlobalError("ERRO: >>>> Não possui email em seu cadastro, favor procurar o Desenvolvedor do Sistema.");
                         return;
@@ -204,21 +230,10 @@ public class AutenticacaoBean {
                     Messages.addGlobalError("ERRO: >>>> Este CPF não possui cadastro no sistema.");
                     return;
                 }
-
+            // é um aluno tentando
             } else {
-                Aluno aluno = new Aluno();
-                aluno = aluDao.buscarPorMat(cpf_mat);
-                if (aluno != null) {
-                    email = aluno.getEmail();
-                    context.put("usuario", aluno);
-                    if (aluno.getEmail().equals("")) {
-                        Messages.addGlobalError("ERRO: >>>> Não possui email em seu cadastro, favor procurar o Desenvolvedor do Sistema.");
-                        return;
-                    }
-                } else {
-                    Messages.addGlobalError("ERRO: >>>> Esta MATRÍCULA não possui cadastro no sistema.");
-                    return;
-                }
+                Messages.addGlobalError("ERRO: >>>> Este Sistema é integrado com o Web Academico, altere sua senha lá e tente novamente.");
+                return;
             }
 
             //configuração do email return configsession
@@ -233,9 +248,12 @@ public class AutenticacaoBean {
                     .bodyHtml(writer.toString())
                     .put("locale", new Locale("pt", "BR"))
                     .send();
-
             Messages.addGlobalInfo("Sua senha foi enviada por Email com sucesso!");
         }
+    }
+    
+    private String getRandomId() {
+        return UUID.randomUUID().toString().substring(0, 8);
     }
 
     public Responsavel getRespLogado() {
