@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
 import javax.ejb.EJB;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.omnifaces.util.Messages;
 
 @ManagedBean
@@ -63,6 +64,7 @@ public class ResponsavelBean {
     public void onRowSelect(SelectEvent evento) {
         cadastro = (Responsavel) evento.getObject();
         acao = "Editar";
+//        System.out.println("Senha capturada na seleção da linha = " +cadastro.getSenha());
     }
 
     /**
@@ -79,9 +81,18 @@ public class ResponsavelBean {
      */
     public void merge() {
         try {
+            
             if (acao.equals("salvar")) {
+                cadastro.setSenha(DigestUtils.md5Hex(cadastro.getSenha()));
                 dao.incluir(cadastro);
             } else {
+                // criar uma verificação pra saber se a senha foi alterada
+//                System.out.println("Senha capturada no formulário edição = " +cadastro.getSenha());
+                if(cadastro.getSenha().equals("")){
+                    Messages.addGlobalError(">>>> Erro: Favor Informar uma Senha para Continuar!");
+                    return;
+                }
+                cadastro.setSenha(DigestUtils.md5Hex(cadastro.getSenha()));
                 dao.alterar(cadastro);
             }
             carregar();
@@ -120,7 +131,7 @@ public class ResponsavelBean {
         if (cadastro.getEmail() != null) {
             SimpleMailTemplete smt = new SimpleMailTemplete();
             MailMessage message = new MailMessageImpl(smt.enviarEmail());
-
+            
             message.to(cadastro.getEmail())
                     .subject("Pedido de Envio de senha.")
                     .bodyHtml(new VelocityTemplate(getClass().getResourceAsStream("/emails/recupera_senha.template")))
