@@ -49,7 +49,7 @@ public class AlunoDao {
                 .getSingleResult();
         return aluno;
     }
-    
+
     public Aluno buscarPorMat(String matricula) {
         try {
             String q = "select a FROM Aluno a WHERE a.matricula=:matricula";
@@ -61,6 +61,20 @@ public class AlunoDao {
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    public Aluno getLogin(String matricula, String senha) {
+
+        Query q = em.createQuery("select a FROM Aluno a WHERE a.matricula=:matricula AND a.senha=:senha");
+        q.setParameter("matricula", matricula);
+        q.setParameter("senha", senha);
+        List<Aluno> l = q.getResultList();
+
+        if (l.isEmpty()) {
+            return null;
+        }
+
+        return l.get(0);
     }
 
     public Aluno autenticar(String mat, String senha) {
@@ -79,4 +93,5 @@ public class AlunoDao {
             return null;
         }
     }
+
 }
