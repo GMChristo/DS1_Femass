@@ -40,6 +40,13 @@ public class EnderecoDao {
         return q.getResultList();
     }
 
+    /**
+     * Busca pelos parametros abaixo se existe um cadastro de endereço no banco de dados
+     * @param logradouro
+     * @param num
+     * @param bairro
+     * @return 
+     */
     public Endereco BuscarPorLogradouroBairroAndNumero(String logradouro, String num, String bairro) {
         try {
             String q = "select e from Endereco e where e.logradouro=:log AND e.numero=:num AND e.bairro=:bairro";

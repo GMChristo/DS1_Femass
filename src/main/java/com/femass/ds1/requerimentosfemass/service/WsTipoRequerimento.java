@@ -34,10 +34,8 @@ public class WsTipoRequerimento {
     TipoRequerimentoDao daoTipoRequerimento;
     
     @GET
-//    @Path("buscarPorLoginSenha/{login}/{senha}")
-//    public UsuarioWs buscarUsuarioPorLoginSenha(@PathParam("login") String strLogin, @PathParam("senha") String strSenha) {
     @Path("tiposRequerimento")
-    public List<TipoRequerimento> buscarTiposRequerimento(@PathParam("login") String strLogin, @PathParam("senha") String strSenha) {
+    public List<TipoRequerimento> buscarTiposRequerimento() {
         return daoTipoRequerimento.getTipoRequerimentos();
     }
     

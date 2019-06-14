@@ -10,6 +10,7 @@ import com.femass.ds1.requerimentosfemass.model.Aluno;
 import com.femass.ds1.requerimentosfemass.model.AlunoSerFemass;
 import com.femass.ds1.requerimentosfemass.model.Endereco;
 import com.femass.ds1.requerimentosfemass.model.Responsavel;
+import com.femass.ds1.requerimentosfemass.util.WsWebAcademico;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.outjected.email.api.MailMessage;
@@ -50,11 +51,8 @@ public class AutenticacaoBean {
     AlunoDao aluDao;
 
     @EJB
-    EnderecoDao enderecoDao;
-
-    @EJB
-    CursoDao cursoDao;
-
+    WsWebAcademico wsWebAcademico;
+    
     /**
      * Metodo sair
      *
@@ -97,56 +95,24 @@ public class AutenticacaoBean {
 
                 if (aluLogado == null) {
                     // tentar buscar do web service do web academico da femass
-                    AlunoSerFemass alunoFemass = jsonAluno();
+                    AlunoSerFemass alunoFemass = wsWebAcademico.jsonAluno(cpf_mat, senha);
 
                     if (alunoFemass == null) {
                         Messages.addGlobalError("Matrícula e/ou Senha inválidos.");
                         return null;
                     } else {
-                        boolean alterar = false;
                         // verifica se existe aluno no banco interno
                         Aluno aluno = aluDao.buscarPorMat(cpf_mat);
-                        if(aluno != null){
-                            alterar = true;
-                        }else{
+                        if (aluno == null) {
                             aluno = new Aluno();
                         }
-                        System.out.println(alunoFemass.getCpf() + " - " + alunoFemass.getCurso());
-                        aluno.setNome(alunoFemass.getNome());
-//                        aluno.setNome("teste - " + alunoFemass.getCr());
-                        // convertendo a senha para MD5
-                        System.out.println("Senha criptografada = "+DigestUtils.md5Hex(senha));
-                        aluno.setSenha(DigestUtils.md5Hex(senha));
-                        aluno.setMatricula(cpf_mat);
-                        aluno.setCpf(alunoFemass.getCpf());
-                        aluno.setCr(alunoFemass.getCr());
-                        aluno.setEmail(alunoFemass.getEmail());
-                        aluno.setCurso(cursoDao.BuscarPorNome(alunoFemass.getCurso()));
 
-                        Endereco endereco = enderecoDao.BuscarPorLogradouroBairroAndNumero(alunoFemass.getEndereco(), alunoFemass.getEnderecoNumero(), alunoFemass.getEnderecoBairro());
-                        if (endereco == null) {
-                            endereco = new Endereco();
-                            endereco.setLogradouro(alunoFemass.getEndereco());
-                            endereco.setNumero(alunoFemass.getEnderecoNumero());
-                            endereco.setBairro(alunoFemass.getEnderecoBairro());
-                            endereco.setCep(alunoFemass.getEnderecoCep());
-                            endereco.setCidade(alunoFemass.getEnderecoCidade());
-                            endereco.setComplemento(alunoFemass.getEnderecoComplemento());
-                            enderecoDao.incluir(endereco);
-                            System.out.println(endereco);
-                            aluno.setEndereco(endereco);
-                        }
-                        
-                        // alterando
-                        if(alterar == true){
-                            aluDao.alterar(aluno);
-                            System.out.println("Alterando");
-                        }else{
-                            aluDao.incluir(aluno);
-                            System.out.println("Incluindo");
-                        }
+                        // atualizando do objeto AlunoFemass para o objeto Aluno que será atualizado inclusive o endereço
+                        aluno = wsWebAcademico.atualizaAluno(aluno, alunoFemass, cpf_mat, senha);
+
+                        aluDao.alterar(aluno);
                         aluLogado = aluno;
-                        
+
                         Messages.addGlobalInfo("Usuário autenticado com sucesso.");
                         cpf_mat = "";
                         senha = "";
@@ -162,34 +128,6 @@ public class AutenticacaoBean {
         } catch (RuntimeException ex) {
             Messages.addGlobalError("Erro ao tentar entrar no sistema: " + ex.getMessage());
             return null; // permanecer na pagina onde estou
-        }
-    }
-
-    /**
-     * Método que consulta no web service as informações informadas e retorna o
-     * objeto consultado
-     *
-     * @return
-     */
-    private AlunoSerFemass jsonAluno() {
-        try {
-            Client cliente = ClientBuilder.newClient();
-            String path = "http://200.159.247.135:8083/WebAcademico/rest/usuario/buscarPorLoginSenha/" + cpf_mat + "/" + senha;
-            WebTarget caminho = cliente.target(path);
-
-            // recebendo o json da consulta
-            String json = caminho.request().get(String.class);
-//            System.out.println(json);
-
-            // convertendo em classe de objeto
-            Gson gson = new Gson();
-            AlunoSerFemass aluno = gson.fromJson(json, AlunoSerFemass.class);
-//            System.out.println(aluno);
-
-            return aluno;
-        } catch (RuntimeException ex) {
-            System.out.println("Erro ao tentar Acessar o WebService da Femass - " + ex.getMessage());
-            return null;
         }
     }
 
@@ -212,13 +150,13 @@ public class AutenticacaoBean {
             if (responsavel) {
                 Responsavel resp = new Responsavel();
                 resp = respDao.buscarPorCPF(cpf_mat);
-                                
+
                 if (resp != null) {
                     System.out.println("Senha: " + senha);
                     resp.setSenha(DigestUtils.md5Hex(senha));
                     System.out.println("MD5 senha: " + DigestUtils.md5Hex(senha));
                     respDao.alterar(resp);
-                    
+
                     email = resp.getEmail();
                     context.put("usuario", resp);
                     context.put("senha", senha);
@@ -230,7 +168,7 @@ public class AutenticacaoBean {
                     Messages.addGlobalError("ERRO: >>>> Este CPF não possui cadastro no sistema.");
                     return;
                 }
-            // é um aluno tentando
+                // é um aluno tentando
             } else {
                 Messages.addGlobalError("ERRO: >>>> Este Sistema é integrado com o Web Academico, altere sua senha lá e tente novamente.");
                 return;
@@ -251,7 +189,11 @@ public class AutenticacaoBean {
             Messages.addGlobalInfo("Sua senha foi enviada por Email com sucesso!");
         }
     }
-    
+
+    /**
+     * Método que gera uma senha randomica para poder ser alterar posteriormente
+     * @return 
+     */
     private String getRandomId() {
         return UUID.randomUUID().toString().substring(0, 8);
     }
